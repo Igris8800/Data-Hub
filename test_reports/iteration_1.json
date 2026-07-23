@@ -1,0 +1,51 @@
+{
+  "summary": "First E2E test on Data Hub MVP. Backend: 20/20 pytest tests passed (auth, progress+XP+idempotency, leaderboard, payments config/503, AI 401/402 gates, newsletter valid/invalid). Frontend: 9/10 Playwright flows passed (home, newsletter, signup+header update, SQL sidebar 9 beginner + 6 locked previews, difficulty selector switches sets, cross-module nav, Stats MCQ correct badge, Roadmap 18 items + localStorage persistence, upgrade modal opens after 5 solved). 1 UX bug found: header XP/streak does not refresh in real-time after submitting a correct answer — only updates after page reload or hard refetch of /auth/me.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "Header / AuthProvider",
+        "issue": "After a correct MCQ (POST /api/progress succeeds with +10 XP), the header XP counter still shows the stale value until the user navigates or reloads. AuthProvider.checkAuth() runs only once on mount and QuestionCard/SQLRunner/PythonRunner never call refresh() after posting progress. This makes gamification feedback feel broken.",
+        "selector": "[data-testid=\"header-xp\"], [data-testid=\"header-streak\"]",
+        "priority": "MEDIUM"
+      }
+    ],
+    "integration_issues": [
+      {
+        "flow": "Progress submission -> Header XP sync",
+        "issue": "QuestionCard.submit() calls api.post('/progress', ...) but discards the response and does not call the AuthProvider.refresh() (aka checkAuth) helper. Same pattern likely in SQLRunner.jsx and PythonRunner.jsx.",
+        "affected_selectors": ["[data-testid=\"header-xp\"]", "[data-testid=\"header-streak\"]"]
+      }
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "In /app/frontend/src/components/QuestionCard.jsx after `await api.post('/progress', ...)` call `refresh()` from useAuth() so the Header XP/streak/level updates immediately. Apply the same fix in SQLRunner.jsx and PythonRunner.jsx.",
+    "(Optional) The /api/progress endpoint already returns the updated user; you can call setUser(response.data.user) directly to avoid the extra /auth/me round trip."
+  ],
+  "critical_code_review_comments": [
+    "AuthProvider only fetches /auth/me on initial mount — there is no exposed re-sync after mutating actions. Add refresh() calls in runners or push the updated user object back into the context after each progress POST.",
+    "auth.jsx: setUser is exposed via context which is good; consumers should use it after POST /api/progress since that endpoint already returns the fresh user.",
+    "server.py streak logic in /api/progress: on the very first attempt of the day (days_diff == 0 and streak == 0) streak is set to 1. Subsequent same-day correct answers keep it at 1 which is correct. But if a user signs up and immediately answers, last_active from signup was already set to now → days_diff==0, streak==0 → gets streak=1. This works. No bug.",
+    "server.py CORS: allow_credentials=True combined with allow_origins='*' will be rejected by browsers when using cookies. Since REACT_APP_BACKEND_URL is same-origin via ingress it is not exercised, but this is a latent issue if credentials are used from a different origin.",
+    "server.py generate_question uses model name 'claude-sonnet-4-6' — verify this exact model id is supported by the Emergent LLM chat client for Anthropic. (Cannot verify without a premium user.)",
+    "Header.jsx does `user.name.split(' ')[0]` — safe here because signup requires a name, but a null/empty name would crash. Consider `user.name?.split(' ')?.[0] ?? 'You'`."
+  ],
+  "updated_files": [
+    "/app/backend/tests/backend_test.py (new — 20 pytest cases across health/auth/progress/leaderboard/payments/AI/newsletter)"
+  ],
+  "success_rate": {"backend": "100% (20/20)", "frontend": "90% (9/10)"},
+  "test_credentials": "Fresh signup performed each run per /app/memory/test_credentials.md. Emails used: qa+datahub-<ts>@example.com (backend), qa+ui-<ts>@example.com (frontend). Password TestPass!234.",
+  "seed_data_creation": "Test users created via /api/auth/signup during test runs; no explicit teardown (users are isolated by unique timestamped emails).",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Backend is solid — no changes needed. The only remaining item is verifying the frontend fix for header XP/streak live refresh after progress POST (in QuestionCard.jsx / SQLRunner.jsx / PythonRunner.jsx). Fix pattern: `const { refresh } = useAuth();` then `await refresh();` after successful api.post('/progress', …). To re-verify: log in, note current XP in [data-testid=\"header-xp\"], answer a correct Stats MCQ, wait 2s, header-xp should increase by 10 without any navigation/reload. Razorpay flow is intentionally unconfigured — /api/payments/order returns 503, which is expected. The Pyodide (/python) Run button was not exercised in this iteration because the ~10MB CDN load slows the run; recommend a targeted retest specifically for the Python runner. AI generation (Claude) also not run end-to-end because it requires a premium user; only the 401/402 gates were verified.",
+  "rca of the issue": "Header XP not refreshing: AuthProvider (src/lib/auth.jsx) only calls /api/auth/me once on mount via useEffect(checkAuth). QuestionCard.submit() posts /api/progress which the backend correctly processes (verified via pytest — XP goes 0→10 for a beginner correct MCQ) but the frontend never re-syncs the user object. Mitigation: call the exposed `refresh` (== checkAuth) from useAuth after api.post('/progress', ...) OR use the returned user payload: `const { data } = await api.post('/progress', ...); setUser(data.user);`."
+}
