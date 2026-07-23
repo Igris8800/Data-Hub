@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/lib/auth";
 import Header from "@/components/Header";
+import PromoBar from "@/components/PromoBar";
 import Footer from "@/components/Footer";
 import Home from "@/pages/Home";
 import ExcelPage from "@/pages/ExcelPage";
@@ -24,8 +25,9 @@ function AppShell() {
   }
   return (
     <div className="App grain">
+      <PromoBar />
       <Header />
-      <main className="pt-24">
+      <main className="pt-[8.75rem]">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/excel" element={<ExcelPage />} />

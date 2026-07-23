@@ -23,7 +23,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="fixed top-0 inset-x-0 z-40 backdrop-blur-xl bg-[#0D1117]/70 border-b border-white/10">
+      <header className="fixed top-11 inset-x-0 z-40 backdrop-blur-xl bg-[#0D1117]/70 border-b border-white/10 data-[promo-hidden=true]:top-0" id="site-header">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2 font-heading" data-testid="brand-link">
             <span className="w-8 h-8 rounded-md bg-gradient-to-br from-[#00D4FF] to-[#00FF88] flex items-center justify-center text-[#0D1117] font-bold text-lg">D</span>
