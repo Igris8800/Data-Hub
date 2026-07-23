@@ -1,0 +1,122 @@
+{
+  "theme": "dark",
+  "typography": {
+    "headings": {
+      "fontFamily": "'Outfit', sans-serif",
+      "strategy": "The Anti-Default Rule: High-contrast, expressive tech. Use font-light (300) for large text mixed with font-bold (700) for emphasis. MUST use tight letter spacing (tracking-tight) for sizes > 32px.",
+      "scales": {
+        "h1": "text-4xl sm:text-5xl lg:text-6xl tracking-tighter leading-none",
+        "h2": "text-2xl sm:text-3xl lg:text-4xl tracking-tight",
+        "h3": "text-xl sm:text-2xl",
+        "h4": "text-lg sm:text-xl"
+      }
+    },
+    "body": {
+      "fontFamily": "'IBM Plex Sans', sans-serif",
+      "strategy": "Sterile, readable utility.",
+      "scales": {
+        "default": "text-base leading-relaxed",
+        "small": "text-sm",
+        "labels": "uppercase text-xs tracking-[0.2em]"
+      }
+    },
+    "code": {
+      "fontFamily": "'JetBrains Mono', monospace",
+      "strategy": "For SQL/Python editors and code snippets."
+    }
+  },
+  "colors": {
+    "strategy": "ELECTRIC & NEON Archetype. True navy/black (#0D1117) canvas with highly saturated, minimal accents. Use layered elevation.",
+    "palette": {
+      "background": "#0D1117",
+      "surface": "#151B23",
+      "surface_raised": "#1E242C",
+      "primary": "#00D4FF",
+      "primary_hover": "#33DDFF",
+      "secondary": "#00FF88",
+      "border": "#30363D",
+      "text_primary": "#F8FAFC",
+      "text_secondary": "#94A3B8"
+    },
+    "rules": [
+      "No full-screen gradients. Use pure colors.",
+      "Tint neutral greys with blue to match the navy background.",
+      "Hover states must be explicitly styled and lighter than active states.",
+      "Avoid completely transparent backgrounds on dropdowns or floating elements. Use Solid #151B23."
+    ]
+  },
+  "visual_enhancers": {
+    "glassmorphism": "Use sparingly for sticky headers and modals: bg-[#0D1117]/70 backdrop-blur-xl border border-white/10 shadow-lg.",
+    "borders": "Expose the skeleton. 1px solid #30363D (border-border).",
+    "premium_lock": "Overlay premium content with backdrop-blur-md bg-[#0D1117]/50. Center a gold badge using yellow/gold gradients (e.g., from-yellow-400 to-amber-600) for text and icons.",
+    "gamification": "Use high-contrast electric blue for XP bars and emerald green for streak counters. Add subtle drop-shadows to active streaks/rings."
+  },
+  "components": {
+    "buttons": "Pill-shaped (rounded-full) or slightly rounded (rounded-md). High-contrast text on primary background. Primary buttons use #00D4FF with black text.",
+    "cards": "Borderless or 1px subtle border. Flat background (#151B23). On hover: -translate-y-1, border-white/20, shadow-lg.",
+    "navigation": "Visible links on desktop (no hamburger). Glassmorphism background. Include user XP, Level, and Streak in the header.",
+    "practice_layout": "Strict grid hierarchy. Left sidebar for questions, center/right for editor and preview.",
+    "roadmap": "Vertical timeline layout using grid or flex column with connecting lines (1px #30363D border-l).",
+    "editors": "Use dark theme for code editors. Style the Run button with secondary color (Emerald Green).",
+    "shadcn_overrides": "Override shadcn default radii to rounded-md. Override popover backgrounds to #151B23 with #30363D borders."
+  },
+  "grids": {
+    "bento_strategy": "For the homepage features, use a High-Density Grid: grid-cols-1 md:grid-cols-3. Span primary modules 2 columns and secondary 1 column to create asymmetry.",
+    "spacing": "Generous Spacing: p-6 or p-8 inside cards. gap-6 or gap-8 between layout sections."
+  },
+  "layouts": {
+    "hero": "Left-aligned text (H1 + subtitle + CTAs) with a subtle abstract data visualization background on the right or behind. max-w-7xl mx-auto.",
+    "module_page": "Full-height (h-screen) flex/grid layout. Sidebar (w-80) border-r, main content flex-1.",
+    "roadmap_page": "Centered timeline, max-w-4xl mx-auto. Grouped by months."
+  },
+  "motion": {
+    "rules": [
+      "Hover states on all interactive elements: transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease.",
+      "Do NOT use 'transition: all'.",
+      "Staggered entrance animations for feature cards and roadmap items.",
+      "Respect prefers-reduced-motion."
+    ]
+  },
+  "accessibility": {
+    "contrast": "Ensure text meets WCAG AA standards. Use #F8FAFC for text on dark backgrounds.",
+    "testing": "All interactive and key informational elements MUST include a data-testid attribute to facilitate robust automated testing."
+  },
+  "media": {
+    "icons": "Use lucide-react (already installed). Use Crown, Shield, Zap, Flame for gamification.",
+    "images": "Use images sparingly. Rely on abstract backgrounds for the hero."
+  },
+  "image_urls": {
+    "hero_background": {
+      "url": "https://images.unsplash.com/photo-1750969185331-e03829f72c7d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwzfHxhYnN0cmFjdCUyMGRhdGElMjBuZXR3b3JrJTIwZGFya3xlbnwwfHx8fDE3ODQ3OTUxMTJ8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Abstract blue lines and dots. Apply opacity 0.2 and mix-blend-screen to avoid overpowering text. Use in Hero section.",
+      "category": "background"
+    }
+  },
+  "instructions_to_main_agent": [
+    "You have .js files not .tsx file, so share the guideline for .js files not for .tsx files.",
+    "Install required fonts from Google Fonts in index.css: @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;700&display=swap');",
+    "Set the Tailwind CSS variables in index.css to match the Dark Theme palette provided in this JSON.",
+    "Implement the 5 feature cards using the bento grid strategy.",
+    "For the SQL and Python editors, mock the visual interface if the actual library (SQL.js/Pyodide) is too complex to wire up fully in the MVP, but make it look fully functional with a 'Run' button and output terminal.",
+    "For the Lock UI overlay, apply a backdrop-filter blur with a z-index and absolute positioning over the premium content.",
+    "Use lucide-react icons for badges: Flame for streaks, Zap for XP, Crown for Premium."
+  ],
+  "universal_guidelines_for_main_agent": [
+    "You tend to converge toward generic, 'on distribution' outputs. Avoid this: make creative, distinctive frontends that surprise and delight.",
+    "Dark colors look good when used independently without gradients. DO NOT use dark colors as gradients.",
+    "Don't make generic centered layouts, simplistic gradients, and uniform styling.",
+    "Create depth through layered design elements with z-index hierarchy.",
+    "Use glass-morphism effects with backdrop filters (12-24px blur).",
+    "You MUST NOT apply universal transition. Eg: transition: all. Always add transitions for specific interactive elements like button, input excluding transforms.",
+    "You MUST NOT center align the app container, ie do not add .App { text-align: center; } in the css file.",
+    "Always use modern button styles like pill-shaped, or sharp button with interaction animations & color relevant to the app style.",
+    "NEVER: use AI assistant Emoji characters like 🤖🧠💭💡🔮🎯 etc for icons.",
+    "Every interaction needs micro-animations - hover states, transitions, parallax effects, and entrance animations. Static = dead.",
+    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap.",
+    "Subtle grain textures, noise overlays, custom cursors, selection states, and loading animations: separates good from extraordinary.",
+    "Main agent relies on these image URLs. Missing categories = main agent will use placeholder text which is FORBIDDEN.",
+    "Prioritize using pre-existing components from src/components/ui when applicable.",
+    "Use sonner for toasts, located in /app/frontend/src/components/ui/sonner.js",
+    "All interactive and key informational elements MUST include a data-testid attribute in kebab-case."
+  ]
+}
