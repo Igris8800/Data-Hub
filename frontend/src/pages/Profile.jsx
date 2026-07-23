@@ -13,16 +13,21 @@ const ICONS = { Sheet, Database, Code2, BarChart3, Sigma };
 const CERT_THRESHOLD = 20;
 
 export default function Profile() {
-  const { user, logout } = useAuth();
+  const { user, logout, loading, refresh } = useAuth();
   const nav = useNavigate();
   const [modules, setModules] = useState({});
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [downloadingCert, setDownloadingCert] = useState(null);
 
   useEffect(() => {
+    if (loading) return;
     if (!user) { nav("/"); return; }
-    api.get("/progress").then(({data}) => setModules(data.modules || {})).catch(() => {});
-  }, [user, nav]);
+    api.get("/progress").then(({ data }) => {
+      setModules(data.modules || {});
+      // refresh user so top cards reflect latest server state
+      refresh?.();
+    }).catch(() => {});
+  }, [user, loading, nav, refresh]);
 
   const downloadCert = async (moduleKey, moduleName) => {
     setDownloadingCert(moduleKey);
@@ -52,6 +57,9 @@ export default function Profile() {
     }
   };
 
+  if (loading) return (
+    <div className="min-h-[60vh] flex items-center justify-center text-slate-500 text-sm" data-testid="profile-loading">Loading profile…</div>
+  );
   if (!user) return null;
 
   return (

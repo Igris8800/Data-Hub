@@ -51,6 +51,15 @@ Leaderboard: GET /api/leaderboard
 - XP + streak + level (Rookie→Master) + total_solved sync via /api/progress
 - AI question generator endpoint (Claude Sonnet 4.5, premium-gated)
 
+## What's Implemented (2026-02-24 — Iteration 2)
+- **AI question bank growth**: `/api/ai/generate-question` (un-gated for now, TODO re-gate to premium once Razorpay live) generates questions via Claude Sonnet 4.5 and persists them in `db.ai_questions` with hash-based dedup. `/api/questions/{module}` returns the growing bank.
+- **Frontend "Grow bank with AI (+3)" button** on every module page — appends fresh AI questions into the sidebar with ★ marker.
+- **PDF certificate generator** at `/api/certificate/{module}` using reportlab. Landscape A4 with brand colors, cert ID, XP, level. Threshold: 20 correct answers in that module.
+- **Profile certificate downloads**: per-module button (data-testid `cert-download-<key>`) shows progress toward threshold and downloads PDF when unlocked.
+- **Adaptive difficulty routing**: consecutive-correct streak per (module, difficulty) tracked in localStorage `dh_streak_<module>_<difficulty>`. After 5 in a row, a Sonner toast prompts the user to advance to the next difficulty with a one-tap action.
+- **Adaptive backend endpoint** `/api/adaptive/{module}` returns rolling last-10 accuracy per difficulty and a `recommend` next level.
+- **Profile bug fix**: loading state respected so direct-URL / hard-reload of /profile no longer redirects logged-in users to home.
+
 ## Deferred / Backlog
 - P0: Actual Razorpay keys → real subscription flow
 - P1: Expand question bank to ~1000/module (AI generator can help)
