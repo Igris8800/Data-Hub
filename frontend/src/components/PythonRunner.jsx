@@ -28,6 +28,7 @@ async function getPyodide(setStatus) {
   return pyodidePromise;
 }
 
+export default function PythonRunner({ question, onSolved }) {
   const { user, setUser } = useAuth();
   const [code, setCode] = useState(question.starter || "");
   const [output, setOutput] = useState("");

@@ -362,34 +362,41 @@ async def get_progress(request: Request):
             per_module[m]["solved"] += 1
     return {"user": user_to_public(user).model_dump(), "modules": per_module, "attempts": attempts}
 
-# --- AI Question Generation (Premium only) ---
-@api_router.post("/ai/generate-question")
-async def generate_question(payload: AIQuestionRequest, request: Request):
-    user = await require_user(request)
-    if not user.get("is_premium"):
-        raise HTTPException(status_code=402, detail="Premium subscription required")
+# --- AI Question Generation (currently un-gated — TODO: re-gate to premium once payments are live) ---
+class AIGenerateBatch(BaseModel):
+    module: str
+    difficulty: str
+    count: int = 1
+    topic: Optional[str] = None
 
+def _hash_q(module: str, prompt: str) -> str:
+    import hashlib
+    return hashlib.sha1(f"{module}::{prompt}".encode()).hexdigest()[:16]
+
+async def _ai_generate_one(module: str, difficulty: str, topic: Optional[str]) -> dict:
     if not EMERGENT_LLM_KEY:
         raise HTTPException(status_code=500, detail="LLM key not configured")
-
     try:
         from emergentintegrations.llm.chat import LlmChat, UserMessage
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"LLM library not available: {e}")
 
     system = (
-        "You generate practice questions for a Data Analyst learning platform. "
-        "Output STRICT JSON with keys: title, prompt, type (mcq|code|fill), "
-        "options (list of 4 for mcq else empty), correct_answer (string), hint, solution, difficulty."
+        "You generate concise practice questions for a Data Analyst learning platform. "
+        "Return STRICT JSON only (no markdown, no prose) with EXACTLY these keys: "
+        "title (short string), prompt (question text), type ('mcq'|'fill'|'code'), "
+        "options (array of 4 strings for mcq, else empty array), answer (correct answer as string; "
+        "for mcq must exactly match one option), hint (one-line), solution (short explanation). "
+        "Difficulty is inferred from context: beginner=easy fundamentals, intermediate=applied, advanced=interview-level."
     )
     prompt = (
-        f"Generate one {payload.difficulty} question for module '{payload.module}'."
-        + (f" Topic: {payload.topic}." if payload.topic else "")
-        + " Return only JSON."
+        f"Generate ONE {difficulty} question for the '{module}' module."
+        + (f" Focus topic: {topic}." if topic else "")
+        + " Vary from typical textbook examples. Return only the JSON object."
     )
     chat = LlmChat(
         api_key=EMERGENT_LLM_KEY,
-        session_id=f"gen_{user['user_id']}_{uuid.uuid4().hex[:8]}",
+        session_id=f"gen_{uuid.uuid4().hex[:10]}",
         system_message=system,
     ).with_model("anthropic", "claude-sonnet-4-6")
 
@@ -397,17 +404,201 @@ async def generate_question(payload: AIQuestionRequest, request: Request):
     async for ev in chat.stream_message(UserMessage(text=prompt)):
         if hasattr(ev, "content"):
             text += ev.content
-    # Extract JSON
+
     import json, re
-    m = re.search(r"\{.*\}", text, re.S)
-    if not m:
+    # Strip markdown code fences if present
+    cleaned = re.sub(r"^```(?:json)?\s*|\s*```$", "", text.strip(), flags=re.M).strip()
+
+    def _try_parse(s: str):
+        # 1. Direct parse
+        try:
+            return json.loads(s)
+        except Exception:
+            pass
+        # 2. Use raw_decode from first '{' — grabs first valid object even if trailing junk
+        start = s.find("{")
+        if start >= 0:
+            try:
+                dec = json.JSONDecoder()
+                obj, _end = dec.raw_decode(s[start:])
+                return obj
+            except Exception:
+                pass
+        return None
+
+    obj = _try_parse(cleaned)
+    if obj is None:
+        logger.warning(f"AI raw response (first 800 chars): {text[:800]!r}")
         raise HTTPException(status_code=500, detail="AI failed to produce JSON")
-    try:
-        data = json.loads(m.group(0))
-    except Exception:
-        raise HTTPException(status_code=500, detail="AI returned invalid JSON")
-    data["id"] = f"ai_{uuid.uuid4().hex[:10]}"
-    return data
+
+    q_id = f"ai-{module}-{_hash_q(module, obj.get('prompt',''))}"
+    doc = {
+        "id": q_id,
+        "module": module,
+        "difficulty": difficulty,
+        "type": obj.get("type", "mcq"),
+        "title": obj.get("title") or "AI Question",
+        "prompt": obj.get("prompt") or "",
+        "options": obj.get("options") or [],
+        "answer": obj.get("answer") or obj.get("correct_answer") or "",
+        "hint": obj.get("hint") or "",
+        "solution": obj.get("solution") or "",
+        "source": "ai",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    # Store (upsert on id)
+    await db.ai_questions.update_one({"id": q_id}, {"$setOnInsert": doc}, upsert=True)
+    return doc
+
+@api_router.post("/ai/generate-question")
+async def generate_question(payload: AIGenerateBatch, request: Request):
+    # TODO: When payments go live, re-add: if not user.get("is_premium"): raise 402
+    _ = await require_user(request)
+    count = max(1, min(payload.count, 5))
+    results = []
+    for _i in range(count):
+        try:
+            results.append(await _ai_generate_one(payload.module, payload.difficulty, payload.topic))
+        except HTTPException:
+            raise
+        except Exception as e:
+            logger.warning(f"AI gen failed: {e}")
+    return {"generated": results, "total_in_bank": await db.ai_questions.count_documents({"module": payload.module, "difficulty": payload.difficulty})}
+
+@api_router.get("/questions/{module}")
+async def get_questions(module: str, difficulty: Optional[str] = None):
+    """Public — returns AI-generated questions for the given module (already stored)."""
+    q = {"module": module}
+    if difficulty:
+        q["difficulty"] = difficulty
+    docs = await db.ai_questions.find(q, {"_id": 0}).sort("created_at", -1).to_list(200)
+    return {"module": module, "questions": docs, "total": len(docs)}
+
+# --- Adaptive difficulty helper ---
+@api_router.get("/adaptive/{module}")
+async def adaptive_progress(module: str, request: Request):
+    """Returns rolling per-difficulty accuracy for the current user in the given module."""
+    user = await require_user(request)
+    attempts = await db.attempts.find(
+        {"user_id": user["user_id"], "module": module}, {"_id": 0}
+    ).sort("updated_at", -1).to_list(500)
+    by_diff = {"beginner": [], "intermediate": [], "advanced": []}
+    for a in attempts:
+        d = a.get("difficulty", "beginner")
+        if d in by_diff and len(by_diff[d]) < 10:
+            by_diff[d].append(bool(a.get("correct")))
+    def acc(arr):
+        if not arr: return None
+        return sum(1 for x in arr if x) / len(arr)
+    return {
+        "beginner_last10_accuracy": acc(by_diff["beginner"]),
+        "intermediate_last10_accuracy": acc(by_diff["intermediate"]),
+        "advanced_last10_accuracy": acc(by_diff["advanced"]),
+        "recommend": (
+            "advanced" if acc(by_diff["intermediate"]) and acc(by_diff["intermediate"]) >= 0.8 else
+            "intermediate" if acc(by_diff["beginner"]) and acc(by_diff["beginner"]) >= 0.8 else
+            None
+        ),
+    }
+
+# --- Certificate PDF ---
+@api_router.get("/certificate/{module}")
+async def certificate(module: str, request: Request):
+    from fastapi.responses import StreamingResponse
+    from reportlab.pdfgen import canvas
+    from reportlab.lib.pagesizes import landscape, A4
+    from reportlab.lib.colors import HexColor
+    import io
+
+    user = await require_user(request)
+
+    # Verify user has solved enough (>= 20 of 25 free questions in this module)
+    attempts = await db.attempts.find(
+        {"user_id": user["user_id"], "module": module, "correct": True}, {"_id": 0}
+    ).to_list(500)
+    solved = len(attempts)
+    threshold = 20
+    if solved < threshold:
+        raise HTTPException(status_code=400, detail=f"Complete at least {threshold} questions in this module to unlock the certificate (currently {solved}).")
+
+    module_names = {
+        "excel": "Excel Analytics",
+        "sql": "SQL for Data",
+        "python": "Python for Data Analysts",
+        "powerbi": "Power BI",
+        "stats": "Statistics",
+    }
+    module_label = module_names.get(module, module.title())
+
+    buf = io.BytesIO()
+    w, h = landscape(A4)
+    c = canvas.Canvas(buf, pagesize=landscape(A4))
+
+    # Background
+    c.setFillColor(HexColor("#0D1117"))
+    c.rect(0, 0, w, h, fill=1, stroke=0)
+
+    # Border
+    c.setStrokeColor(HexColor("#00D4FF"))
+    c.setLineWidth(2)
+    c.rect(20, 20, w - 40, h - 40, fill=0, stroke=1)
+    c.setStrokeColor(HexColor("#00FF88"))
+    c.setLineWidth(0.5)
+    c.rect(30, 30, w - 60, h - 60, fill=0, stroke=1)
+
+    # Header
+    c.setFillColor(HexColor("#00D4FF"))
+    c.setFont("Helvetica-Bold", 42)
+    c.drawCentredString(w / 2, h - 110, "Certificate of Completion")
+
+    c.setFillColor(HexColor("#94A3B8"))
+    c.setFont("Helvetica", 14)
+    c.drawCentredString(w / 2, h - 145, "DATA HUB · Learn. Practice. Get Hired.")
+
+    # Name
+    c.setFillColor(HexColor("#F8FAFC"))
+    c.setFont("Helvetica", 16)
+    c.drawCentredString(w / 2, h - 210, "This is proudly presented to")
+
+    c.setFont("Helvetica-Bold", 36)
+    c.drawCentredString(w / 2, h - 260, user.get("name", "Analyst"))
+
+    c.setStrokeColor(HexColor("#30363D"))
+    c.setLineWidth(0.5)
+    c.line(w / 2 - 180, h - 275, w / 2 + 180, h - 275)
+
+    c.setFillColor(HexColor("#94A3B8"))
+    c.setFont("Helvetica", 14)
+    c.drawCentredString(w / 2, h - 310, "for successfully completing the")
+
+    c.setFillColor(HexColor("#00FF88"))
+    c.setFont("Helvetica-Bold", 28)
+    c.drawCentredString(w / 2, h - 350, f"{module_label} module")
+
+    c.setFillColor(HexColor("#94A3B8"))
+    c.setFont("Helvetica", 12)
+    c.drawCentredString(w / 2, h - 390, f"Solved {solved} questions · XP earned: {user.get('xp', 0)} · Level: {compute_level(user.get('xp', 0))}")
+
+    # Footer
+    cert_id = f"DH-{module.upper()}-{user['user_id'][-6:].upper()}-{datetime.now(timezone.utc).strftime('%Y%m%d')}"
+    c.setFont("Helvetica", 10)
+    c.drawString(60, 60, f"Certificate ID · {cert_id}")
+    c.drawRightString(w - 60, 60, f"Issued · {datetime.now(timezone.utc).strftime('%d %b %Y')}")
+
+    c.setFillColor(HexColor("#00D4FF"))
+    c.setFont("Helvetica-Bold", 12)
+    c.drawCentredString(w / 2, 65, "datahub.app")
+
+    c.showPage()
+    c.save()
+    buf.seek(0)
+
+    filename = f"datahub-{module}-certificate-{user['user_id'][-6:]}.pdf"
+    return StreamingResponse(
+        buf,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
 
 # --- Razorpay (payments) ---
 @api_router.get("/payments/config")

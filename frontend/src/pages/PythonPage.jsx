@@ -8,7 +8,7 @@ export default function PythonPage() {
     <ModulePractice
       moduleKey="python"
       render={(q, onSolved) => (
-        q.type === "code"
+        q.type === "code" && q.source !== "ai"
           ? <PythonRunner question={q} onSolved={onSolved} />
           : <QuestionCard question={q} onSolved={onSolved} />
       )}

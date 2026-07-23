@@ -29,6 +29,7 @@ async function getDb() {
   return sqlDbPromise;
 }
 
+export default function SQLRunner({ question, onSolved }) {
   const { user, setUser } = useAuth();
   const [code, setCode] = useState("");
   const [output, setOutput] = useState(null);

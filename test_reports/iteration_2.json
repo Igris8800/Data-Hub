@@ -1,0 +1,59 @@
+{
+  "summary": "Iteration 2 E2E testing complete. Backend: 27/27 pytest tests passed — all 3 new features (AI question generation via Claude Sonnet 4.5, adaptive difficulty API, certificate PDF) work end-to-end. Frontend: 5/6 core flows verified. Iteration 1 header-XP live-refresh bug is confirmed FIXED. One new bug discovered: Profile.jsx redirects to / on hard-reload/direct URL because it does not wait for AuthProvider.loading to resolve before checking !user. SPA navigation to /profile works fine.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "Profile.jsx",
+        "issue": "On hard-reload or direct URL entry to /profile, the page redirects back to / even for authenticated users. Root cause: useEffect fires `if (!user) nav('/')` while AuthProvider is still in loading=true (user=null momentarily until /api/auth/me resolves). Should gate the redirect on `!loading && !user`.",
+        "selector": "[data-testid=\"profile-name\"]",
+        "priority": "MEDIUM"
+      },
+      {
+        "component": "Profile.jsx StatBig cards (XP/Streak/Solved)",
+        "issue": "After seeding progress via API (or any state change outside the current tab), the top XP/Streak/Solved cards read from the stale AuthProvider `user` object and remain 0 even though the per-module 'Statistics: 20 solved · 100%' below is correct (fresh /api/progress fetch). Consider refreshing the user via `refresh()` inside the /progress useEffect.",
+        "selector": ".StatBig",
+        "priority": "LOW"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "Fix Profile.jsx redirect: change `if (!user) { nav('/'); return; }` to `if (!loading && !user) { nav('/'); return; } if (loading) return null;` (import `loading` from useAuth). This ensures direct-URL and hard-reload access to /profile work for authenticated users.",
+    "(Optional) In Profile.jsx after `api.get('/progress')` also call `refresh()` from useAuth so the top XP/Streak/Solved cards reflect current server state."
+  ],
+  "critical_code_review_comments": [
+    "Backend server.py:401 uses model 'claude-sonnet-4-6' — verified working end-to-end (real Claude call returned valid JSON, ~15-30s per question).",
+    "Backend /api/ai/generate-question is currently UN-GATED (no premium check) as intentionally noted in the code comment and by the user. Once Razorpay goes live this must be re-gated.",
+    "Backend /api/certificate/{module} correctly enforces the 20-question threshold, returns application/pdf with attachment disposition, and body starts with %PDF magic bytes.",
+    "Backend /api/adaptive/{module} correctly returns beginner_last10_accuracy=1.0 and recommend='intermediate' after 9 correct beginner attempts.",
+    "GET /api/questions/{module} correctly returns AI-generated questions ordered by created_at DESC with source='ai' on each item.",
+    "Backend AI generate endpoint stores questions in db.ai_questions with an id hashed from module+prompt (upsert via $setOnInsert) so re-generating the same prompt is idempotent.",
+    "ModulePractice.jsx correctly merges seed + AI questions into the sidebar (verified: '11 available +2 AI' shown for stats) with ★ marker on AI items.",
+    "Adaptive-difficulty streak tracking via localStorage `dh_streak_<module>_<difficulty>` works correctly at threshold=5; toast fires with a working 'Go intermediate' action button that switches difficulty.",
+    "Iteration 1 UX gap CONFIRMED FIXED: after 5 correct MCQs in Statistics the header-xp updates from 0 → 50 without page reload (QuestionCard.jsx line 46 now calls setUser(data.user) after progress POST).",
+    "Profile.jsx redirect-before-loading bug: this makes bookmarking /profile or refreshing the page impossible for logged-in users — significant UX issue.",
+    "server.py CORS: allow_credentials=True + allow_origins='*' remains a latent issue (unchanged from iteration 1)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/backend_test.py (added 8 new tests for AI generation, /questions/{module}, adaptive, and certificate flows; removed obsolete AI premium 402 test since endpoint is now un-gated)"
+  ],
+  "success_rate": {
+    "backend": "100% (27/27)",
+    "frontend": "83% (5/6 — Profile.jsx has redirect bug)"
+  },
+  "test_credentials": "Fresh signups per run via /api/auth/signup with emails qa+datahub-<ts>@example.com, qa+ui-*@example.com, password TestPass!234, per /app/memory/test_credentials.md.",
+  "seed_data_creation": "During tests: 1 AI stats question generated and stored in db.ai_questions (via real Claude call). Multiple TEST_ users created and 20+ correct attempts seeded per user for /python and /stats to unlock cert.",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Backend is 100% solid — no changes needed on any of the iteration-2 endpoints. Only outstanding UI item is the Profile.jsx hard-reload redirect bug. Reproduce: log in (or seed localStorage 'datahub_token'), directly navigate to /profile (or hard-refresh on that URL) — page redirects to /. Fix: gate the `!user` redirect on `loading===false`. To verify fix: after fix, `page.goto('/profile')` should render [data-testid=profile-name] with the logged-in user's name. AI generation is real and takes 15-30s per question; count=1 is enough for testing. Certificate PDF download in the frontend was verified end-to-end (download event fires, file has %PDF magic bytes, filename is 'datahub-<module>-certificate.pdf'). Adaptive difficulty toast works after 5 consecutive correct answers in the same (module,difficulty); localStorage key `dh_streak_<module>_<difficulty>` must be cleared between runs to reproduce.",
+  "rca of the issue": "Profile hard-reload redirect: /app/frontend/src/pages/Profile.jsx line 22-25 runs useEffect on mount with `if (!user) { nav('/'); return; }`. On any full page load, AuthProvider starts with user=null, loading=true, and asynchronously fetches /api/auth/me. The Profile useEffect fires before that promise resolves, so !user is true and the page navigates away. The AuthContext already exposes `loading` but Profile.jsx does not consume it. Mitigation: `const { user, logout, loading } = useAuth(); useEffect(() => { if (!loading && !user) nav('/'); }, [user, loading]);` and render a null / spinner while loading."
+}

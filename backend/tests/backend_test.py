@@ -164,16 +164,117 @@ class TestPayments:
         assert r.status_code == 401
 
 
-# ---------- AI Generate ----------
+# ---------- AI Generate (Iteration 2: un-gated, real Claude call) ----------
 class TestAIGenerate:
     def test_ai_requires_auth(self, session):
         r = session.post(f"{API}/ai/generate-question", json={"module": "sql", "difficulty": "beginner"}, timeout=15)
         assert r.status_code == 401
 
-    def test_ai_requires_premium(self, session, auth):
+    def test_ai_generate_success_and_shape(self, session, auth):
+        """Iteration 2: /ai/generate-question is un-gated. One real Claude call."""
         headers = {"Authorization": f"Bearer {auth['token']}"}
-        r = session.post(f"{API}/ai/generate-question", json={"module": "sql", "difficulty": "beginner"}, headers=headers, timeout=30)
-        assert r.status_code == 402
+        # count=1 to keep runtime reasonable (~15-45s per call)
+        r = session.post(
+            f"{API}/ai/generate-question",
+            json={"module": "stats", "difficulty": "beginner", "count": 1},
+            headers=headers,
+            timeout=90,
+        )
+        assert r.status_code == 200, f"AI gen failed: {r.status_code} {r.text}"
+        data = r.json()
+        assert "generated" in data
+        assert isinstance(data["generated"], list)
+        assert len(data["generated"]) == 1
+        assert data.get("total_in_bank", 0) >= 1
+        q = data["generated"][0]
+        for k in ("id", "module", "difficulty", "type", "title", "prompt", "options", "answer", "hint", "solution", "source"):
+            assert k in q, f"missing key {k} in AI question"
+        assert q["module"] == "stats"
+        assert q["difficulty"] == "beginner"
+        assert q["source"] == "ai"
+        assert isinstance(q["options"], list)
+
+    def test_questions_get_returns_generated(self, session, auth):
+        """GET /api/questions/stats should now include the just-generated AI question."""
+        r = session.get(f"{API}/questions/stats", timeout=15)
+        assert r.status_code == 200
+        data = r.json()
+        assert data["module"] == "stats"
+        assert isinstance(data["questions"], list)
+        assert data["total"] >= 1
+        # Every returned Q has source=ai
+        for q in data["questions"]:
+            assert q.get("source") == "ai"
+
+    def test_questions_get_empty_module(self, session):
+        """A module with no AI questions yet returns empty list, total=0."""
+        r = session.get(f"{API}/questions/powerbi", timeout=15)
+        assert r.status_code == 200
+        data = r.json()
+        assert data["module"] == "powerbi"
+        # Could be non-empty if a prior run populated it — allow >=0 but require list shape
+        assert isinstance(data["questions"], list)
+        assert data["total"] == len(data["questions"])
+
+
+# ---------- Adaptive difficulty ----------
+class TestAdaptive:
+    def test_adaptive_requires_auth(self, session):
+        r = session.get(f"{API}/adaptive/sql", timeout=15)
+        assert r.status_code == 401
+
+    def test_adaptive_recommends_intermediate_after_beginner_streak(self, session, auth):
+        """
+        Log 9 correct SQL beginner attempts → beginner_last10_accuracy=1.0, recommend=intermediate.
+        """
+        headers = {"Authorization": f"Bearer {auth['token']}"}
+        for i in range(9):
+            r = session.post(
+                f"{API}/progress",
+                json={"module": "sql", "question_id": f"sql_beg_adaptive_{i}", "correct": True, "difficulty": "beginner"},
+                headers=headers, timeout=15,
+            )
+            assert r.status_code == 200
+        r = session.get(f"{API}/adaptive/sql", headers=headers, timeout=15)
+        assert r.status_code == 200
+        data = r.json()
+        assert data["beginner_last10_accuracy"] == 1.0
+        assert data["recommend"] == "intermediate"
+
+
+# ---------- Certificate PDF ----------
+class TestCertificate:
+    def test_certificate_requires_auth(self, session):
+        r = session.get(f"{API}/certificate/sql", timeout=15)
+        assert r.status_code == 401
+
+    def test_certificate_locked_when_below_threshold(self, session, auth):
+        """User has <20 correct in 'excel' — expect 400."""
+        headers = {"Authorization": f"Bearer {auth['token']}"}
+        r = session.get(f"{API}/certificate/excel", headers=headers, timeout=15)
+        assert r.status_code == 400
+        assert "Complete at least" in r.json().get("detail", "")
+
+    def test_certificate_unlocked_pdf(self, session, auth):
+        """
+        Seed 20 correct 'python' attempts → certificate returns application/pdf starting with %PDF.
+        """
+        headers = {"Authorization": f"Bearer {auth['token']}"}
+        for i in range(20):
+            r = session.post(
+                f"{API}/progress",
+                json={"module": "python", "question_id": f"py_cert_{i}", "correct": True, "difficulty": "beginner"},
+                headers=headers, timeout=15,
+            )
+            assert r.status_code == 200
+        r = session.get(f"{API}/certificate/python", headers=headers, timeout=20)
+        assert r.status_code == 200, f"cert failed: {r.status_code} {r.text[:200]}"
+        assert r.headers.get("content-type", "").startswith("application/pdf")
+        cd = r.headers.get("content-disposition", "")
+        assert "attachment" in cd.lower()
+        assert ".pdf" in cd.lower()
+        # Actual PDF bytes
+        assert r.content[:4] == b"%PDF", f"body does not look like PDF: {r.content[:10]!r}"
 
 
 # ---------- Newsletter ----------

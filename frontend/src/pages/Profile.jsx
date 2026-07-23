@@ -1,34 +1,66 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { useNavigate } from "react-router-dom";
-import { Flame, Zap, Trophy, Crown, Award, Sheet, Database, Code2, BarChart3, Sigma } from "lucide-react";
+import { Flame, Zap, Trophy, Crown, Award, Sheet, Database, Code2, BarChart3, Sigma, Download, Loader2 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import UpgradeModal from "@/components/UpgradeModal";
 import { MODULES } from "@/lib/questions";
 import api from "@/lib/api";
+import { toast } from "sonner";
 
 const ICONS = { Sheet, Database, Code2, BarChart3, Sigma };
+const CERT_THRESHOLD = 20;
 
 export default function Profile() {
   const { user, logout } = useAuth();
   const nav = useNavigate();
   const [modules, setModules] = useState({});
   const [upgradeOpen, setUpgradeOpen] = useState(false);
+  const [downloadingCert, setDownloadingCert] = useState(null);
 
   useEffect(() => {
     if (!user) { nav("/"); return; }
-    api.get("/progress").then(({data}) => setModules(data.modules || {})).catch(()=>{});
+    api.get("/progress").then(({data}) => setModules(data.modules || {})).catch(() => {});
   }, [user, nav]);
+
+  const downloadCert = async (moduleKey, moduleName) => {
+    setDownloadingCert(moduleKey);
+    try {
+      const res = await api.get(`/certificate/${moduleKey}`, { responseType: "blob" });
+      const url = URL.createObjectURL(res.data);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `datahub-${moduleKey}-certificate.pdf`;
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+      toast.success(`${moduleName} certificate downloaded!`);
+    } catch (e) {
+      let msg = "Failed to download certificate";
+      if (e?.response?.data instanceof Blob) {
+        try {
+          const txt = await e.response.data.text();
+          const parsed = JSON.parse(txt);
+          msg = parsed.detail || msg;
+        } catch { void 0; }
+      } else if (e?.response?.data?.detail) {
+        msg = e.response.data.detail;
+      }
+      toast.error(msg);
+    } finally {
+      setDownloadingCert(null);
+    }
+  };
 
   if (!user) return null;
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-4">
       <div className="p-8 rounded-xl border border-white/10 bg-[#151B23] flex items-center gap-6 flex-wrap mb-8">
-        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#00D4FF] to-[#00FF88] flex items-center justify-center text-[#0D1117] font-heading font-bold text-2xl" data-testid="profile-avatar">
-          {(user.picture ? null : user.name?.[0]?.toUpperCase())}
-          {user.picture && <img src={user.picture} alt="" className="w-full h-full rounded-full object-cover" />}
+        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#00D4FF] to-[#00FF88] flex items-center justify-center text-[#0D1117] font-heading font-bold text-2xl overflow-hidden" data-testid="profile-avatar">
+          {user.picture
+            ? <img src={user.picture} alt="" className="w-full h-full rounded-full object-cover" />
+            : user.name?.[0]?.toUpperCase()}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
@@ -65,11 +97,15 @@ export default function Profile() {
         </div>
       )}
 
-      <div className="mb-4 text-xs uppercase tracking-[0.2em] text-slate-500">Progress by module</div>
+      <div className="mb-4 flex items-center justify-between flex-wrap gap-2">
+        <div className="text-xs uppercase tracking-[0.2em] text-slate-500">Progress & certificates</div>
+        <div className="text-xs text-slate-500">Solve {CERT_THRESHOLD}+ questions in a module to unlock its certificate</div>
+      </div>
       <div className="grid md:grid-cols-2 gap-4 mb-10">
         {MODULES.map(m => {
           const Icon = ICONS[m.icon];
           const solved = modules[m.key]?.solved || 0;
+          const certReady = solved >= CERT_THRESHOLD;
           return (
             <div key={m.key} className="p-4 rounded-lg border border-white/10 bg-[#151B23]" data-testid={`profile-module-${m.key}`}>
               <div className="flex items-center gap-3 mb-3">
@@ -78,11 +114,25 @@ export default function Profile() {
                 </div>
                 <div className="flex-1">
                   <div className="font-heading text-lg tracking-tight">{m.name}</div>
-                  <div className="text-xs text-slate-500">{solved} solved · 25 free questions</div>
+                  <div className="text-xs text-slate-500">{solved} solved · certificate at {CERT_THRESHOLD}</div>
                 </div>
-                <div className="font-mono-editor text-sm text-slate-400">{Math.round((solved/25)*100)}%</div>
+                <div className="font-mono-editor text-sm text-slate-400">{Math.round((solved / CERT_THRESHOLD) * 100)}%</div>
               </div>
-              <Progress value={(solved/25)*100} className="h-1.5" />
+              <Progress value={Math.min(100, (solved / CERT_THRESHOLD) * 100)} className="h-1.5 mb-3" />
+              <Button
+                size="sm"
+                disabled={!certReady || downloadingCert === m.key}
+                onClick={() => downloadCert(m.key, m.name)}
+                data-testid={`cert-download-${m.key}`}
+                className={certReady
+                  ? "w-full rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 text-[#0D1117] hover:from-yellow-300 hover:to-amber-400 font-medium"
+                  : "w-full rounded-full border border-white/10 bg-transparent text-slate-500 hover:bg-white/5"}
+              >
+                {downloadingCert === m.key
+                  ? <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  : certReady ? <Download className="w-4 h-4 mr-2" /> : <Award className="w-4 h-4 mr-2" />}
+                {certReady ? "Download certificate" : `Unlocks at ${CERT_THRESHOLD} solved`}
+              </Button>
             </div>
           );
         })}
