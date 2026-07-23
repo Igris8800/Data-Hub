@@ -29,8 +29,7 @@ async function getDb() {
   return sqlDbPromise;
 }
 
-export default function SQLRunner({ question, onSolved }) {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const [code, setCode] = useState("");
   const [output, setOutput] = useState(null);
   const [error, setError] = useState(null);
@@ -83,12 +82,13 @@ export default function SQLRunner({ question, onSolved }) {
         onSolved?.(question);
         if (user) {
           try {
-            await api.post("/progress", {
+            const { data } = await api.post("/progress", {
               module: question.module,
               question_id: question.id,
               correct: true,
               difficulty: question.difficulty,
             });
+            if (data?.user) setUser(data.user);
           } catch (e) { void e; }
         }
       } else {

@@ -63,7 +63,7 @@ export default function Header() {
                   )}
                 </div>
                 <Button variant="ghost" size="sm" onClick={() => nav("/profile")} data-testid="header-profile-btn">
-                  <User className="w-4 h-4 mr-1" /> {user.name.split(" ")[0]}
+                  <User className="w-4 h-4 mr-1" /> {user.name?.split(" ")?.[0] ?? "You"}
                 </Button>
                 <Button variant="ghost" size="sm" onClick={logout} data-testid="header-logout-btn" title="Logout">
                   <LogOut className="w-4 h-4" />

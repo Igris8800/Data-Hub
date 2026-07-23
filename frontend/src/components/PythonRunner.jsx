@@ -28,8 +28,7 @@ async function getPyodide(setStatus) {
   return pyodidePromise;
 }
 
-export default function PythonRunner({ question, onSolved }) {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const [code, setCode] = useState(question.starter || "");
   const [output, setOutput] = useState("");
   const [error, setError] = useState(null);
@@ -74,12 +73,13 @@ sys.stderr = _buf
         onSolved?.(question);
         if (user) {
           try {
-            await api.post("/progress", {
+            const { data } = await api.post("/progress", {
               module: question.module,
               question_id: question.id,
               correct: true,
               difficulty: question.difficulty,
             });
+            if (data?.user) setUser(data.user);
           } catch (e) { void e; }
         }
       } else {
