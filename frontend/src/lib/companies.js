@@ -28,6 +28,7 @@ export const AMAZON = {
   tagline: "E-commerce · Fulfillment · Reviews",
   color: "#FF9900",
   logo: "🛒",
+  logoUrl: "https://cdn.simpleicons.org/amazon/FF9900",
   tables: [
     {
       name: "customers", color: "#FF9900",
@@ -164,6 +165,7 @@ export const NETFLIX = {
   tagline: "Streaming · Subscriptions · Content",
   color: "#E50914",
   logo: "🎬",
+  logoUrl: "https://cdn.simpleicons.org/netflix/E50914",
   tables: [
     {
       name: "users", color: "#E50914",
@@ -263,6 +265,7 @@ export const UBER = {
   tagline: "Rideshare · Drivers · Payments",
   color: "#000000",
   logo: "🚗",
+  logoUrl: "https://cdn.simpleicons.org/uber/FFFFFF",
   tables: [
     {
       name: "drivers", color: "#00D4FF",
@@ -334,6 +337,7 @@ export const GOOGLE = {
   tagline: "Search · Ads · YouTube",
   color: "#4285F4",
   logo: "🔍",
+  logoUrl: "https://cdn.simpleicons.org/google/4285F4",
   tables: [
     {
       name: "users", color: "#4285F4",
@@ -449,6 +453,7 @@ export const META = {
   tagline: "Facebook · Instagram · Growth",
   color: "#1877F2",
   logo: "🌐",
+  logoUrl: "https://cdn.simpleicons.org/meta/1877F2",
   tables: [
     {
       name: "users", color: "#1877F2",

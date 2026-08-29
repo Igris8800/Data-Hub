@@ -66,11 +66,29 @@ function formatSql(s) {
 }
 
 // --- Sub-components ---
-function ModeTab({ active, onClick, icon: Icon, label, testId }) {
+const MODE_META = {
+  learning:  { color: "#00FF88", tag: "Guided",     desc: "Sequential · hints allowed"        },
+  practice:  { color: "#00D4FF", tag: "Free-form",  desc: "Jump around · full toolkit"         },
+  interview: { color: "#FFD166", tag: "Timed",      desc: "5-min timer · no hints or solution" },
+};
+
+function ModeTab({ active, onClick, icon: Icon, label, testId, mode }) {
+  const meta = MODE_META[mode];
   return (
     <button onClick={onClick} data-testid={testId}
-      className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${active ? "bg-[#151B23] text-white border border-white/10" : "text-slate-400 hover:text-white hover:bg-white/5"}`}>
-      <Icon className="w-3.5 h-3.5" /> {label}
+      title={meta.desc}
+      className={`relative inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200 ${
+        active
+          ? "text-[#0D1117] shadow-lg"
+          : "text-slate-300 hover:text-white hover:bg-white/5"
+      }`}
+      style={active ? {
+        background: meta.color,
+        boxShadow: `0 6px 18px -6px ${meta.color}cc`,
+      } : undefined}
+    >
+      <Icon className="w-4 h-4" /> {label}
+      {active && <span className="ml-1 hidden lg:inline text-[10px] font-mono-editor opacity-70">· {meta.tag}</span>}
     </button>
   );
 }
@@ -269,11 +287,18 @@ export default function SQLPage() {
   const [previewTable, setPreviewTable] = useState(null);
   const [history, setHistory] = useState([]);
   const [lastMs, setLastMs] = useState(null);
+  const [interviewSeconds, setInterviewSeconds] = useState(5 * 60);
 
-  const questions = useMemo(
-    () => company.questions.filter(q => q.difficulty === difficulty),
-    [company, difficulty]
-  );
+  const questions = useMemo(() => {
+    const base = company.questions.filter(q => q.difficulty === difficulty);
+    if (mode === "interview") {
+      // Deterministic shuffle by company + difficulty so refresh doesn't reroll
+      const seed = (company.key + difficulty).split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+      const rand = (i) => ((seed * 9301 + i * 49297) % 233280) / 233280;
+      return base.map((q, i) => ({ q, k: rand(i) })).sort((a, b) => a.k - b.k).map(x => x.q);
+    }
+    return base;
+  }, [company, difficulty, mode]);
   const cur = questions[idx] || company.questions[0];
 
   useEffect(() => {
@@ -288,7 +313,24 @@ export default function SQLPage() {
     setOutputTab("output");
   }, [cur?.id, companyKey]);
 
-  useEffect(() => { setIdx(0); }, [companyKey, difficulty]);
+  useEffect(() => { setIdx(0); }, [companyKey, difficulty, mode]);
+
+  // Interview timer — 5 min per question, resets on question change
+  useEffect(() => {
+    if (mode !== "interview") return;
+    setInterviewSeconds(5 * 60);
+    const t = setInterval(() => {
+      setInterviewSeconds(s => {
+        if (s <= 1) {
+          clearInterval(t);
+          toast.error("⏱ Time's up! Move to the next question.");
+          return 0;
+        }
+        return s - 1;
+      });
+    }, 1000);
+    return () => clearInterval(t);
+  }, [mode, cur?.id]);
 
   // Referenced tables extracted from expected answer for the "referenced" badge
   const referencedTables = useMemo(() => {
@@ -378,17 +420,27 @@ export default function SQLPage() {
   }, [code, cur?.id, companyKey]);
 
   const goPrev = () => setIdx(i => Math.max(0, i - 1));
-  const goNext = () => setIdx(i => Math.min(questions.length - 1, i + 1));
+  const goNext = () => {
+    // Learning mode: block if current not solved
+    if (mode === "learning" && cur && !solvedIds.has(cur.id)) {
+      toast.info("📚 Learning Mode — solve this one before moving on.");
+      return;
+    }
+    setIdx(i => Math.min(questions.length - 1, i + 1));
+  };
+
+  const mm = String(Math.floor(interviewSeconds / 60)).padStart(2, "0");
+  const ss = String(interviewSeconds % 60).padStart(2, "0");
 
   const difficultyLabel = { beginner: "EASY", intermediate: "MEDIUM", advanced: "HARD" }[difficulty];
   const difficultyColor = { beginner: "#00FF88", intermediate: "#00D4FF", advanced: "#FFD166" }[difficulty];
 
   return (
     <div className="min-h-[calc(100vh-140px)] flex flex-col bg-[#0D1117]">
-      {/* Top brand bar with company selector */}
+      {/* Top brand bar */}
       <div className="border-b border-white/10 bg-[#0F1520]">
-        <div className="max-w-[1600px] mx-auto px-4 py-3 flex items-center gap-3 flex-wrap">
-          <div className="flex items-center gap-2 mr-auto">
+        <div className="max-w-[1600px] mx-auto px-4 py-3 flex items-center gap-4 flex-wrap">
+          <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-md bg-gradient-to-br from-[#00D4FF] to-[#00FF88] flex items-center justify-center text-[#0D1117] font-heading font-bold">S</div>
             <div>
               <div className="font-heading text-sm tracking-tight">SQL Practice</div>
@@ -396,26 +448,70 @@ export default function SQLPage() {
             </div>
           </div>
 
-          {/* Company selector — the key upgrade */}
-          <div className="flex items-center gap-1 p-1 rounded-lg bg-[#0D1117] border border-white/5" data-testid="company-selector">
-            {COMPANIES.map(c => (
-              <button key={c.key}
-                onClick={() => setCompanyKey(c.key)}
-                data-testid={`company-${c.key}`}
-                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${c.key === companyKey ? "text-white" : "text-slate-400 hover:text-white hover:bg-white/5"}`}
-                style={c.key === companyKey ? { background: `${c.color}22`, border: `1px solid ${c.color}66` } : { border: "1px solid transparent" }}>
-                <span className="text-base leading-none">{c.logo}</span>
-                <span>{c.name}</span>
-                <span className="text-[9px] font-mono-editor px-1.5 py-0.5 rounded bg-white/5 text-slate-400">{c.questions.length}Q</span>
-              </button>
-            ))}
+          {/* HERO MODE SELECTOR — large, prominent, always visible */}
+          <div
+            className="flex items-center gap-1 p-1 rounded-lg bg-[#0D1117] border border-white/10"
+            data-testid="mode-selector"
+            role="tablist"
+            aria-label="Practice mode"
+          >
+            <ModeTab mode="learning"  active={mode === "learning"}  onClick={() => setMode("learning")}  icon={BookOpen}  label="Learning"  testId="mode-learning" />
+            <ModeTab mode="practice"  active={mode === "practice"}  onClick={() => setMode("practice")}  icon={Play}      label="Practice"  testId="mode-practice" />
+            <ModeTab mode="interview" active={mode === "interview"} onClick={() => setMode("interview")} icon={Briefcase} label="Interview" testId="mode-interview" />
           </div>
 
-          <div className="flex items-center gap-1 p-1 rounded-lg bg-[#0D1117] border border-white/5">
-            <ModeTab active={mode === "learning"}  onClick={() => setMode("learning")}  icon={BookOpen}  label="Learning"  testId="mode-learning" />
-            <ModeTab active={mode === "practice"}  onClick={() => setMode("practice")}  icon={Play}      label="Practice"  testId="mode-practice" />
-            <ModeTab active={mode === "interview"} onClick={() => setMode("interview")} icon={Briefcase} label="Interview" testId="mode-interview" />
+          {/* Company selector — pushed to the right */}
+          <div className="flex items-center gap-2 flex-wrap ml-auto" data-testid="company-selector">
+            {COMPANIES.map(c => {
+              const active = c.key === companyKey;
+              return (
+                <button
+                  key={c.key}
+                  onClick={() => setCompanyKey(c.key)}
+                  data-testid={`company-${c.key}`}
+                  title={c.name}
+                  className={`relative inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${active ? "text-white -translate-y-0.5" : "text-slate-400 hover:text-white hover:bg-white/5 border border-white/5"}`}
+                  style={active ? {
+                    background: `linear-gradient(135deg, ${c.color}22, ${c.color}11)`,
+                    border: `1px solid ${c.color}`,
+                    boxShadow: `0 0 0 3px ${c.color}22, 0 8px 24px -6px ${c.color}88`,
+                  } : undefined}
+                >
+                  <img
+                    src={c.logoUrl}
+                    alt={c.name}
+                    className={`w-4 h-4 object-contain transition-all ${active ? "" : "opacity-70 grayscale group-hover:grayscale-0"}`}
+                    onError={(e) => { e.currentTarget.style.display = "none"; }}
+                  />
+                  <span className={active ? "font-semibold" : ""}>{c.name}</span>
+                  <span className={`text-[9px] font-mono-editor px-1.5 py-0.5 rounded ${active ? "bg-white/10 text-white" : "bg-white/5 text-slate-400"}`}>{c.questions.length}Q</span>
+                  {active && (
+                    <span
+                      className="absolute -bottom-1 left-3 right-3 h-0.5 rounded-full"
+                      style={{ background: c.color, boxShadow: `0 0 8px ${c.color}` }}
+                    />
+                  )}
+                </button>
+              );
+            })}
           </div>
+        </div>
+
+        {/* Mode description strip — reinforces what each mode does */}
+        <div className="max-w-[1600px] mx-auto px-4 pb-2 -mt-1 flex items-center gap-2 text-[11px]">
+          <span
+            className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md font-mono-editor"
+            style={{
+              color: MODE_META[mode].color,
+              background: `${MODE_META[mode].color}12`,
+              border: `1px solid ${MODE_META[mode].color}40`,
+            }}
+            data-testid="mode-badge"
+          >
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background: MODE_META[mode].color }} />
+            {mode === "learning" ? "Learning Mode" : mode === "practice" ? "Practice Mode" : "Interview Mode"}
+          </span>
+          <span className="text-slate-400">{MODE_META[mode].desc}</span>
         </div>
 
         {/* Sub-bar */}
@@ -452,6 +548,20 @@ export default function SQLPage() {
           </div>
 
           <div className="ml-auto flex items-center gap-2">
+            {mode === "interview" && (
+              <div
+                className={`inline-flex items-center gap-1.5 text-xs px-2 py-1 rounded-full border font-mono-editor font-medium ${interviewSeconds <= 30 ? "border-red-400/50 bg-red-400/10 text-red-300 animate-pulse" : "border-yellow-400/40 bg-yellow-400/10 text-yellow-300"}`}
+                data-testid="interview-timer"
+                title="Time remaining for this question"
+              >
+                <Timer className="w-3.5 h-3.5" /> {mm}:{ss}
+              </div>
+            )}
+            {mode === "learning" && cur && !solvedIds.has(cur.id) && (
+              <div className="inline-flex items-center gap-1.5 text-xs px-2 py-1 rounded-full border border-[#00FF88]/40 bg-[#00FF88]/10 text-[#00FF88] font-medium" data-testid="learning-lock">
+                <BookOpen className="w-3.5 h-3.5" /> Solve to unlock next
+              </div>
+            )}
             <div className={`inline-flex items-center gap-1.5 text-xs px-2 py-1 rounded-full border font-medium ${
               status.tone === "good" ? "border-[#00FF88]/40 bg-[#00FF88]/10 text-[#00FF88]" :
               status.tone === "bad"  ? "border-red-400/40 bg-red-400/10 text-red-300" :
@@ -491,7 +601,9 @@ export default function SQLPage() {
             <Button onClick={() => setCode(c => formatSql(c))} variant="outline" size="sm" data-testid="btn-format"
               className="h-8 border-white/15 bg-transparent hover:bg-white/5">Format</Button>
             <Button onClick={() => setShowHint(v => !v)} variant="outline" size="sm" data-testid="btn-hint"
-              className="h-8 border-[#00D4FF]/40 bg-[#00D4FF]/5 text-[#00D4FF] hover:bg-[#00D4FF]/10">
+              disabled={mode === "interview"}
+              title={mode === "interview" ? "Hints disabled in Interview Mode" : "Show hint"}
+              className="h-8 border-[#00D4FF]/40 bg-[#00D4FF]/5 text-[#00D4FF] hover:bg-[#00D4FF]/10 disabled:opacity-30">
               <Lightbulb className="w-3.5 h-3.5 mr-1" /> Hint
             </Button>
             <Button onClick={() => setPaletteOpen(true)} variant="outline" size="sm" data-testid="btn-palette"
@@ -500,7 +612,9 @@ export default function SQLPage() {
               <kbd className="text-[10px] font-mono-editor bg-white/5 border border-white/10 px-1 py-0 rounded">K</kbd>
             </Button>
             <Button onClick={() => setShowSolution(v => !v)} variant="outline" size="sm" data-testid="btn-solution"
-              className="h-8 border-yellow-400/40 bg-yellow-400/5 text-yellow-300 hover:bg-yellow-400/10 ml-auto">
+              disabled={mode === "interview"}
+              title={mode === "interview" ? "Solutions disabled in Interview Mode" : "Show solution"}
+              className="h-8 border-yellow-400/40 bg-yellow-400/5 text-yellow-300 hover:bg-yellow-400/10 ml-auto disabled:opacity-30">
               <Eye className="w-3.5 h-3.5 mr-1" /> Solution
             </Button>
           </div>

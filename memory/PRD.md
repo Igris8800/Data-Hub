@@ -51,6 +51,13 @@ Leaderboard: GET /api/leaderboard
 - XP + streak + level (Rookie→Master) + total_solved sync via /api/progress
 - AI question generator endpoint (Claude Sonnet 4.5, premium-gated)
 
+## What's Implemented (2026-02-25 — Iteration 3)
+- **SQL IDE mode toggle relocated** to a prominent hero position right next to the "SQL Practice" logo (top-left). ModeTab component now renders as a large 3-way segmented control (Learning / Practice / Interview) with the active mode's brand color (green / cyan / yellow) filling the tab.
+- **Mode description badge strip** added below the top bar: `data-testid=mode-badge` reinforces "Learning Mode · Sequential · hints allowed" / "Practice Mode · Jump around · full toolkit" / "Interview Mode · 5-min timer · no hints or solution".
+- **Company logos**: Amazon / Netflix / Uber / Google / Meta now use real brand SVGs from cdn.simpleicons.org (`logoUrl` per company). Selected company shows an outer boxShadow glow in the brand color.
+- **Question bank expanded to 45 questions/module** across Excel, SQL, Python, Statistics, Power BI (17 beginner / 17 intermediate / 11 advanced), up from 25/module. Total seed questions: 225.
+- **Verified**: testing agent iteration_3.json — 100% (9/9 review checks pass).
+
 ## What's Implemented (2026-02-24 — Iteration 2)
 - **AI question bank growth**: `/api/ai/generate-question` (un-gated for now, TODO re-gate to premium once Razorpay live) generates questions via Claude Sonnet 4.5 and persists them in `db.ai_questions` with hash-based dedup. `/api/questions/{module}` returns the growing bank.
 - **Frontend "Grow bank with AI (+3)" button** on every module page — appends fresh AI questions into the sidebar with ★ marker.
