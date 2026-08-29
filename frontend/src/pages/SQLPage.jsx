@@ -2,80 +2,28 @@ import React, { useState, useEffect, useMemo, useRef, useCallback } from "react"
 import { useNavigate } from "react-router-dom";
 import {
   Database, ChevronRight, ChevronDown, Search, Play, Sparkles, Lightbulb,
-  Eye, Check, X, Loader2, RotateCcw, ChevronLeft, HelpCircle, BookOpen,
-  Briefcase, Award, Circle, CircleCheck, Flag, PanelLeftClose, PanelLeftOpen,
+  Eye, X, Loader2, RotateCcw, ChevronLeft, HelpCircle, BookOpen,
+  Briefcase, Circle, CircleCheck, Flag, PanelLeftClose, PanelLeftOpen,
   Table as TableIcon, Download, History, Command as CmdIcon, Timer,
+  GitBranch, ExternalLink, KeyRound,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import api from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { useTheme } from "@/lib/theme";
-import { sqlQuestions, SQL_SEED } from "@/lib/questions";
+import { COMPANIES, buildSeed } from "@/lib/companies";
 import UpgradeModal from "@/components/UpgradeModal";
 import SqlEditor from "@/components/SqlEditor";
 import CommandPalette from "@/components/CommandPalette";
+import ERDModal from "@/components/ERDModal";
+import SamplePreviewModal from "@/components/SamplePreviewModal";
 
-// --- Database schema metadata (kept in sync with SQL_SEED) ---
-const SCHEMA = {
-  name: "default",
-  engine: "SQLite · sql.js",
-  tables: [
-    {
-      name: "employees",
-      referenced: true,
-      columns: [
-        { name: "id",         type: "INTEGER",     tag: "PK" },
-        { name: "name",       type: "TEXT",        tag: null },
-        { name: "dept_id",    type: "INTEGER",     tag: "FK" },
-        { name: "salary",     type: "INTEGER",     tag: null },
-        { name: "hire_date",  type: "DATE",        tag: null },
-      ],
-    },
-    {
-      name: "departments",
-      columns: [
-        { name: "id",   type: "INTEGER", tag: "PK" },
-        { name: "name", type: "TEXT",    tag: null },
-      ],
-    },
-    {
-      name: "customers",
-      columns: [
-        { name: "id",          type: "INTEGER", tag: "PK" },
-        { name: "name",        type: "TEXT",    tag: null },
-        { name: "city",        type: "TEXT",    tag: null },
-        { name: "signup_date", type: "DATE",    tag: null },
-      ],
-    },
-    {
-      name: "orders",
-      columns: [
-        { name: "id",          type: "INTEGER", tag: "PK" },
-        { name: "customer_id", type: "INTEGER", tag: "FK" },
-        { name: "amount",      type: "INTEGER", tag: null },
-        { name: "order_date",  type: "DATE",    tag: null },
-        { name: "status",      type: "TEXT",    tag: null },
-      ],
-    },
-    {
-      name: "sales",
-      columns: [
-        { name: "id",        type: "INTEGER", tag: "PK" },
-        { name: "region",    type: "TEXT",    tag: null },
-        { name: "product",   type: "TEXT",    tag: null },
-        { name: "amount",    type: "INTEGER", tag: null },
-        { name: "sale_date", type: "DATE",    tag: null },
-      ],
-    },
-  ],
-};
-
-// --- SQL.js loader (shared cache) ---
-let sqlDbPromise = null;
-async function getDb() {
-  if (sqlDbPromise) return sqlDbPromise;
-  sqlDbPromise = (async () => {
+// --- SQL.js loader ---
+let sqlJsPromise = null;
+async function loadSqlJs() {
+  if (sqlJsPromise) return sqlJsPromise;
+  sqlJsPromise = (async () => {
     if (!window.initSqlJs) {
       await new Promise((resolve, reject) => {
         const s = document.createElement("script");
@@ -84,14 +32,21 @@ async function getDb() {
         document.body.appendChild(s);
       });
     }
-    const SQL = await window.initSqlJs({
+    return await window.initSqlJs({
       locateFile: (f) => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${f}`,
     });
-    const db = new SQL.Database();
-    db.exec(SQL_SEED);
-    return db;
   })();
-  return sqlDbPromise;
+  return sqlJsPromise;
+}
+
+const dbCache = {}; // key: companyKey → db instance
+async function getDbFor(company) {
+  if (dbCache[company.key]) return dbCache[company.key];
+  const SQL = await loadSqlJs();
+  const db = new SQL.Database();
+  db.exec(buildSeed(company));
+  dbCache[company.key] = db;
+  return db;
 }
 
 function formatSql(s) {
@@ -113,12 +68,9 @@ function formatSql(s) {
 // --- Sub-components ---
 function ModeTab({ active, onClick, icon: Icon, label, testId }) {
   return (
-    <button
-      onClick={onClick}
-      data-testid={testId}
-      className={`inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${active ? "bg-[#151B23] text-white border border-white/10" : "text-slate-400 hover:text-white hover:bg-white/5"}`}
-    >
-      <Icon className="w-4 h-4" /> {label}
+    <button onClick={onClick} data-testid={testId}
+      className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${active ? "bg-[#151B23] text-white border border-white/10" : "text-slate-400 hover:text-white hover:bg-white/5"}`}>
+      <Icon className="w-3.5 h-3.5" /> {label}
     </button>
   );
 }
@@ -132,20 +84,21 @@ function TagPill({ tag }) {
   return <span className={`px-1.5 py-0.5 rounded text-[9px] font-heading font-bold border ${styles}`}>{tag}</span>;
 }
 
-function DatabaseSidebar({ collapsed, onCollapse, referencedTable, onColumnClick, onTableClick }) {
-  const [expanded, setExpanded] = useState({ employees: true, departments: true });
+function DatabaseSidebar({ company, collapsed, onCollapse, referencedTables, onColumnClick, onTableClick, onPreview }) {
+  const [expanded, setExpanded] = useState(() => Object.fromEntries(company.tables.slice(0, 2).map(t => [t.name, true])));
   const [filter, setFilter] = useState("");
+
+  useEffect(() => {
+    setExpanded(Object.fromEntries(company.tables.slice(0, 2).map(t => [t.name, true])));
+  }, [company.key]);
 
   const filteredTables = useMemo(() => {
     const q = filter.trim().toLowerCase();
-    if (!q) return SCHEMA.tables;
-    return SCHEMA.tables
-      .map(t => ({
-        ...t,
-        columns: t.columns.filter(c => c.name.includes(q) || t.name.includes(q)),
-      }))
+    if (!q) return company.tables;
+    return company.tables
+      .map(t => ({ ...t, columns: t.columns.filter(c => c.name.includes(q) || t.name.includes(q)) }))
       .filter(t => t.name.includes(q) || t.columns.length > 0);
-  }, [filter]);
+  }, [filter, company]);
 
   if (collapsed) {
     return (
@@ -162,12 +115,12 @@ function DatabaseSidebar({ collapsed, onCollapse, referencedTable, onColumnClick
     <div className="w-72 shrink-0 border-r border-white/5 bg-[#0F1520] flex flex-col" data-testid="db-sidebar">
       <div className="px-4 py-3 border-b border-white/5 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-md bg-[#00D4FF]/15 border border-[#00D4FF]/40 flex items-center justify-center">
-            <Database className="w-3.5 h-3.5 text-[#00D4FF]" />
+          <div className="w-7 h-7 rounded-md flex items-center justify-center" style={{ background: `${company.color}22`, border: `1px solid ${company.color}55` }}>
+            <span className="text-sm">{company.logo}</span>
           </div>
           <div>
-            <div className="font-heading text-sm tracking-tight">Database</div>
-            <div className="text-[10px] text-slate-500 font-mono-editor">{SCHEMA.name}</div>
+            <div className="font-heading text-sm tracking-tight">{company.name}</div>
+            <div className="text-[10px] text-slate-500 font-mono-editor">{company.tables.length} tables</div>
           </div>
         </div>
         <button onClick={onCollapse} className="p-1.5 rounded-md hover:bg-white/5 text-slate-400" data-testid="db-sidebar-collapse">
@@ -178,13 +131,10 @@ function DatabaseSidebar({ collapsed, onCollapse, referencedTable, onColumnClick
       <div className="p-3 border-b border-white/5">
         <div className="relative">
           <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-          <input
-            value={filter}
-            onChange={e => setFilter(e.target.value)}
+          <input value={filter} onChange={e => setFilter(e.target.value)}
             placeholder="Filter tables or columns"
             className="w-full bg-[#0D1117] border border-white/10 rounded-md pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-[#00D4FF]/50"
-            data-testid="db-filter-input"
-          />
+            data-testid="db-filter-input" />
         </div>
       </div>
 
@@ -196,7 +146,7 @@ function DatabaseSidebar({ collapsed, onCollapse, referencedTable, onColumnClick
       <div className="flex-1 overflow-y-auto pb-4">
         {filteredTables.map(t => {
           const isOpen = expanded[t.name] ?? false;
-          const isRef = t.name === referencedTable;
+          const isRef = referencedTables.includes(t.name);
           return (
             <div key={t.name} className="mb-1">
               <button
@@ -204,10 +154,9 @@ function DatabaseSidebar({ collapsed, onCollapse, referencedTable, onColumnClick
                 onDoubleClick={() => onTableClick?.(t.name)}
                 className="w-full flex items-center gap-2 px-3 py-1.5 hover:bg-white/5 text-left group"
                 data-testid={`db-table-${t.name}`}
-                title="Click to expand · double-click to insert SELECT * FROM"
-              >
+                title="Click to expand · double-click to insert SELECT">
                 {isOpen ? <ChevronDown className="w-3 h-3 text-slate-500" /> : <ChevronRight className="w-3 h-3 text-slate-500" />}
-                <TableIcon className="w-3.5 h-3.5 text-[#00D4FF]" />
+                <TableIcon className="w-3.5 h-3.5" style={{ color: t.color || company.color }} />
                 <span className="text-sm text-slate-200 font-mono-editor">{t.name}</span>
                 {isRef && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[#00FF88]" title="Referenced by current challenge" />}
               </button>
@@ -219,18 +168,21 @@ function DatabaseSidebar({ collapsed, onCollapse, referencedTable, onColumnClick
                     </div>
                   )}
                   {t.columns.map(c => (
-                    <button
-                      key={c.name}
+                    <button key={c.name}
                       onClick={() => onColumnClick?.(`${t.name}.${c.name}`)}
                       className="w-full flex items-center gap-2 py-1 text-left hover:bg-white/5 rounded"
-                      data-testid={`db-col-${t.name}-${c.name}`}
-                    >
+                      data-testid={`db-col-${t.name}-${c.name}`}>
                       <span className="text-xs text-slate-300 font-mono-editor flex-1 truncate">{c.name}</span>
                       <TagPill tag={c.tag} />
                       <span className="text-[9px] text-slate-500 font-mono-editor">{c.type}</span>
                     </button>
                   ))}
-                  <div className="mt-2 text-[10px] text-[#00D4FF] hover:underline cursor-pointer">View sample rows →</div>
+                  <button
+                    onClick={() => onPreview?.(t)}
+                    className="mt-2 text-[10px] text-[#00D4FF] hover:underline inline-flex items-center gap-1"
+                    data-testid={`db-preview-${t.name}`}>
+                    <Eye className="w-3 h-3" /> Preview rows from {t.name} →
+                  </button>
                 </div>
               )}
             </div>
@@ -241,44 +193,34 @@ function DatabaseSidebar({ collapsed, onCollapse, referencedTable, onColumnClick
   );
 }
 
-function ExpectedOutput({ question }) {
+function ExpectedOutput({ company, question }) {
   const [rows, setRows] = useState(null);
   const [cols, setCols] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
-    getDb().then(db => {
+    setLoading(true); setErr(null);
+    getDbFor(company).then(db => {
       try {
         const r = db.exec(question.answer);
         if (cancelled) return;
-        if (r.length) {
-          setCols(r[0].columns);
-          setRows(r[0].values);
-        } else {
-          setCols([]); setRows([]);
-        }
-      } catch {
-        setCols([]); setRows([]);
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
+        if (r.length) { setCols(r[0].columns); setRows(r[0].values); }
+        else { setCols([]); setRows([]); }
+      } catch (e) {
+        setErr(e.message);
+      } finally { if (!cancelled) setLoading(false); }
     });
     return () => { cancelled = true; };
-  }, [question.id, question.answer]);
+  }, [company.key, question.id, question.answer]);
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="px-4 py-2 border-b border-white/5 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-slate-400">
-          <span className="text-[#00FF88] font-semibold">Expected Output</span>
-          {rows && <span className="font-mono-editor text-[10px] text-slate-500">{rows.length} rows</span>}
-        </div>
-      </div>
+    <div className="h-full flex flex-col" data-testid="expected-output-panel">
       <div className="flex-1 overflow-auto">
         {loading && <div className="p-4 text-xs text-slate-500">Computing expected output…</div>}
-        {!loading && rows && (
+        {err && <pre className="p-4 text-xs text-red-400 font-mono-editor whitespace-pre-wrap">{err}</pre>}
+        {!loading && !err && rows && (
           <table className="text-xs font-mono-editor w-full">
             <thead>
               <tr className="border-b border-white/10 bg-white/5 sticky top-0">
@@ -288,7 +230,7 @@ function ExpectedOutput({ question }) {
             <tbody>
               {rows.slice(0, 50).map((r, i) => (
                 <tr key={i} className="border-b border-white/5">
-                  {r.map((v, j) => <td key={j} className="px-3 py-1 text-slate-300 whitespace-nowrap">{String(v)}</td>)}
+                  {r.map((v, j) => <td key={j} className="px-3 py-1 text-slate-300 whitespace-nowrap">{v == null ? <span className="text-slate-600 italic">NULL</span> : String(v)}</td>)}
                 </tr>
               ))}
             </tbody>
@@ -304,6 +246,9 @@ export default function SQLPage() {
   const { user, setUser } = useAuth();
   const { theme } = useTheme();
   const nav = useNavigate();
+
+  const [companyKey, setCompanyKey] = useState(COMPANIES[0].key);
+  const company = COMPANIES.find(c => c.key === companyKey);
   const [mode, setMode] = useState("practice");
   const [collapsed, setCollapsed] = useState(false);
   const [difficulty, setDifficulty] = useState("beginner");
@@ -317,39 +262,50 @@ export default function SQLPage() {
   const [showSolution, setShowSolution] = useState(false);
   const [solvedIds, setSolvedIds] = useState(new Set());
   const [dbReady, setDbReady] = useState(false);
-  const [outputTab, setOutputTab] = useState("output"); // output | expected | history
+  const [outputTab, setOutputTab] = useState("output");
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
-  const [history, setHistory] = useState([]); // [{sql, ms, rows, ts, ok}]
+  const [erdOpen, setErdOpen] = useState(false);
+  const [previewTable, setPreviewTable] = useState(null);
+  const [history, setHistory] = useState([]);
   const [lastMs, setLastMs] = useState(null);
-  const editorRef = useRef(null);
 
-  const questions = useMemo(() => sqlQuestions.filter(q => q.difficulty === difficulty), [difficulty]);
-  const cur = questions[idx];
+  const questions = useMemo(
+    () => company.questions.filter(q => q.difficulty === difficulty),
+    [company, difficulty]
+  );
+  const cur = questions[idx] || company.questions[0];
 
-  useEffect(() => { getDb().then(() => setDbReady(true)).catch(e => setError(e.message)); }, []);
   useEffect(() => {
-    setCode("");
-    setOutput(null);
-    setError(null);
-    setShowHint(false);
-    setShowSolution(false);
+    setDbReady(false);
+    getDbFor(company).then(() => setDbReady(true)).catch(e => setError(e.message));
+  }, [company.key]);
+
+  useEffect(() => {
+    setCode(""); setOutput(null); setError(null);
+    setShowHint(false); setShowSolution(false);
     setStatus({ text: "Not Started", tone: "muted" });
     setOutputTab("output");
-  }, [cur?.id]);
+  }, [cur?.id, companyKey]);
 
-  const referencedTable = useMemo(() => {
-    const m = cur?.answer?.match(/from\s+([a-z_]+)/i);
-    return m?.[1] || null;
+  useEffect(() => { setIdx(0); }, [companyKey, difficulty]);
+
+  // Referenced tables extracted from expected answer for the "referenced" badge
+  const referencedTables = useMemo(() => {
+    if (!cur?.answer) return [];
+    const found = new Set();
+    const re = /(?:from|join)\s+([a-z_]+)/gi;
+    let m;
+    while ((m = re.exec(cur.answer))) found.add(m[1].toLowerCase());
+    return [...found];
   }, [cur]);
 
   const run = async () => {
     if (!code.trim()) { toast.error("Write a query first"); return; }
-    setRunning(true);
-    setError(null);
+    setRunning(true); setError(null);
     const t0 = performance.now();
     try {
-      const db = await getDb();
+      const db = await getDbFor(company);
       const res = db.exec(code);
       const gotRows = res[0]?.values || [];
       const gotCols = res[0]?.columns || [];
@@ -371,7 +327,10 @@ export default function SQLPage() {
         toast.success("Correct! Query matches expected output.");
         if (user) {
           try {
-            const { data } = await api.post("/progress", { module: "sql", question_id: cur.id, correct: true, difficulty });
+            const { data } = await api.post("/progress", {
+              module: "sql", question_id: `${companyKey}-${cur.id}`,
+              correct: true, difficulty,
+            });
             if (data?.user) setUser(data.user);
           } catch (e) { void e; }
         }
@@ -384,9 +343,7 @@ export default function SQLPage() {
       setError(e.message || String(e));
       setStatus({ text: "Query error", tone: "bad" });
       setHistory(h => [{ sql: code, ms, rows: 0, ts: Date.now(), ok: false, err: e.message }, ...h].slice(0, 10));
-    } finally {
-      setRunning(false);
-    }
+    } finally { setRunning(false); }
   };
 
   const insertAtCursor = useCallback((text) => {
@@ -399,7 +356,7 @@ export default function SQLPage() {
   }, []);
 
   const exportCsv = () => {
-    if (!output || !output.values?.length) { toast.error("No results to export"); return; }
+    if (!output?.values?.length) { toast.error("No results to export"); return; }
     const rows = [output.columns, ...output.values];
     const csv = rows.map(r => r.map(v => {
       const s = String(v ?? "");
@@ -414,14 +371,11 @@ export default function SQLPage() {
     toast.success("CSV downloaded");
   };
 
-  // Ctrl/Cmd+Enter to run
   useEffect(() => {
-    const onKey = (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "Enter") { e.preventDefault(); run(); }
-    };
+    const onKey = (e) => { if ((e.metaKey || e.ctrlKey) && e.key === "Enter") { e.preventDefault(); run(); } };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [code, cur?.id]);
+  }, [code, cur?.id, companyKey]);
 
   const goPrev = () => setIdx(i => Math.max(0, i - 1));
   const goNext = () => setIdx(i => Math.min(questions.length - 1, i + 1));
@@ -431,9 +385,9 @@ export default function SQLPage() {
 
   return (
     <div className="min-h-[calc(100vh-140px)] flex flex-col bg-[#0D1117]">
-      {/* Sub-header: Mode tabs + question navigator */}
+      {/* Top brand bar with company selector */}
       <div className="border-b border-white/10 bg-[#0F1520]">
-        <div className="max-w-[1600px] mx-auto px-4 py-3 flex items-center gap-4 flex-wrap">
+        <div className="max-w-[1600px] mx-auto px-4 py-3 flex items-center gap-3 flex-wrap">
           <div className="flex items-center gap-2 mr-auto">
             <div className="w-8 h-8 rounded-md bg-gradient-to-br from-[#00D4FF] to-[#00FF88] flex items-center justify-center text-[#0D1117] font-heading font-bold">S</div>
             <div>
@@ -442,44 +396,55 @@ export default function SQLPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-1 p-1 rounded-lg bg-[#0D1117] border border-white/5">
-            <ModeTab active={mode === "learning"}  onClick={() => setMode("learning")}  icon={BookOpen} label="Learning Mode"  testId="mode-learning" />
-            <ModeTab active={mode === "practice"}  onClick={() => setMode("practice")}  icon={Play}     label="Practice Mode"  testId="mode-practice" />
-            <ModeTab active={mode === "interview"} onClick={() => setMode("interview")} icon={Briefcase} label="Interview Mode" testId="mode-interview" />
+          {/* Company selector — the key upgrade */}
+          <div className="flex items-center gap-1 p-1 rounded-lg bg-[#0D1117] border border-white/5" data-testid="company-selector">
+            {COMPANIES.map(c => (
+              <button key={c.key}
+                onClick={() => setCompanyKey(c.key)}
+                data-testid={`company-${c.key}`}
+                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${c.key === companyKey ? "text-white" : "text-slate-400 hover:text-white hover:bg-white/5"}`}
+                style={c.key === companyKey ? { background: `${c.color}22`, border: `1px solid ${c.color}66` } : { border: "1px solid transparent" }}>
+                <span className="text-base leading-none">{c.logo}</span>
+                <span>{c.name}</span>
+                <span className="text-[9px] font-mono-editor px-1.5 py-0.5 rounded bg-white/5 text-slate-400">{c.questions.length}Q</span>
+              </button>
+            ))}
           </div>
 
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => { setCode(""); setOutput(null); setError(null); setStatus({ text: "Not Started", tone: "muted" }); }}
-            data-testid="btn-reset"
-            className="text-slate-400 hover:text-white"
-          >
-            <RotateCcw className="w-4 h-4 mr-1" /> Reset
-          </Button>
+          <div className="flex items-center gap-1 p-1 rounded-lg bg-[#0D1117] border border-white/5">
+            <ModeTab active={mode === "learning"}  onClick={() => setMode("learning")}  icon={BookOpen}  label="Learning"  testId="mode-learning" />
+            <ModeTab active={mode === "practice"}  onClick={() => setMode("practice")}  icon={Play}      label="Practice"  testId="mode-practice" />
+            <ModeTab active={mode === "interview"} onClick={() => setMode("interview")} icon={Briefcase} label="Interview" testId="mode-interview" />
+          </div>
         </div>
 
+        {/* Sub-bar */}
         <div className="max-w-[1600px] mx-auto px-4 py-2 border-t border-white/5 flex items-center gap-4 flex-wrap text-sm">
           <div className="flex items-center gap-2">
             <span className="text-slate-500 text-xs uppercase tracking-widest">Schema</span>
-            <span className="px-2 py-1 rounded-md bg-[#0D1117] border border-white/10 font-mono-editor text-xs">{SCHEMA.name}</span>
+            <span className="px-2 py-1 rounded-md bg-[#0D1117] border font-mono-editor text-xs"
+                  style={{ borderColor: `${company.color}55`, color: company.color }}>
+              {company.name.toLowerCase()}
+            </span>
             <span className="text-[10px] text-slate-500 font-mono-editor">{questions.length}Q</span>
+            <Button onClick={() => setErdOpen(true)} variant="outline" size="sm" data-testid="btn-erd"
+              className="h-7 border-white/15 bg-transparent hover:bg-white/5 ml-1">
+              <GitBranch className="w-3.5 h-3.5 mr-1" /> ERD
+            </Button>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-slate-500 text-xs uppercase tracking-widest">Engine</span>
-            <span className="px-2 py-1 rounded-md bg-[#0D1117] border border-white/10 font-mono-editor text-xs">{SCHEMA.engine}</span>
+            <span className="px-2 py-1 rounded-md bg-[#0D1117] border border-white/10 font-mono-editor text-xs">SQLite · sql.js</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-slate-500 text-xs uppercase tracking-widest">Level</span>
             <div className="flex gap-1">
               {["beginner", "intermediate", "advanced"].map(d => (
-                <button
-                  key={d}
+                <button key={d}
                   onClick={() => { setDifficulty(d); setIdx(0); }}
                   data-testid={`level-${d}`}
                   className={`px-2 py-1 rounded-md text-xs font-medium border transition-colors ${difficulty === d ? "text-[#0D1117]" : "text-slate-300 hover:bg-white/5 border-white/10"}`}
-                  style={difficulty === d ? { background: difficultyColor, borderColor: difficultyColor } : {}}
-                >
+                  style={difficulty === d ? { background: difficultyColor, borderColor: difficultyColor } : {}}>
                   {d === "beginner" ? "Easy" : d === "intermediate" ? "Medium" : "Hard"}
                 </button>
               ))}
@@ -498,26 +463,24 @@ export default function SQLPage() {
             <button onClick={goPrev} disabled={idx === 0} className="p-1.5 rounded-md hover:bg-white/5 disabled:opacity-30" data-testid="btn-prev-q"><ChevronLeft className="w-4 h-4" /></button>
             <div className="font-mono-editor text-xs text-slate-300">{idx + 1} / {questions.length}</div>
             <button onClick={goNext} disabled={idx >= questions.length - 1} className="p-1.5 rounded-md hover:bg-white/5 disabled:opacity-30" data-testid="btn-next-q"><ChevronRight className="w-4 h-4" /></button>
-            <Button onClick={() => setUpgradeOpen(true)} size="sm" className="rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 text-[#0D1117] hover:from-yellow-300 hover:to-amber-400 font-semibold h-8" data-testid="btn-challenge">
-              <Flag className="w-3.5 h-3.5 mr-1" /> Challenge
-            </Button>
           </div>
         </div>
       </div>
 
-      {/* IDE 3-column layout */}
+      {/* IDE layout */}
       <div className="flex-1 flex overflow-hidden max-w-[1600px] w-full mx-auto">
         <DatabaseSidebar
+          company={company}
           collapsed={collapsed}
           onCollapse={() => setCollapsed(c => !c)}
-          referencedTable={referencedTable}
+          referencedTables={referencedTables}
           onColumnClick={insertAtCursor}
           onTableClick={insertTableSelect}
+          onPreview={setPreviewTable}
         />
 
         {/* Center: editor + output */}
         <div className="flex-1 flex flex-col min-w-0">
-          {/* Editor toolbar */}
           <div className="px-4 py-2 border-b border-white/5 bg-[#0D1117] flex items-center gap-2 flex-wrap">
             <span className="text-xs font-heading font-semibold text-[#00D4FF] px-2 py-1 rounded-md bg-[#00D4FF]/10">SQL</span>
             <Button onClick={run} disabled={!dbReady || running} data-testid="btn-run"
@@ -526,16 +489,14 @@ export default function SQLPage() {
               Run <span className="ml-2 text-[10px] opacity-70">Ctrl / ⌘ ⏎</span>
             </Button>
             <Button onClick={() => setCode(c => formatSql(c))} variant="outline" size="sm" data-testid="btn-format"
-              className="h-8 border-white/15 bg-transparent hover:bg-white/5">
-              Format
-            </Button>
+              className="h-8 border-white/15 bg-transparent hover:bg-white/5">Format</Button>
             <Button onClick={() => setShowHint(v => !v)} variant="outline" size="sm" data-testid="btn-hint"
               className="h-8 border-[#00D4FF]/40 bg-[#00D4FF]/5 text-[#00D4FF] hover:bg-[#00D4FF]/10">
-              <Lightbulb className="w-3.5 h-3.5 mr-1" /> Hint {showHint ? "•" : "1"}
+              <Lightbulb className="w-3.5 h-3.5 mr-1" /> Hint
             </Button>
             <Button onClick={() => setPaletteOpen(true)} variant="outline" size="sm" data-testid="btn-palette"
               className="h-8 border-white/15 bg-transparent hover:bg-white/5 gap-1.5">
-              <CmdIcon className="w-3.5 h-3.5" /> <span className="hidden md:inline">Cmd</span>
+              <CmdIcon className="w-3.5 h-3.5" />
               <kbd className="text-[10px] font-mono-editor bg-white/5 border border-white/10 px-1 py-0 rounded">K</kbd>
             </Button>
             <Button onClick={() => setShowSolution(v => !v)} variant="outline" size="sm" data-testid="btn-solution"
@@ -544,77 +505,49 @@ export default function SQLPage() {
             </Button>
           </div>
 
-          {/* Editor (CodeMirror) */}
           <div className="relative flex-1 min-h-[240px] bg-[#0D1117] border-b border-white/5 overflow-hidden">
-            <SqlEditor
-              ref={editorRef}
-              value={code}
-              onChange={setCode}
-              onRun={run}
-              theme={theme}
-              placeholder={`-- Write your query here\nSELECT * FROM ${referencedTable || "employees"};`}
-            />
+            <SqlEditor value={code} onChange={setCode} onRun={run} theme={theme}
+              placeholder={`-- ${company.name} challenge · ${cur?.title}\n-- Referenced tables: ${referencedTables.join(", ") || "(auto)"}`} />
           </div>
 
-          {/* Data output + Expected output tabs */}
           <div className="flex-1 min-h-[220px] bg-[#0F1520] flex flex-col">
             <div className="px-4 py-2 border-b border-white/5 flex items-center gap-4">
-              <button
-                onClick={() => setOutputTab("output")}
+              <button onClick={() => setOutputTab("output")}
                 className={`text-xs font-semibold pb-1 border-b-2 ${outputTab === "output" ? "text-[#00D4FF] border-[#00D4FF]" : "text-slate-400 border-transparent"}`}
-                data-testid="tab-data-output"
-              >
+                data-testid="tab-data-output">
                 Data Output {output && <span className="ml-1 font-mono-editor text-[10px]">{output.values.length}</span>}
               </button>
-              <button
-                onClick={() => setOutputTab("expected")}
+              <button onClick={() => setOutputTab("expected")}
                 className={`text-xs font-semibold pb-1 border-b-2 ${outputTab === "expected" ? "text-[#00FF88] border-[#00FF88]" : "text-slate-400 border-transparent"}`}
-                data-testid="tab-expected-output"
-              >
+                data-testid="tab-expected-output">
                 Expected Output
               </button>
-              <button
-                onClick={() => setOutputTab("history")}
+              <button onClick={() => setOutputTab("history")}
                 className={`text-xs font-semibold pb-1 border-b-2 flex items-center gap-1 ${outputTab === "history" ? "text-yellow-300 border-yellow-300" : "text-slate-400 border-transparent"}`}
-                data-testid="tab-history"
-              >
+                data-testid="tab-history">
                 <History className="w-3 h-3" /> History {history.length > 0 && <span className="ml-1 font-mono-editor text-[10px]">{history.length}</span>}
               </button>
 
               <div className="ml-auto flex items-center gap-3 text-[10px] font-mono-editor text-slate-500">
-                {lastMs != null && (
-                  <span className="inline-flex items-center gap-1" data-testid="query-timer">
-                    <Timer className="w-3 h-3" /> {lastMs} ms
-                  </span>
-                )}
+                {lastMs != null && (<span className="inline-flex items-center gap-1" data-testid="query-timer"><Timer className="w-3 h-3" /> {lastMs} ms</span>)}
                 <span>{solvedIds.size} / {questions.length} solved</span>
-                <button
-                  onClick={exportCsv}
-                  disabled={!output?.values?.length}
+                <button onClick={exportCsv} disabled={!output?.values?.length}
                   className="inline-flex items-center gap-1 px-2 py-1 rounded border border-white/10 hover:bg-white/5 disabled:opacity-40"
-                  data-testid="btn-export-csv"
-                  title="Export current result as CSV"
-                >
+                  data-testid="btn-export-csv" title="Export CSV">
                   <Download className="w-3 h-3" /> CSV
                 </button>
               </div>
             </div>
 
             <div className="flex-1 overflow-auto">
-              {outputTab === "expected" && <ExpectedOutput question={cur} />}
-
+              {outputTab === "expected" && <ExpectedOutput company={company} question={cur} />}
               {outputTab === "history" && (
                 <div className="p-3 space-y-2" data-testid="history-list">
-                  {history.length === 0 && (
-                    <div className="py-8 text-center text-xs text-slate-500">No queries yet — press Run.</div>
-                  )}
+                  {history.length === 0 && <div className="py-8 text-center text-xs text-slate-500">No queries yet — press Run.</div>}
                   {history.map((h, i) => (
-                    <button
-                      key={i}
-                      onClick={() => { setCode(h.sql); setOutputTab("output"); }}
+                    <button key={i} onClick={() => { setCode(h.sql); setOutputTab("output"); }}
                       className="w-full text-left rounded-md border border-white/5 hover:border-white/15 bg-[#0D1117] p-3 group"
-                      data-testid={`history-item-${i}`}
-                    >
+                      data-testid={`history-item-${i}`}>
                       <div className="flex items-center gap-2 mb-1">
                         <span className={`w-1.5 h-1.5 rounded-full ${h.ok ? "bg-[#00FF88]" : "bg-red-400"}`} />
                         <span className="text-[10px] font-mono-editor text-slate-500">{new Date(h.ts).toLocaleTimeString()}</span>
@@ -625,12 +558,9 @@ export default function SQLPage() {
                   ))}
                 </div>
               )}
-
               {outputTab === "output" && (
                 <>
-                  {error && (
-                    <pre className="p-4 text-xs text-red-400 font-mono-editor whitespace-pre-wrap" data-testid="query-error">{error}</pre>
-                  )}
+                  {error && <pre className="p-4 text-xs text-red-400 font-mono-editor whitespace-pre-wrap" data-testid="query-error">{error}</pre>}
                   {!error && !output && (
                     <div className="p-6 text-center text-slate-500 text-xs" data-testid="no-results">
                       <div className="w-10 h-10 mx-auto rounded-full bg-white/5 flex items-center justify-center mb-3">
@@ -649,7 +579,7 @@ export default function SQLPage() {
                       <tbody>
                         {output.values.slice(0, 200).map((r, i) => (
                           <tr key={i} className="border-b border-white/5 hover:bg-white/[0.03]">
-                            {r.map((v, j) => <td key={j} className="px-3 py-1 text-slate-300 whitespace-nowrap">{String(v)}</td>)}
+                            {r.map((v, j) => <td key={j} className="px-3 py-1 text-slate-300 whitespace-nowrap">{v == null ? <span className="text-slate-600 italic">NULL</span> : String(v)}</td>)}
                           </tr>
                         ))}
                       </tbody>
@@ -661,42 +591,60 @@ export default function SQLPage() {
           </div>
         </div>
 
-        {/* Right: Challenge panel */}
-        <div className="w-[340px] shrink-0 border-l border-white/5 bg-[#0F1520] flex flex-col" data-testid="challenge-panel">
+        {/* Right: Challenge panel — CONTEXT / TASK / OUTPUT / RULES */}
+        <div className="w-[360px] shrink-0 border-l border-white/5 bg-[#0F1520] flex flex-col" data-testid="challenge-panel">
           <div className="px-4 py-2 border-b border-white/5 flex items-center justify-between">
             <div className="text-[10px] uppercase tracking-widest font-heading font-bold" style={{ color: difficultyColor }}>
-              {difficultyLabel} CHALLENGE
+              {difficultyLabel} · {company.name}
             </div>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-500" />
+            <span className="text-[10px] font-mono-editor text-slate-500">{cur.id}</span>
           </div>
           <div className="flex-1 overflow-y-auto p-5">
-            <h2 className="font-heading text-xl tracking-tight mb-3">{cur.title}</h2>
-            <div className="mb-4 inline-flex items-center gap-1 px-2 py-1 rounded-md border border-white/10 bg-[#0D1117] text-[10px] uppercase tracking-widest text-slate-400">
-              <Circle className="w-2 h-2 fill-[#00D4FF] text-[#00D4FF]" /> {referencedTable || "database"}
+            <h2 className="font-heading text-xl tracking-tight mb-4">{cur.title}</h2>
+
+            <div className="mb-4 flex flex-wrap items-center gap-2">
+              {referencedTables.map(t => (
+                <span key={t} className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-white/10 bg-[#0D1117] text-[10px] font-mono-editor text-slate-300">
+                  <TableIcon className="w-3 h-3" style={{ color: company.color }} /> {t}
+                </span>
+              ))}
             </div>
-            <p className="text-sm text-slate-300 leading-relaxed mb-6">{cur.prompt}</p>
 
-            <div className="p-4 rounded-lg border-l-2 bg-[#0D1117]" style={{ borderColor: difficultyColor }}>
-              <div className="text-[10px] uppercase tracking-widest text-slate-500 mb-2">Question</div>
-              <p className="text-sm text-white font-medium leading-relaxed">{cur.prompt}</p>
-            </div>
-
-            {showHint && (
-              <div className="mt-4 p-3 rounded-md border border-[#00D4FF]/30 bg-[#00D4FF]/5 text-sm text-slate-200" data-testid="hint-panel">
-                <div className="text-[10px] uppercase tracking-widest text-[#00D4FF] mb-1">Hint</div>
-                {cur.hint}
+            <div className="space-y-4">
+              <div>
+                <div className="text-[10px] uppercase tracking-widest text-slate-500 mb-1">Context</div>
+                <p className="text-sm text-slate-300 leading-relaxed">{cur.context}</p>
               </div>
-            )}
-            {showSolution && (
-              <div className="mt-4 p-3 rounded-md border border-yellow-400/30 bg-yellow-400/5" data-testid="solution-panel">
-                <div className="text-[10px] uppercase tracking-widest text-yellow-300 mb-1">Solution</div>
-                <pre className="text-xs font-mono-editor text-slate-200 whitespace-pre-wrap">{cur.solution}</pre>
-              </div>
-            )}
 
-            <div className="mt-6 text-xs text-slate-500">
-              <div className="uppercase tracking-widest text-[10px] mb-1">Rules</div>
-              Do not modify the seed data. Case-insensitive matches. Row order is normalised before comparison.
+              <div className="p-4 rounded-lg border-l-2 bg-[#0D1117]" style={{ borderColor: difficultyColor }}>
+                <div className="text-[10px] uppercase tracking-widest mb-1" style={{ color: difficultyColor }}>Task</div>
+                <p className="text-sm text-white font-medium leading-relaxed">{cur.task}</p>
+              </div>
+
+              <div>
+                <div className="text-[10px] uppercase tracking-widest text-slate-500 mb-1">Required output</div>
+                <div className="p-2.5 rounded-md bg-[#0D1117] border border-white/10 font-mono-editor text-xs text-[#00FF88]">
+                  {cur.output}
+                </div>
+              </div>
+
+              <div>
+                <div className="text-[10px] uppercase tracking-widest text-slate-500 mb-1">Rules</div>
+                <p className="text-xs text-slate-400 leading-relaxed">{cur.rules}</p>
+              </div>
+
+              {showHint && (
+                <div className="p-3 rounded-md border border-[#00D4FF]/30 bg-[#00D4FF]/5 text-sm text-slate-200" data-testid="hint-panel">
+                  <div className="text-[10px] uppercase tracking-widest text-[#00D4FF] mb-1">Hint</div>
+                  {cur.hint}
+                </div>
+              )}
+              {showSolution && (
+                <div className="p-3 rounded-md border border-yellow-400/30 bg-yellow-400/5" data-testid="solution-panel">
+                  <div className="text-[10px] uppercase tracking-widest text-yellow-300 mb-1">Solution</div>
+                  <pre className="text-[11px] font-mono-editor text-slate-200 whitespace-pre-wrap">{cur.solution}</pre>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -708,10 +656,10 @@ export default function SQLPage() {
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1.5">
               <span className={`w-1.5 h-1.5 rounded-full ${dbReady ? "bg-[#00FF88]" : "bg-slate-500"} ${dbReady ? "pulse-ring" : ""}`} />
-              {dbReady ? "Runtime ready" : "Booting SQL engine…"}
+              {dbReady ? "Runtime ready" : "Loading engine…"}
             </span>
             <span>SQLite · sql.js</span>
-            <span>Database: {SCHEMA.name}</span>
+            <span>Database: <span style={{ color: company.color }}>{company.name.toLowerCase()}</span></span>
           </div>
           <div className="flex items-center gap-4">
             {user && <span>Lv <span className="text-slate-300">{user.level}</span> · <span className="text-[#00D4FF]">{user.xp} XP</span></span>}
@@ -720,25 +668,24 @@ export default function SQLPage() {
         </div>
       </div>
 
+      <ERDModal open={erdOpen} onOpenChange={setErdOpen} company={company} />
+      <SamplePreviewModal open={!!previewTable} onOpenChange={(v) => !v && setPreviewTable(null)} table={previewTable} />
+
       <CommandPalette
         open={paletteOpen}
         onOpenChange={setPaletteOpen}
         actions={[
           { id: "run", group: "Editor", label: "Run query", hint: "Ctrl/⌘ ↵", icon: Play, onSelect: run },
-          { id: "next", group: "Navigation", label: "Next question", hint: "→", icon: ChevronRight, onSelect: goNext },
-          { id: "prev", group: "Navigation", label: "Previous question", hint: "←", icon: ChevronLeft, onSelect: goPrev },
+          { id: "next", group: "Navigation", label: "Next question", icon: ChevronRight, onSelect: goNext },
+          { id: "prev", group: "Navigation", label: "Previous question", icon: ChevronLeft, onSelect: goPrev },
+          { id: "erd", group: "Schema", label: `View ${company.name} ERD`, icon: GitBranch, onSelect: () => setErdOpen(true) },
           { id: "hint", group: "Help", label: "Toggle hint", icon: Lightbulb, onSelect: () => setShowHint(v => !v) },
           { id: "solution", group: "Help", label: "Show solution", icon: Eye, onSelect: () => setShowSolution(true) },
           { id: "export-csv", group: "Data", label: "Export results as CSV", icon: Download, onSelect: exportCsv },
           { id: "reset", group: "Editor", label: "Reset editor", icon: RotateCcw, onSelect: () => { setCode(""); setOutput(null); setError(null); setStatus({ text: "Not Started", tone: "muted" }); } },
-          { id: "level-easy",   group: "Difficulty", label: "Switch to Easy",   onSelect: () => { setDifficulty("beginner"); setIdx(0); } },
-          { id: "level-medium", group: "Difficulty", label: "Switch to Medium", onSelect: () => { setDifficulty("intermediate"); setIdx(0); } },
-          { id: "level-hard",   group: "Difficulty", label: "Switch to Hard",   onSelect: () => { setDifficulty("advanced"); setIdx(0); } },
-          ...SCHEMA.tables.map(t => ({
-            id: `t-${t.name}`, group: "Insert",
-            label: `SELECT * FROM ${t.name};`, icon: TableIcon,
-            onSelect: () => insertTableSelect(t.name),
-          })),
+          ...COMPANIES.map(c => ({ id: `co-${c.key}`, group: "Company", label: `Switch to ${c.name} schema`, icon: KeyRound, onSelect: () => setCompanyKey(c.key) })),
+          ...company.tables.map(t => ({ id: `t-${t.name}`, group: "Insert", label: `SELECT * FROM ${t.name};`, icon: TableIcon, onSelect: () => insertTableSelect(t.name) })),
+          ...company.tables.map(t => ({ id: `pv-${t.name}`, group: "Preview", label: `Preview rows from ${t.name}`, icon: Eye, onSelect: () => setPreviewTable(t) })),
         ]}
       />
 
