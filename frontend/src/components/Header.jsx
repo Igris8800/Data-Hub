@@ -4,6 +4,7 @@ import { Flame, Zap, Crown, LogOut, User, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
 import AuthModal from "@/components/AuthModal";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -47,6 +48,9 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center gap-3">
+            <div className="hidden md:block">
+              <ThemeToggle />
+            </div>
             {user ? (
               <>
                 <div className="hidden md:flex items-center gap-3 text-sm">

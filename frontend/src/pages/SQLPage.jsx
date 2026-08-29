@@ -4,15 +4,17 @@ import {
   Database, ChevronRight, ChevronDown, Search, Play, Sparkles, Lightbulb,
   Eye, Check, X, Loader2, RotateCcw, ChevronLeft, HelpCircle, BookOpen,
   Briefcase, Award, Circle, CircleCheck, Flag, PanelLeftClose, PanelLeftOpen,
-  Table as TableIcon,
+  Table as TableIcon, Download, History, Command as CmdIcon, Timer,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import api from "@/lib/api";
 import { useAuth } from "@/lib/auth";
+import { useTheme } from "@/lib/theme";
 import { sqlQuestions, SQL_SEED } from "@/lib/questions";
 import UpgradeModal from "@/components/UpgradeModal";
+import SqlEditor from "@/components/SqlEditor";
+import CommandPalette from "@/components/CommandPalette";
 
 // --- Database schema metadata (kept in sync with SQL_SEED) ---
 const SCHEMA = {
@@ -130,7 +132,7 @@ function TagPill({ tag }) {
   return <span className={`px-1.5 py-0.5 rounded text-[9px] font-heading font-bold border ${styles}`}>{tag}</span>;
 }
 
-function DatabaseSidebar({ collapsed, onCollapse, referencedTable, onColumnClick }) {
+function DatabaseSidebar({ collapsed, onCollapse, referencedTable, onColumnClick, onTableClick }) {
   const [expanded, setExpanded] = useState({ employees: true, departments: true });
   const [filter, setFilter] = useState("");
 
@@ -199,8 +201,10 @@ function DatabaseSidebar({ collapsed, onCollapse, referencedTable, onColumnClick
             <div key={t.name} className="mb-1">
               <button
                 onClick={() => setExpanded(s => ({ ...s, [t.name]: !s[t.name] }))}
+                onDoubleClick={() => onTableClick?.(t.name)}
                 className="w-full flex items-center gap-2 px-3 py-1.5 hover:bg-white/5 text-left group"
                 data-testid={`db-table-${t.name}`}
+                title="Click to expand · double-click to insert SELECT * FROM"
               >
                 {isOpen ? <ChevronDown className="w-3 h-3 text-slate-500" /> : <ChevronRight className="w-3 h-3 text-slate-500" />}
                 <TableIcon className="w-3.5 h-3.5 text-[#00D4FF]" />
@@ -298,6 +302,7 @@ function ExpectedOutput({ question }) {
 // --- Main page ---
 export default function SQLPage() {
   const { user, setUser } = useAuth();
+  const { theme } = useTheme();
   const nav = useNavigate();
   const [mode, setMode] = useState("practice");
   const [collapsed, setCollapsed] = useState(false);
@@ -312,8 +317,11 @@ export default function SQLPage() {
   const [showSolution, setShowSolution] = useState(false);
   const [solvedIds, setSolvedIds] = useState(new Set());
   const [dbReady, setDbReady] = useState(false);
-  const [outputTab, setOutputTab] = useState("output"); // output | expected
+  const [outputTab, setOutputTab] = useState("output"); // output | expected | history
   const [upgradeOpen, setUpgradeOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  const [history, setHistory] = useState([]); // [{sql, ms, rows, ts, ok}]
+  const [lastMs, setLastMs] = useState(null);
   const editorRef = useRef(null);
 
   const questions = useMemo(() => sqlQuestions.filter(q => q.difficulty === difficulty), [difficulty]);
@@ -339,11 +347,14 @@ export default function SQLPage() {
     if (!code.trim()) { toast.error("Write a query first"); return; }
     setRunning(true);
     setError(null);
+    const t0 = performance.now();
     try {
       const db = await getDb();
       const res = db.exec(code);
       const gotRows = res[0]?.values || [];
       const gotCols = res[0]?.columns || [];
+      const ms = Math.round(performance.now() - t0);
+      setLastMs(ms);
       setOutput({ columns: gotCols, values: gotRows });
 
       const expected = db.exec(cur.answer);
@@ -352,8 +363,10 @@ export default function SQLPage() {
       const b = JSON.stringify(expRows.map(r => r.map(String)).sort());
       const correct = gotRows.length === expRows.length && a === b;
 
+      setHistory(h => [{ sql: code, ms, rows: gotRows.length, ts: Date.now(), ok: correct }, ...h].slice(0, 10));
+
       if (correct) {
-        setStatus({ text: "Solved · +XP", tone: "good" });
+        setStatus({ text: `Solved · ${ms}ms`, tone: "good" });
         setSolvedIds(s => { const n = new Set(s); n.add(cur.id); return n; });
         toast.success("Correct! Query matches expected output.");
         if (user) {
@@ -366,24 +379,40 @@ export default function SQLPage() {
         setStatus({ text: "Wrong output", tone: "bad" });
       }
     } catch (e) {
+      const ms = Math.round(performance.now() - t0);
+      setLastMs(ms);
       setError(e.message || String(e));
       setStatus({ text: "Query error", tone: "bad" });
+      setHistory(h => [{ sql: code, ms, rows: 0, ts: Date.now(), ok: false, err: e.message }, ...h].slice(0, 10));
     } finally {
       setRunning(false);
     }
   };
 
   const insertAtCursor = useCallback((text) => {
-    const el = editorRef.current;
-    if (!el) { setCode(c => c + text); return; }
-    const start = el.selectionStart ?? code.length;
-    const end = el.selectionEnd ?? code.length;
-    setCode(code.slice(0, start) + text + code.slice(end));
-    requestAnimationFrame(() => {
-      el.focus();
-      el.selectionStart = el.selectionEnd = start + text.length;
-    });
-  }, [code]);
+    setCode(c => (c && !c.endsWith(" ") && !c.endsWith("\n") ? c + " " : c) + text);
+  }, []);
+
+  const insertTableSelect = useCallback((tableName) => {
+    setCode(`SELECT * FROM ${tableName};`);
+    toast.success(`Loaded template for ${tableName}`);
+  }, []);
+
+  const exportCsv = () => {
+    if (!output || !output.values?.length) { toast.error("No results to export"); return; }
+    const rows = [output.columns, ...output.values];
+    const csv = rows.map(r => r.map(v => {
+      const s = String(v ?? "");
+      return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    }).join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = `${cur.id || "query"}.csv`;
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+    toast.success("CSV downloaded");
+  };
 
   // Ctrl/Cmd+Enter to run
   useEffect(() => {
@@ -483,6 +512,7 @@ export default function SQLPage() {
           onCollapse={() => setCollapsed(c => !c)}
           referencedTable={referencedTable}
           onColumnClick={insertAtCursor}
+          onTableClick={insertTableSelect}
         />
 
         {/* Center: editor + output */}
@@ -503,32 +533,31 @@ export default function SQLPage() {
               className="h-8 border-[#00D4FF]/40 bg-[#00D4FF]/5 text-[#00D4FF] hover:bg-[#00D4FF]/10">
               <Lightbulb className="w-3.5 h-3.5 mr-1" /> Hint {showHint ? "•" : "1"}
             </Button>
+            <Button onClick={() => setPaletteOpen(true)} variant="outline" size="sm" data-testid="btn-palette"
+              className="h-8 border-white/15 bg-transparent hover:bg-white/5 gap-1.5">
+              <CmdIcon className="w-3.5 h-3.5" /> <span className="hidden md:inline">Cmd</span>
+              <kbd className="text-[10px] font-mono-editor bg-white/5 border border-white/10 px-1 py-0 rounded">K</kbd>
+            </Button>
             <Button onClick={() => setShowSolution(v => !v)} variant="outline" size="sm" data-testid="btn-solution"
               className="h-8 border-yellow-400/40 bg-yellow-400/5 text-yellow-300 hover:bg-yellow-400/10 ml-auto">
               <Eye className="w-3.5 h-3.5 mr-1" /> Solution
             </Button>
           </div>
 
-          {/* Editor + gutter */}
-          <div className="relative flex-1 min-h-[240px] bg-[#0D1117] border-b border-white/5 flex">
-            <div className="w-10 py-3 text-right pr-2 select-none border-r border-white/5 bg-[#0F1520]">
-              {Array.from({ length: Math.max(8, code.split("\n").length) }).map((_, i) => (
-                <div key={i} className="text-[10px] leading-6 text-slate-600 font-mono-editor">{i + 1}</div>
-              ))}
-            </div>
-            <textarea
+          {/* Editor (CodeMirror) */}
+          <div className="relative flex-1 min-h-[240px] bg-[#0D1117] border-b border-white/5 overflow-hidden">
+            <SqlEditor
               ref={editorRef}
               value={code}
-              onChange={e => setCode(e.target.value)}
+              onChange={setCode}
+              onRun={run}
+              theme={theme}
               placeholder={`-- Write your query here\nSELECT * FROM ${referencedTable || "employees"};`}
-              spellCheck={false}
-              className="flex-1 bg-transparent text-slate-100 font-mono-editor text-sm p-3 outline-none resize-none leading-6"
-              data-testid="sql-editor"
             />
           </div>
 
           {/* Data output + Expected output tabs */}
-          <div className="flex-1 min-h-[200px] bg-[#0F1520] flex flex-col">
+          <div className="flex-1 min-h-[220px] bg-[#0F1520] flex flex-col">
             <div className="px-4 py-2 border-b border-white/5 flex items-center gap-4">
               <button
                 onClick={() => setOutputTab("output")}
@@ -544,15 +573,60 @@ export default function SQLPage() {
               >
                 Expected Output
               </button>
-              <div className="ml-auto text-[10px] text-slate-500 font-mono-editor">
-                {solvedIds.size} / {questions.length} solved
+              <button
+                onClick={() => setOutputTab("history")}
+                className={`text-xs font-semibold pb-1 border-b-2 flex items-center gap-1 ${outputTab === "history" ? "text-yellow-300 border-yellow-300" : "text-slate-400 border-transparent"}`}
+                data-testid="tab-history"
+              >
+                <History className="w-3 h-3" /> History {history.length > 0 && <span className="ml-1 font-mono-editor text-[10px]">{history.length}</span>}
+              </button>
+
+              <div className="ml-auto flex items-center gap-3 text-[10px] font-mono-editor text-slate-500">
+                {lastMs != null && (
+                  <span className="inline-flex items-center gap-1" data-testid="query-timer">
+                    <Timer className="w-3 h-3" /> {lastMs} ms
+                  </span>
+                )}
+                <span>{solvedIds.size} / {questions.length} solved</span>
+                <button
+                  onClick={exportCsv}
+                  disabled={!output?.values?.length}
+                  className="inline-flex items-center gap-1 px-2 py-1 rounded border border-white/10 hover:bg-white/5 disabled:opacity-40"
+                  data-testid="btn-export-csv"
+                  title="Export current result as CSV"
+                >
+                  <Download className="w-3 h-3" /> CSV
+                </button>
               </div>
             </div>
 
             <div className="flex-1 overflow-auto">
-              {outputTab === "expected" ? (
-                <ExpectedOutput question={cur} />
-              ) : (
+              {outputTab === "expected" && <ExpectedOutput question={cur} />}
+
+              {outputTab === "history" && (
+                <div className="p-3 space-y-2" data-testid="history-list">
+                  {history.length === 0 && (
+                    <div className="py-8 text-center text-xs text-slate-500">No queries yet — press Run.</div>
+                  )}
+                  {history.map((h, i) => (
+                    <button
+                      key={i}
+                      onClick={() => { setCode(h.sql); setOutputTab("output"); }}
+                      className="w-full text-left rounded-md border border-white/5 hover:border-white/15 bg-[#0D1117] p-3 group"
+                      data-testid={`history-item-${i}`}
+                    >
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className={`w-1.5 h-1.5 rounded-full ${h.ok ? "bg-[#00FF88]" : "bg-red-400"}`} />
+                        <span className="text-[10px] font-mono-editor text-slate-500">{new Date(h.ts).toLocaleTimeString()}</span>
+                        <span className="ml-auto text-[10px] font-mono-editor text-slate-500">{h.rows} rows · {h.ms} ms</span>
+                      </div>
+                      <pre className="text-xs font-mono-editor text-slate-300 truncate group-hover:whitespace-pre-wrap">{h.sql}</pre>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {outputTab === "output" && (
                 <>
                   {error && (
                     <pre className="p-4 text-xs text-red-400 font-mono-editor whitespace-pre-wrap" data-testid="query-error">{error}</pre>
@@ -574,7 +648,7 @@ export default function SQLPage() {
                       </thead>
                       <tbody>
                         {output.values.slice(0, 200).map((r, i) => (
-                          <tr key={i} className="border-b border-white/5">
+                          <tr key={i} className="border-b border-white/5 hover:bg-white/[0.03]">
                             {r.map((v, j) => <td key={j} className="px-3 py-1 text-slate-300 whitespace-nowrap">{String(v)}</td>)}
                           </tr>
                         ))}
@@ -645,6 +719,28 @@ export default function SQLPage() {
           </div>
         </div>
       </div>
+
+      <CommandPalette
+        open={paletteOpen}
+        onOpenChange={setPaletteOpen}
+        actions={[
+          { id: "run", group: "Editor", label: "Run query", hint: "Ctrl/⌘ ↵", icon: Play, onSelect: run },
+          { id: "next", group: "Navigation", label: "Next question", hint: "→", icon: ChevronRight, onSelect: goNext },
+          { id: "prev", group: "Navigation", label: "Previous question", hint: "←", icon: ChevronLeft, onSelect: goPrev },
+          { id: "hint", group: "Help", label: "Toggle hint", icon: Lightbulb, onSelect: () => setShowHint(v => !v) },
+          { id: "solution", group: "Help", label: "Show solution", icon: Eye, onSelect: () => setShowSolution(true) },
+          { id: "export-csv", group: "Data", label: "Export results as CSV", icon: Download, onSelect: exportCsv },
+          { id: "reset", group: "Editor", label: "Reset editor", icon: RotateCcw, onSelect: () => { setCode(""); setOutput(null); setError(null); setStatus({ text: "Not Started", tone: "muted" }); } },
+          { id: "level-easy",   group: "Difficulty", label: "Switch to Easy",   onSelect: () => { setDifficulty("beginner"); setIdx(0); } },
+          { id: "level-medium", group: "Difficulty", label: "Switch to Medium", onSelect: () => { setDifficulty("intermediate"); setIdx(0); } },
+          { id: "level-hard",   group: "Difficulty", label: "Switch to Hard",   onSelect: () => { setDifficulty("advanced"); setIdx(0); } },
+          ...SCHEMA.tables.map(t => ({
+            id: `t-${t.name}`, group: "Insert",
+            label: `SELECT * FROM ${t.name};`, icon: TableIcon,
+            onSelect: () => insertTableSelect(t.name),
+          })),
+        ]}
+      />
 
       <UpgradeModal open={upgradeOpen} onOpenChange={setUpgradeOpen} />
     </div>
