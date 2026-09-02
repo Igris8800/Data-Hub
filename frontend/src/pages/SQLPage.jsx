@@ -357,8 +357,10 @@ export default function SQLPage() {
 
       const expected = db.exec(cur.answer);
       const expRows = expected[0]?.values || [];
-      const a = JSON.stringify(gotRows.map(r => r.map(String)).sort());
-      const b = JSON.stringify(expRows.map(r => r.map(String)).sort());
+      // Normalise cells so float noise (1.18 vs 118/100) and NULL don't cause false negatives
+      const norm = (v) => v == null ? "\u2205" : typeof v === "number" ? String(Math.round(v * 10000) / 10000) : String(v);
+      const a = JSON.stringify(gotRows.map(r => r.map(norm)).sort());
+      const b = JSON.stringify(expRows.map(r => r.map(norm)).sort());
       const correct = gotRows.length === expRows.length && a === b;
 
       setHistory(h => [{ sql: code, ms, rows: gotRows.length, ts: Date.now(), ok: correct }, ...h].slice(0, 10));
