@@ -17,3 +17,7 @@ Tiers map to the app's beginner / intermediate / advanced levels.
 | Uber    | –    | –      | –    | |
 | Google  | –    | –      | –    | |
 | Meta    | –    | –      | –    | |
+
+## Deploying the frontend on Vercel
+Import the GitHub repo in Vercel, set **Root Directory = `frontend`** (everything else is read from `frontend/vercel.json`).
+Add env var `REACT_APP_BACKEND_URL` once the backend is hosted; leave it unset before that.
