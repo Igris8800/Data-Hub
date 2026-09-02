@@ -1,0 +1,545 @@
+{
+"key": "sales",
+"name": "Sales Ledger",
+"tagline": "Orders \u00b7 Products \u00b7 Reps",
+"color": "#00FF88",
+"tables": [
+{
+"name": "Orders",
+"anchor": "A1",
+"headers": [
+"OrderID",
+"Date",
+"Region",
+"Rep",
+"Product",
+"Units",
+"UnitPrice",
+"Status"
+],
+"types": [
+"n",
+"date",
+"s",
+"s",
+"s",
+"n",
+"money",
+"s"
+],
+"rows": [
+[
+1001,
+45523,
+"North",
+"Eva Rossi",
+"Service Plan",
+8,
+120.0,
+"Returned"
+],
+[
+1002,
+45592,
+"South",
+"Ben Carter",
+"Doohickey",
+9,
+14.99,
+"Cancelled"
+],
+[
+1003,
+45614,
+"North",
+"Eva Rossi",
+"Doohickey",
+2,
+14.99,
+"Cancelled"
+],
+[
+1004,
+45447,
+"South",
+"Ben Carter",
+"Gadget",
+9,
+69.5,
+"Delivered"
+],
+[
+1005,
+45596,
+"West",
+"  ana silva ",
+"Service Plan",
+11,
+120.0,
+"Pending"
+],
+[
+1006,
+45624,
+"South",
+"Ben Carter",
+"Widget",
+9,
+29.99,
+"Delivered"
+],
+[
+1007,
+45322,
+"North",
+"Ana Silva",
+"Cable Pack",
+4,
+8.99,
+"Pending"
+],
+[
+1008,
+45307,
+"West",
+"Dev Patel",
+"Sensor",
+8,
+99.0,
+"Pending"
+],
+[
+1009,
+45392,
+"North",
+"Eva Rossi",
+"Cable Pack",
+11,
+8.99,
+"Delivered"
+],
+[
+1010,
+45547,
+"North",
+"Ana Silva",
+"Gadget",
+8,
+69.5,
+"Delivered"
+],
+[
+1011,
+45500,
+"North",
+"Eva Rossi",
+"Gadget",
+12,
+69.5,
+"Delivered"
+],
+[
+1012,
+45453,
+"South",
+"BEN CARTER",
+"Dock",
+1,
+49.0,
+"Delivered"
+],
+[
+1013,
+45580,
+"North",
+"Ana Silva",
+"Controller",
+2,
+149.0,
+"Delivered"
+],
+[
+1014,
+45489,
+"North",
+"Ana Silva",
+"Widget",
+11,
+29.99,
+"Delivered"
+],
+[
+1015,
+45401,
+"South",
+"Ben Carter",
+"Widget",
+8,
+29.99,
+"Delivered"
+],
+[
+1016,
+45654,
+"West",
+"Dev Patel",
+"Controller",
+2,
+149.0,
+"Pending"
+],
+[
+1017,
+45614,
+"South",
+"Ben Carter",
+"Dock",
+6,
+49.0,
+"Delivered"
+],
+[
+1018,
+45451,
+"East",
+"Chloe Wang",
+"Widget",
+7,
+29.99,
+"Delivered"
+],
+[
+1019,
+45360,
+"South",
+"Ben Carter",
+"Gadget",
+1,
+69.5,
+"Delivered"
+],
+[
+1020,
+45530,
+"West",
+"Dev Patel",
+"Doohickey",
+11,
+14.99,
+"Returned"
+],
+[
+1021,
+45388,
+"West",
+"Dev Patel",
+"Cable Pack",
+12,
+8.99,
+"Delivered"
+],
+[
+1022,
+45506,
+"South",
+"Farid Khan",
+"Controller",
+2,
+149.0,
+"Delivered"
+],
+[
+1023,
+45507,
+"north",
+"Ben Carter",
+"Widget",
+5,
+29.99,
+"Pending"
+],
+[
+1024,
+45447,
+"North",
+"Ana Silva",
+"Cable Pack",
+3,
+8.99,
+"Delivered"
+],
+[
+1025,
+45600,
+"South",
+"Farid Khan",
+"Gadget",
+1,
+69.5,
+"Delivered"
+],
+[
+1026,
+45401,
+"West",
+"Dev Patel",
+"Dock",
+1,
+49.0,
+"Pending"
+],
+[
+1027,
+45460,
+"East",
+"Chloe Wang",
+"Controller",
+2,
+149.0,
+"Delivered"
+],
+[
+1028,
+45338,
+"South",
+"Ben Carter",
+"Cable Pack",
+1,
+8.99,
+"Pending"
+],
+[
+1029,
+45480,
+"East",
+"Chloe Wang",
+"Service Plan",
+3,
+120.0,
+"Pending"
+],
+[
+1030,
+45539,
+"North",
+"Eva Rossi",
+"Doohickey",
+7,
+14.99,
+"Delivered"
+],
+[
+1031,
+45613,
+"South",
+"Ben Carter",
+"Dock",
+4,
+49.0,
+"Pending"
+],
+[
+1032,
+45419,
+"South",
+"Farid Khan",
+"Cable Pack",
+3,
+8.99,
+"Returned"
+],
+[
+1033,
+45392,
+"South",
+"Farid Khan",
+"Controller",
+8,
+149.0,
+"Pending"
+],
+[
+1034,
+45332,
+"West",
+"Dev Patel",
+"Widget",
+2,
+29.99,
+"Delivered"
+],
+[
+1035,
+45311,
+"North",
+"Eva Rossi",
+"Dock",
+4,
+49.0,
+"Delivered"
+],
+[
+1036,
+45423,
+"West",
+"Dev Patel",
+"Service Plan",
+5,
+120.0,
+"Returned"
+],
+[
+1037,
+45381,
+"South",
+"Farid Khan",
+"Gadget",
+3,
+69.5,
+"Delivered"
+],
+[
+1038,
+45537,
+"North",
+"Eva Rossi",
+"Gadget",
+5,
+69.5,
+"Delivered"
+],
+[
+1039,
+45396,
+"South",
+"Farid Khan",
+"Widget",
+2,
+29.99,
+"Delivered"
+],
+[
+1040,
+45502,
+"West",
+"Dev Patel",
+"Cable Pack",
+1,
+8.99,
+"Delivered"
+]
+]
+},
+{
+"name": "Products",
+"anchor": "J1",
+"headers": [
+"Product",
+"Category",
+"Cost"
+],
+"types": [
+"s",
+"s",
+"money"
+],
+"rows": [
+[
+"Widget",
+"Hardware",
+18.5
+],
+[
+"Gadget",
+"Hardware",
+42.0
+],
+[
+"Doohickey",
+"Hardware",
+9.75
+],
+[
+"Cable Pack",
+"Accessories",
+4.2
+],
+[
+"Dock",
+"Accessories",
+27.0
+],
+[
+"Sensor",
+"Electronics",
+63.0
+],
+[
+"Controller",
+"Electronics",
+88.0
+],
+[
+"Service Plan",
+"Services",
+0.0
+]
+]
+},
+{
+"name": "Reps",
+"anchor": "N1",
+"headers": [
+"Rep",
+"Region",
+"Target",
+"HireDate"
+],
+"types": [
+"s",
+"s",
+"money",
+"date"
+],
+"rows": [
+[
+"Ana Silva",
+"North",
+42000,
+44270
+],
+[
+"Ben Carter",
+"South",
+38000,
+43647
+],
+[
+"Chloe Wang",
+"East",
+45000,
+44571
+],
+[
+"Dev Patel",
+"West",
+40000,
+44158
+],
+[
+"Eva Rossi",
+"North",
+36000,
+45048
+],
+[
+"Farid Khan",
+"South",
+44000,
+43360
+]
+]
+}
+],
+"answerCell": "A44"
+}

@@ -1,0 +1,332 @@
+[
+{
+"id": "xl-h-01",
+"tier": "hard",
+"topic": "Dynamic arrays",
+"title": "Unique regions",
+"context": "Build a region list without Remove Duplicates.",
+"task": "Return the unique values of C2:C41 as a spilled array (as-is, no cleaning).",
+"hint": "UNIQUE(range).",
+"answer": "=UNIQUE(C2:C41)"
+},
+{
+"id": "xl-h-02",
+"tier": "hard",
+"topic": "Dynamic arrays",
+"title": "Unique products, sorted",
+"context": "A clean picklist.",
+"task": "Return the unique values of E2:E41, sorted ascending.",
+"hint": "SORT(UNIQUE(...)).",
+"answer": "=SORT(UNIQUE(E2:E41))"
+},
+{
+"id": "xl-h-03",
+"tier": "hard",
+"topic": "FILTER",
+"title": "Orders over 10 units",
+"context": "Spill only the big orders' IDs.",
+"task": "Return the OrderIDs (A2:A41) where Units (F2:F41) is greater than 10.",
+"hint": "FILTER(A2:A41, F2:F41>10).",
+"answer": "=FILTER(A2:A41,F2:F41>10)"
+},
+{
+"id": "xl-h-04",
+"tier": "hard",
+"topic": "FILTER",
+"title": "Cancelled orders in the East",
+"context": "Two conditions inside FILTER multiply.",
+"task": "Return OrderIDs where Region is \"East\" and Status is \"Cancelled\"; return \"None\" if there are none.",
+"hint": "FILTER(A2:A41,(C2:C41=\"East\")*(H2:H41=\"Cancelled\"),\"None\").",
+"answer": "=FILTER(A2:A41,(C2:C41=\"East\")*(H2:H41=\"Cancelled\"),\"None\")"
+},
+{
+"id": "xl-h-05",
+"tier": "hard",
+"topic": "SORT",
+"title": "Top 3 orders by units",
+"context": "Sort then take the head.",
+"task": "Return the top 3 Units values from F2:F41 in descending order as a 3-row array.",
+"hint": "INDEX(SORT(F2:F41,1,-1),SEQUENCE(3)) or LARGE with SEQUENCE.",
+"answer": "=LARGE(F2:F41,SEQUENCE(3))"
+},
+{
+"id": "xl-h-06",
+"tier": "hard",
+"topic": "SUMPRODUCT",
+"title": "Revenue by region for North with a date window",
+"context": "North revenue in H1 2024, delivered only.",
+"task": "Return SUMPRODUCT of (C2:C41=\"North\")×(H2:H41=\"Delivered\")×(B2:B41<=DATE(2024,6,30))×F2:F41×G2:G41.",
+"hint": "Every condition is another boolean factor.",
+"answer": "=SUMPRODUCT((C2:C41=\"North\")*(H2:H41=\"Delivered\")*(B2:B41<=DATE(2024,6,30))*F2:F41*G2:G41)"
+},
+{
+"id": "xl-h-07",
+"tier": "hard",
+"topic": "SUMPRODUCT",
+"title": "Weighted average price",
+"context": "Average price weighted by units, not a plain mean.",
+"task": "Return SUMPRODUCT(F2:F41,G2:G41) divided by SUM(F2:F41), rounded to 2 decimals.",
+"hint": "Weighted mean = Σ(w·x)/Σw.",
+"answer": "=ROUND(SUMPRODUCT(F2:F41,G2:G41)/SUM(F2:F41),2)"
+},
+{
+"id": "xl-h-08",
+"tier": "hard",
+"topic": "SUMPRODUCT",
+"title": "Count distinct products ordered",
+"context": "Distinct count without UNIQUE.",
+"task": "Return SUMPRODUCT(1/COUNTIF(E2:E41,E2:E41)).",
+"hint": "Each row contributes 1/(its frequency).",
+"answer": "=SUMPRODUCT(1/COUNTIF(E2:E41,E2:E41))"
+},
+{
+"id": "xl-h-09",
+"tier": "hard",
+"topic": "Two-way lookup",
+"title": "Cost of the product on row 5, via INDEX/MATCH/MATCH",
+"context": "Look up a column by header name, not position.",
+"task": "Return INDEX(J2:L9, MATCH(E5,J2:J9,0), MATCH(\"Cost\",J1:L1,0)).",
+"hint": "Row match on product, column match on header.",
+"answer": "=INDEX(J2:L9,MATCH(E5,J2:J9,0),MATCH(\"Cost\",J1:L1,0))"
+},
+{
+"id": "xl-h-10",
+"tier": "hard",
+"topic": "Approximate match",
+"title": "Commission band",
+"context": "Commission depends on units: 1–4 → 2%, 5–8 → 4%, 9+ → 6%. Use an inline array as the band table.",
+"task": "For row 2, return VLOOKUP(F2, {1,0.02;5,0.04;9,0.06}, 2, TRUE).",
+"hint": "Approximate-match VLOOKUP against an array constant.",
+"answer": "=VLOOKUP(F2,{1,0.02;5,0.04;9,0.06},2,TRUE)"
+},
+{
+"id": "xl-h-11",
+"tier": "hard",
+"topic": "XLOOKUP",
+"title": "Last order for a rep",
+"context": "XLOOKUP can search from the bottom.",
+"task": "Return the OrderID of the LAST order by \"Ben Carter\" in D2:D41, using XLOOKUP with search mode -1.",
+"hint": "XLOOKUP(\"Ben Carter\",D2:D41,A2:A41,\"none\",0,-1).",
+"answer": "=XLOOKUP(\"Ben Carter\",D2:D41,A2:A41,\"none\",0,-1)"
+},
+{
+"id": "xl-h-12",
+"tier": "hard",
+"topic": "XLOOKUP",
+"title": "Whole-row return",
+"context": "XLOOKUP can return several columns at once.",
+"task": "Return the Category and Cost (K2:L9) for the product \"Sensor\" as a 1×2 array.",
+"hint": "Return array spans two columns.",
+"answer": "=XLOOKUP(\"Sensor\",J2:J9,K2:L9)"
+},
+{
+"id": "xl-h-13",
+"tier": "hard",
+"topic": "Nested lookup",
+"title": "Region target for an order",
+"context": "Order → rep → rep's target.",
+"task": "Return the Target (P2:P7) for the rep on row 6 (D6) — clean D6 first with TRIM and PROPER because the name is messy.",
+"hint": "XLOOKUP(PROPER(TRIM(D6)),N2:N7,P2:P7).",
+"answer": "=XLOOKUP(PROPER(TRIM(D6)),N2:N7,P2:P7)"
+},
+{
+"id": "xl-h-14",
+"tier": "hard",
+"topic": "Data cleaning",
+"title": "Count orders after cleaning names",
+"context": "Messy rep names break COUNTIF. Count Ana Silva's orders case- and space-insensitively.",
+"task": "Return SUMPRODUCT(--(TRIM(LOWER(D2:D41))=\"ana silva\")).",
+"hint": "Apply TRIM/LOWER across the array, then coerce booleans.",
+"answer": "=SUMPRODUCT(--(TRIM(LOWER(D2:D41))=\"ana silva\"))"
+},
+{
+"id": "xl-h-15",
+"tier": "hard",
+"topic": "Text",
+"title": "Initials",
+"context": "\"Ana Silva\" → \"AS\".",
+"task": "Return LEFT(D2,1) & MID(D2, FIND(\" \",D2)+1, 1) in upper case.",
+"hint": "UPPER around the concatenation.",
+"answer": "=UPPER(LEFT(D2,1)&MID(D2,FIND(\" \",D2)+1,1))"
+},
+{
+"id": "xl-h-16",
+"tier": "hard",
+"topic": "Text",
+"title": "Count words",
+"context": "How many words in the product name in E5?",
+"task": "Return LEN(TRIM(E5)) - LEN(SUBSTITUTE(TRIM(E5),\" \",\"\")) + 1.",
+"hint": "Word count = spaces + 1.",
+"answer": "=LEN(TRIM(E5))-LEN(SUBSTITUTE(TRIM(E5),\" \",\"\"))+1"
+},
+{
+"id": "xl-h-17",
+"tier": "hard",
+"topic": "TEXTJOIN",
+"title": "All products in one cell",
+"context": "A comma-separated list of the product catalogue.",
+"task": "Return TEXTJOIN(\", \", TRUE, J2:J9).",
+"hint": "TEXTJOIN(delimiter, ignore_empty, range).",
+"answer": "=TEXTJOIN(\", \",TRUE,J2:J9)"
+},
+{
+"id": "xl-h-18",
+"tier": "hard",
+"topic": "TEXTJOIN + FILTER",
+"title": "Reps in the North, joined",
+"context": "Combine FILTER with TEXTJOIN.",
+"task": "Return the names in N2:N7 whose Region (O2:O7) is \"North\", joined with \" & \".",
+"hint": "TEXTJOIN(\" & \",TRUE,FILTER(N2:N7,O2:O7=\"North\")).",
+"answer": "=TEXTJOIN(\" & \",TRUE,FILTER(N2:N7,O2:O7=\"North\"))"
+},
+{
+"id": "xl-h-19",
+"tier": "hard",
+"topic": "Dates",
+"title": "Orders per month via SUMPRODUCT",
+"context": "Count orders in March 2024 without helper columns.",
+"task": "Return SUMPRODUCT((MONTH(B2:B41)=3)*(YEAR(B2:B41)=2024)).",
+"hint": "MONTH and YEAR work on arrays inside SUMPRODUCT.",
+"answer": "=SUMPRODUCT((MONTH(B2:B41)=3)*(YEAR(B2:B41)=2024))"
+},
+{
+"id": "xl-h-20",
+"tier": "hard",
+"topic": "Dates",
+"title": "Weekend orders",
+"context": "How many orders were placed on a Saturday or Sunday?",
+"task": "Return SUMPRODUCT(--(WEEKDAY(B2:B41,2)>5)).",
+"hint": "WEEKDAY(date,2) gives Mon=1..Sun=7.",
+"answer": "=SUMPRODUCT(--(WEEKDAY(B2:B41,2)>5))"
+},
+{
+"id": "xl-h-21",
+"tier": "hard",
+"topic": "Dates",
+"title": "Longest-serving rep",
+"context": "Earliest hire date → name.",
+"task": "Return the Rep (N2:N7) with the minimum HireDate (Q2:Q7).",
+"hint": "INDEX/MATCH on MIN.",
+"answer": "=INDEX(N2:N7,MATCH(MIN(Q2:Q7),Q2:Q7,0))"
+},
+{
+"id": "xl-h-22",
+"tier": "hard",
+"topic": "Dates",
+"title": "Months of tenure, all reps",
+"context": "Spill a column of tenure in whole months as of TODAY().",
+"task": "Return an array: for each rep, DATEDIF of Q2:Q7 to TODAY() in months — use (YEAR(TODAY())-YEAR(Q2:Q7))*12+MONTH(TODAY())-MONTH(Q2:Q7).",
+"hint": "Array arithmetic spills 6 rows.",
+"answer": "=(YEAR(TODAY())-YEAR(Q2:Q7))*12+MONTH(TODAY())-MONTH(Q2:Q7)"
+},
+{
+"id": "xl-h-23",
+"tier": "hard",
+"topic": "Conditional stats",
+"title": "Average of top 5 orders",
+"context": "Mean of the five largest unit counts.",
+"task": "Return AVERAGE(LARGE(F2:F41,{1,2,3,4,5})).",
+"hint": "LARGE with an array constant returns 5 values.",
+"answer": "=AVERAGE(LARGE(F2:F41,{1,2,3,4,5}))"
+},
+{
+"id": "xl-h-24",
+"tier": "hard",
+"topic": "Conditional stats",
+"title": "Median units for Delivered orders",
+"context": "MEDIANIF doesn't exist — build it.",
+"task": "Return MEDIAN(FILTER(F2:F41,H2:H41=\"Delivered\")).",
+"hint": "FILTER feeds MEDIAN.",
+"answer": "=MEDIAN(FILTER(F2:F41,H2:H41=\"Delivered\"))"
+},
+{
+"id": "xl-h-25",
+"tier": "hard",
+"topic": "Percentiles",
+"title": "90th percentile of unit price",
+"context": "Premium threshold.",
+"task": "Return PERCENTILE.INC(G2:G41, 0.9).",
+"hint": "PERCENTILE.INC(range, k).",
+"answer": "=PERCENTILE.INC(G2:G41,0.9)"
+},
+{
+"id": "xl-h-26",
+"tier": "hard",
+"topic": "Correlation",
+"title": "Do bigger orders have cheaper items?",
+"context": "Correlate Units with UnitPrice.",
+"task": "Return CORREL(F2:F41,G2:G41) rounded to 3 decimals.",
+"hint": "ROUND(CORREL(...),3).",
+"answer": "=ROUND(CORREL(F2:F41,G2:G41),3)"
+},
+{
+"id": "xl-h-27",
+"tier": "hard",
+"topic": "Ratios",
+"title": "Cancellation rate",
+"context": "Share of orders cancelled, as a percentage text.",
+"task": "Return TEXT(COUNTIF(H2:H41,\"Cancelled\")/COUNTA(H2:H41),\"0.0%\").",
+"hint": "TEXT with a percent format.",
+"answer": "=TEXT(COUNTIF(H2:H41,\"Cancelled\")/COUNTA(H2:H41),\"0.0%\")"
+},
+{
+"id": "xl-h-28",
+"tier": "hard",
+"topic": "Revenue by category",
+"title": "Hardware revenue via lookup array",
+"context": "Category isn't in the Orders table — look it up per row inside SUMPRODUCT.",
+"task": "Return SUMPRODUCT((XLOOKUP(E2:E41,J2:J9,K2:K9)=\"Hardware\")*F2:F41*G2:G41).",
+"hint": "XLOOKUP accepts an array of lookup values.",
+"answer": "=SUMPRODUCT((XLOOKUP(E2:E41,J2:J9,K2:K9)=\"Hardware\")*F2:F41*G2:G41)"
+},
+{
+"id": "xl-h-29",
+"tier": "hard",
+"topic": "Profit",
+"title": "Total profit on delivered orders",
+"context": "Profit = Units × (Price − Cost), cost looked up per row.",
+"task": "Return SUMPRODUCT((H2:H41=\"Delivered\")*F2:F41*(G2:G41-XLOOKUP(E2:E41,J2:J9,L2:L9))) rounded to 2 decimals.",
+"hint": "Array XLOOKUP inside the arithmetic.",
+"answer": "=ROUND(SUMPRODUCT((H2:H41=\"Delivered\")*F2:F41*(G2:G41-XLOOKUP(E2:E41,J2:J9,L2:L9))),2)"
+},
+{
+"id": "xl-h-30",
+"tier": "hard",
+"topic": "Rep scorecard",
+"title": "Delivered revenue for the first rep",
+"context": "Scorecard row for the rep listed in N2.",
+"task": "Return SUMPRODUCT((D2:D41=N2)*(H2:H41=\"Delivered\")*F2:F41*G2:G41) rounded to 2 decimals — the delivered revenue for the rep named in N2.",
+"hint": "Compare the rep column to a cell, not a literal.",
+"answer": "=ROUND(SUMPRODUCT((D2:D41=N2)*(H2:H41=\"Delivered\")*F2:F41*G2:G41),2)"
+},
+{
+"id": "xl-h-31",
+"tier": "hard",
+"topic": "Attainment",
+"title": "Attainment % for the rep in N3",
+"context": "Delivered revenue ÷ target, as a percent text.",
+"task": "Return TEXT(SUMPRODUCT((D2:D41=N3)*(H2:H41=\"Delivered\")*F2:F41*G2:G41)/P3,\"0%\").",
+"hint": "Wrap the ratio in TEXT.",
+"answer": "=TEXT(SUMPRODUCT((D2:D41=N3)*(H2:H41=\"Delivered\")*F2:F41*G2:G41)/P3,\"0%\")"
+},
+{
+"id": "xl-h-32",
+"tier": "hard",
+"topic": "Best product",
+"title": "Top product by units",
+"context": "Which product sold the most units overall?",
+"task": "Return INDEX(J2:J9, MATCH(MAX(SUMIF(E2:E41,J2:J9,F2:F41)), SUMIF(E2:E41,J2:J9,F2:F41), 0)).",
+"hint": "SUMIF with an array of criteria returns an array of totals.",
+"answer": "=INDEX(J2:J9,MATCH(MAX(SUMIF(E2:E41,J2:J9,F2:F41)),SUMIF(E2:E41,J2:J9,F2:F41),0))"
+},
+{
+"id": "xl-h-33",
+"tier": "hard",
+"topic": "Audit",
+"title": "Rows whose rep isn't in the Reps table",
+"context": "Messy names won't match the master list.",
+"task": "Return SUMPRODUCT(--ISNA(MATCH(D2:D41,N2:N7,0))) — i.e. how many order rows have a rep name that doesn't exactly match the Reps table.",
+"hint": "ISNA on an array MATCH.",
+"answer": "=SUMPRODUCT(--ISNA(MATCH(D2:D41,N2:N7,0)))"
+}
+]

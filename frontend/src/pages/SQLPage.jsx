@@ -5,7 +5,7 @@ import {
   Eye, X, Loader2, RotateCcw, ChevronLeft, HelpCircle, BookOpen,
   Briefcase, Circle, CircleCheck, Flag, PanelLeftClose, PanelLeftOpen,
   Table as TableIcon, Download, History, Command as CmdIcon, Timer,
-  GitBranch, ExternalLink, KeyRound,
+  GitBranch, ExternalLink, KeyRound, Lock, Crown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -18,6 +18,7 @@ import SqlEditor from "@/components/SqlEditor";
 import CommandPalette from "@/components/CommandPalette";
 import ERDModal from "@/components/ERDModal";
 import SamplePreviewModal from "@/components/SamplePreviewModal";
+import { isQuestionLocked, lockedCount } from "@/lib/premium";
 
 // --- SQL.js loader ---
 let sqlJsPromise = null;
@@ -343,6 +344,7 @@ export default function SQLPage() {
   }, [cur]);
 
   const run = async () => {
+    if (curLocked) { setUpgradeOpen(true); return; }
     if (!code.trim()) { toast.error("Write a query first"); return; }
     setRunning(true); setError(null);
     const t0 = performance.now();
@@ -421,14 +423,23 @@ export default function SQLPage() {
     return () => window.removeEventListener("keydown", onKey);
   }, [code, cur?.id, companyKey]);
 
-  const goPrev = () => setIdx(i => Math.max(0, i - 1));
+  const isLocked = useCallback((i) => isQuestionLocked(i, difficulty, user), [difficulty, user]);
+  const curLocked = isLocked(idx);
+  const premiumLeft = lockedCount(questions.length, difficulty, user);
+  // Any attempt to land on a locked question opens the upgrade modal instead of moving.
+  const jumpTo = (i) => {
+    if (i < 0 || i >= questions.length) return;
+    if (isLocked(i)) { setUpgradeOpen(true); return; }
+    setIdx(i);
+  };
+  const goPrev = () => jumpTo(idx - 1);
   const goNext = () => {
     // Learning mode: block if current not solved
     if (mode === "learning" && cur && !solvedIds.has(cur.id)) {
       toast.info("📚 Learning Mode — solve this one before moving on.");
       return;
     }
-    setIdx(i => Math.min(questions.length - 1, i + 1));
+    jumpTo(idx + 1);
   };
 
   const mm = String(Math.floor(interviewSeconds / 60)).padStart(2, "0");
@@ -573,9 +584,40 @@ export default function SQLPage() {
               {status.text}
             </div>
             <button onClick={goPrev} disabled={idx === 0} className="p-1.5 rounded-md hover:bg-white/5 disabled:opacity-30" data-testid="btn-prev-q"><ChevronLeft className="w-4 h-4" /></button>
-            <div className="font-mono-editor text-xs text-slate-300">{idx + 1} / {questions.length}</div>
-            <button onClick={goNext} disabled={idx >= questions.length - 1} className="p-1.5 rounded-md hover:bg-white/5 disabled:opacity-30" data-testid="btn-next-q"><ChevronRight className="w-4 h-4" /></button>
+            <div className="font-mono-editor text-xs text-slate-300" title={premiumLeft ? `${premiumLeft} of ${questions.length} need Premium` : undefined}>
+              {idx + 1} / {questions.length}
+              {premiumLeft > 0 && <span className="ml-1.5 text-yellow-300/80 inline-flex items-center gap-0.5"><Lock className="w-3 h-3" />{premiumLeft}</span>}
+            </div>
+            <button onClick={goNext} disabled={idx >= questions.length - 1} className="p-1.5 rounded-md hover:bg-white/5 disabled:opacity-30" data-testid="btn-next-q" title={idx + 1 < questions.length && isLocked(idx + 1) ? "Next question is Premium" : "Next question"}>
+              {idx + 1 < questions.length && isLocked(idx + 1) ? <Lock className="w-4 h-4 text-yellow-300" /> : <ChevronRight className="w-4 h-4" />}
+            </button>
           </div>
+        </div>
+      </div>
+
+      {/* Question strip — every question in this level; locked ones open the upgrade modal */}
+      <div className="border-b border-white/5 bg-[#0D1117]">
+        <div className="max-w-[1600px] mx-auto px-4 py-1.5 flex items-center gap-1 overflow-x-auto" data-testid="question-strip">
+          {questions.map((q, i) => {
+            const locked = isLocked(i);
+            const solved = solvedIds.has(q.id);
+            return (
+              <button key={q.id} onClick={() => jumpTo(i)} title={locked ? `${q.title} · Premium` : q.title}
+                data-testid={`qdot-${i}`}
+                className={`shrink-0 h-6 min-w-[24px] px-1 rounded text-[10px] font-mono-editor border transition-colors ${
+                  i === idx ? "border-[#00D4FF] text-[#00D4FF] bg-[#00D4FF]/10" :
+                  locked ? "border-yellow-400/30 text-yellow-300/70 bg-yellow-400/5 hover:bg-yellow-400/10" :
+                  solved ? "border-[#00FF88]/40 text-[#00FF88] bg-[#00FF88]/5" :
+                  "border-white/10 text-slate-400 hover:bg-white/5"}`}>
+                {locked ? <Lock className="w-3 h-3 inline" /> : i + 1}
+              </button>
+            );
+          })}
+          {premiumLeft > 0 && (
+            <button onClick={() => setUpgradeOpen(true)} className="ml-2 shrink-0 inline-flex items-center gap-1 text-[10px] px-2 py-1 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 text-[#0D1117] font-semibold" data-testid="strip-upgrade">
+              <Crown className="w-3 h-3" /> Unlock {premiumLeft} more
+            </button>
+          )}
         </div>
       </div>
 

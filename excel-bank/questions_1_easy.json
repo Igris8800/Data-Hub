@@ -1,0 +1,342 @@
+[
+{
+"id": "xl-e-01",
+"tier": "easy",
+"topic": "SUM",
+"title": "Total units",
+"context": "Ops wants the total number of units across all orders.",
+"task": "Write a formula that returns the total of the Units column (F2:F41).",
+"hint": "SUM over the range.",
+"answer": "=SUM(F2:F41)"
+},
+{
+"id": "xl-e-02",
+"tier": "easy",
+"topic": "AVERAGE",
+"title": "Average unit price",
+"context": "Pricing wants the mean list price on orders.",
+"task": "Return the average of UnitPrice (G2:G41).",
+"hint": "AVERAGE(range).",
+"answer": "=AVERAGE(G2:G41)"
+},
+{
+"id": "xl-e-03",
+"tier": "easy",
+"topic": "COUNT",
+"title": "How many orders?",
+"context": "A KPI tile needs the order count.",
+"task": "Count the numeric OrderIDs in A2:A41.",
+"hint": "COUNT only counts numbers.",
+"answer": "=COUNT(A2:A41)"
+},
+{
+"id": "xl-e-04",
+"tier": "easy",
+"topic": "COUNTA",
+"title": "How many reps listed?",
+"context": "HR wants a headcount from the Reps table.",
+"task": "Count the non-empty cells in N2:N7.",
+"hint": "COUNTA counts text too.",
+"answer": "=COUNTA(N2:N7)"
+},
+{
+"id": "xl-e-05",
+"tier": "easy",
+"topic": "MAX",
+"title": "Largest single order (units)",
+"context": "Which order had the most units?",
+"task": "Return the maximum value in F2:F41.",
+"hint": "MAX.",
+"answer": "=MAX(F2:F41)"
+},
+{
+"id": "xl-e-06",
+"tier": "easy",
+"topic": "MIN",
+"title": "Cheapest product cost",
+"context": "Procurement wants the lowest unit cost in the Products table.",
+"task": "Return the minimum of Cost (L2:L9).",
+"hint": "MIN.",
+"answer": "=MIN(L2:L9)"
+},
+{
+"id": "xl-e-07",
+"tier": "easy",
+"topic": "Arithmetic",
+"title": "Revenue for one order",
+"context": "Row 2 is a single order; compute its value.",
+"task": "Multiply Units (F2) by UnitPrice (G2).",
+"hint": "Use the * operator.",
+"answer": "=F2*G2"
+},
+{
+"id": "xl-e-08",
+"tier": "easy",
+"topic": "Arithmetic",
+"title": "Margin per unit",
+"context": "Practise subtracting two cells: the list price on row 2 minus the Widget cost.",
+"task": "Return G2 minus L2.",
+"hint": "Subtraction of two cells.",
+"answer": "=G2-L2"
+},
+{
+"id": "xl-e-09",
+"tier": "easy",
+"topic": "Percent",
+"title": "10% discount",
+"context": "A promo gives 10% off the unit price.",
+"task": "Return G2 reduced by 10%.",
+"hint": "G2*(1-10%).",
+"answer": "=G2*(1-10%)"
+},
+{
+"id": "xl-e-10",
+"tier": "easy",
+"topic": "ROUND",
+"title": "Rounded average price",
+"context": "The dashboard shows two decimals.",
+"task": "Return the average of G2:G41 rounded to 2 decimal places.",
+"hint": "ROUND(AVERAGE(...), 2).",
+"answer": "=ROUND(AVERAGE(G2:G41),2)"
+},
+{
+"id": "xl-e-11",
+"tier": "easy",
+"topic": "IF",
+"title": "Big or small order",
+"context": "Flag orders with 6 or more units as Bulk.",
+"task": "For row 2 return \"Bulk\" if F2 >= 6, otherwise \"Standard\".",
+"hint": "IF(condition, value_if_true, value_if_false).",
+"answer": "=IF(F2>=6,\"Bulk\",\"Standard\")"
+},
+{
+"id": "xl-e-12",
+"tier": "easy",
+"topic": "IF",
+"title": "Delivered flag",
+"context": "A helper column marks delivered orders with 1.",
+"task": "For row 3 return 1 if Status (H3) equals \"Delivered\", else 0.",
+"hint": "Compare text with =.",
+"answer": "=IF(H3=\"Delivered\",1,0)"
+},
+{
+"id": "xl-e-13",
+"tier": "easy",
+"topic": "COUNTIF",
+"title": "Delivered orders",
+"context": "Ops tracks fulfilment.",
+"task": "Count how many orders have Status \"Delivered\" (H2:H41).",
+"hint": "COUNTIF(range, criteria).",
+"answer": "=COUNTIF(H2:H41,\"Delivered\")"
+},
+{
+"id": "xl-e-14",
+"tier": "easy",
+"topic": "COUNTIF",
+"title": "Orders over 8 units",
+"context": "How many orders are large?",
+"task": "Count orders where Units (F2:F41) is greater than 8.",
+"hint": "Criteria as text: \">8\".",
+"answer": "=COUNTIF(F2:F41,\">8\")"
+},
+{
+"id": "xl-e-15",
+"tier": "easy",
+"topic": "SUMIF",
+"title": "Units sold in the North",
+"context": "The North regional manager wants their unit volume.",
+"task": "Sum Units (F2:F41) where Region (C2:C41) is \"North\".",
+"hint": "SUMIF(criteria_range, criteria, sum_range).",
+"answer": "=SUMIF(C2:C41,\"North\",F2:F41)"
+},
+{
+"id": "xl-e-16",
+"tier": "easy",
+"topic": "SUMIF",
+"title": "Units for Widgets",
+"context": "Product manager for Widget wants volume.",
+"task": "Sum Units where Product (E2:E41) is \"Widget\".",
+"hint": "SUMIF on the Product column.",
+"answer": "=SUMIF(E2:E41,\"Widget\",F2:F41)"
+},
+{
+"id": "xl-e-17",
+"tier": "easy",
+"topic": "AVERAGEIF",
+"title": "Average units per Gadget order",
+"context": "How big is a typical Gadget order?",
+"task": "Average Units (F2:F41) where Product is \"Gadget\".",
+"hint": "AVERAGEIF(range, criteria, average_range).",
+"answer": "=AVERAGEIF(E2:E41,\"Gadget\",F2:F41)"
+},
+{
+"id": "xl-e-18",
+"tier": "easy",
+"topic": "Text",
+"title": "Uppercase region",
+"context": "Labels on the chart are in caps.",
+"task": "Return the Region in C2 in upper case.",
+"hint": "UPPER().",
+"answer": "=UPPER(C2)"
+},
+{
+"id": "xl-e-19",
+"tier": "easy",
+"topic": "Text",
+"title": "Length of a product name",
+"context": "Checking label widths.",
+"task": "Return the number of characters in E2.",
+"hint": "LEN().",
+"answer": "=LEN(E2)"
+},
+{
+"id": "xl-e-20",
+"tier": "easy",
+"topic": "Text",
+"title": "Order label",
+"context": "Build a label like \"1001 - Widget\".",
+"task": "Concatenate A2, the text \" - \", and E2.",
+"hint": "Use & to join.",
+"answer": "=A2&\" - \"&E2"
+},
+{
+"id": "xl-e-21",
+"tier": "easy",
+"topic": "Text",
+"title": "First three letters",
+"context": "A short code for the region.",
+"task": "Return the first 3 characters of C2.",
+"hint": "LEFT(text, 3).",
+"answer": "=LEFT(C2,3)"
+},
+{
+"id": "xl-e-22",
+"tier": "easy",
+"topic": "Text",
+"title": "Clean a messy name",
+"context": "Row 6 has a rep name with stray spaces and wrong case.",
+"task": "Return D6 trimmed of extra spaces and converted to Proper Case.",
+"hint": "PROPER(TRIM(D6)).",
+"answer": "=PROPER(TRIM(D6))"
+},
+{
+"id": "xl-e-23",
+"tier": "easy",
+"topic": "Dates",
+"title": "Order year",
+"context": "Finance groups orders by year.",
+"task": "Return the year of the date in B2.",
+"hint": "YEAR().",
+"answer": "=YEAR(B2)"
+},
+{
+"id": "xl-e-24",
+"tier": "easy",
+"topic": "Dates",
+"title": "Order month",
+"context": "Monthly reporting.",
+"task": "Return the month number of the date in B2.",
+"hint": "MONTH().",
+"answer": "=MONTH(B2)"
+},
+{
+"id": "xl-e-25",
+"tier": "easy",
+"topic": "Dates",
+"title": "Days between two orders",
+"context": "How many days separate order 1001 and order 1002?",
+"task": "Return B3 minus B2 (dates are serial numbers, so subtraction gives days).",
+"hint": "Just subtract.",
+"answer": "=B3-B2"
+},
+{
+"id": "xl-e-26",
+"tier": "easy",
+"topic": "Dates",
+"title": "Build a date",
+"context": "A fixed reporting date.",
+"task": "Return the date 31 March 2024 using DATE.",
+"hint": "DATE(year, month, day).",
+"answer": "=DATE(2024,3,31)"
+},
+{
+"id": "xl-e-27",
+"tier": "easy",
+"topic": "VLOOKUP",
+"title": "Look up a product's category",
+"context": "Add the category next to an order.",
+"task": "Using VLOOKUP on the Products table (J2:L9), return the Category for the product in E2 (exact match).",
+"hint": "VLOOKUP(E2, J2:L9, 2, FALSE).",
+"answer": "=VLOOKUP(E2,J2:L9,2,FALSE)"
+},
+{
+"id": "xl-e-28",
+"tier": "easy",
+"topic": "VLOOKUP",
+"title": "Look up a rep's target",
+"context": "Compare each rep to target.",
+"task": "Return the Target from the Reps table (N2:Q7) for the rep in D2 (exact match).",
+"hint": "Target is the 3rd column of N2:Q7.",
+"answer": "=VLOOKUP(D2,N2:Q7,3,FALSE)"
+},
+{
+"id": "xl-e-29",
+"tier": "easy",
+"topic": "MAX/MIN",
+"title": "Price range",
+"context": "Spread between most and least expensive list price.",
+"task": "Return MAX of G2:G41 minus MIN of G2:G41.",
+"hint": "Two functions in one formula.",
+"answer": "=MAX(G2:G41)-MIN(G2:G41)"
+},
+{
+"id": "xl-e-30",
+"tier": "easy",
+"topic": "Logic",
+"title": "Both conditions",
+"context": "North region AND delivered.",
+"task": "For row 2, return TRUE if C2 is \"North\" AND H2 is \"Delivered\", else FALSE.",
+"hint": "AND(a, b).",
+"answer": "=AND(C2=\"North\",H2=\"Delivered\")"
+},
+{
+"id": "xl-e-31",
+"tier": "easy",
+"topic": "Logic",
+"title": "Either condition",
+"context": "Cancelled or Returned means lost revenue.",
+"task": "For row 2, return TRUE if H2 is \"Cancelled\" OR \"Returned\".",
+"hint": "OR(a, b).",
+"answer": "=OR(H2=\"Cancelled\",H2=\"Returned\")"
+},
+{
+"id": "xl-e-32",
+"tier": "easy",
+"topic": "COUNTBLANK",
+"title": "Any missing statuses?",
+"context": "Data-quality check on the Status column.",
+"task": "Count blank cells in H2:H41.",
+"hint": "COUNTBLANK.",
+"answer": "=COUNTBLANK(H2:H41)"
+},
+{
+"id": "xl-e-33",
+"tier": "easy",
+"topic": "Arithmetic",
+"title": "Share of total units",
+"context": "What fraction of all units is in order 1001?",
+"task": "Return F2 divided by the sum of F2:F41.",
+"hint": "F2/SUM(F2:F41).",
+"answer": "=F2/SUM(F2:F41)"
+},
+{
+"id": "xl-e-34",
+"tier": "easy",
+"topic": "MOD",
+"title": "Even or odd order number",
+"context": "Alternate row shading uses even/odd IDs.",
+"task": "Return the remainder when A2 is divided by 2.",
+"hint": "MOD(number, divisor).",
+"answer": "=MOD(A2,2)"
+}
+]
