@@ -204,7 +204,7 @@ F.SUBSTITUTE = (t, o, n, inst) => { t = str(scalar(t)); o = str(scalar(o)); n = 
 F.REPLACE = (t, s, n, nt) => { t = str(scalar(t)); s = num(scalar(s)); n = num(scalar(n)); return t.slice(0, s - 1) + str(scalar(nt)) + t.slice(s - 1 + n); };
 F.FIND = (f, t, s = 1) => { const i = str(scalar(t)).indexOf(str(scalar(f)), num(scalar(s)) - 1); if (i < 0) throw ERR("#VALUE!"); return i + 1; };
 F.SEARCH = (f, t, s = 1) => { const i = str(scalar(t)).toLowerCase().indexOf(str(scalar(f)).toLowerCase(), num(scalar(s)) - 1); if (i < 0) throw ERR("#VALUE!"); return i + 1; };
-F.REPT = (t, n) => str(scalar(t)).repeat(Math.max(0, num(scalar(n)))); F.EXACT = (a, b) => str(scalar(a)) === str(scalar(b));
+F.REPT = (t, n) => str(scalar(t)).repeat(Math.max(0, num(scalar(n)))); F.EXACT = (a, b) => broadcast(a, b, (x, y) => str(x) === str(y));
 F.VALUE = (v) => num(scalar(v)); F.TEXT = (v, f) => fmtNumber(num(scalar(v)), str(scalar(f)));
 F.TEXTBEFORE = (t, d) => { t = str(scalar(t)); const i = t.indexOf(str(scalar(d))); if (i < 0) throw ERR("#N/A"); return t.slice(0, i); };
 F.TEXTAFTER = (t, d) => { t = str(scalar(t)); d = str(scalar(d)); const i = t.indexOf(d); if (i < 0) throw ERR("#N/A"); return t.slice(i + d.length); };
@@ -218,11 +218,14 @@ F.EDATE = (v, m) => { const d = fromSerial(num(scalar(v))); m = num(scalar(m)); 
 F.EOMONTH = (v, m) => { const d = fromSerial(num(scalar(v))); m = num(scalar(m)); return Math.round((Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + m + 1, 0) - EPOCH) / 864e5); };
 F.DAYS = (a, b) => num(scalar(a)) - num(scalar(b));
 F.DATEDIF = (a, b, u) => { const A = fromSerial(num(scalar(a))), B = fromSerial(num(scalar(b))); u = str(scalar(u)).toUpperCase(); if (u === "D") return Math.floor((B - A) / 864e5); let months = (B.getUTCFullYear() - A.getUTCFullYear()) * 12 + (B.getUTCMonth() - A.getUTCMonth()); if (B.getUTCDate() < A.getUTCDate()) months--; if (u === "M") return months; if (u === "Y") return Math.floor(months / 12); throw ERR("#NUM!"); };
-F.NETWORKDAYS = (a, b) => { let s = num(scalar(a)), e = num(scalar(b)), n = 0; for (let d = s; d <= e; d++) { const w = fromSerial(d).getUTCDay(); if (w !== 0 && w !== 6) n++; } return n; };
+F.NETWORKDAYS = (a, b, hol) => { let s = num(scalar(a)), e = num(scalar(b)), n = 0; const H = new Set(hol ? flat(hol).filter((x) => typeof x === "number").map(Math.floor) : []); for (let d = s; d <= e; d++) { const w = fromSerial(d).getUTCDay(); if (w !== 0 && w !== 6 && !H.has(d)) n++; } return n; };
+F.WORKDAY = (a, days, hol) => { let d = num(scalar(a)); let left = num(scalar(days)); const H = new Set(hol ? flat(hol).filter((x) => typeof x === "number").map(Math.floor) : []); const step = left < 0 ? -1 : 1; left = Math.abs(left); while (left > 0) { d += step; const w = fromSerial(d).getUTCDay(); if (w !== 0 && w !== 6 && !H.has(d)) left--; } return d; };
+F.SWITCH = (v, ...a) => { v = scalar(v); for (let i = 0; i + 1 < a.length; i += 2) if (cmp(v, scalar(a[i])) === 0) return a[i + 1]; if (a.length % 2 === 1) return a[a.length - 1]; throw ERR("#N/A"); };
+F.YEARFRAC = (a, b) => (num(scalar(b)) - num(scalar(a))) / 365;
 F.DATEVALUE = (t) => serialFromISO(str(scalar(t)));
 
 // array-aware lifting: single-argument scalar functions map over arrays (YEAR(B2:B41) inside SUMPRODUCT etc.)
-for (const name of ["YEAR","MONTH","DAY","WEEKDAY","TRIM","LOWER","UPPER","PROPER","LEN","ISNUMBER","ISTEXT","ISBLANK","ABS","INT","TRUNC","SQRT","N","VALUE","EOMONTH","EDATE","LEFT","RIGHT","ROUND","ROUNDUP","ROUNDDOWN","TEXT"]) {
+for (const name of ["NOT","YEAR","MONTH","DAY","WEEKDAY","TRIM","LOWER","UPPER","PROPER","LEN","ISNUMBER","ISTEXT","ISBLANK","ABS","INT","TRUNC","SQRT","N","VALUE","EOMONTH","EDATE","LEFT","RIGHT","ROUND","ROUNDUP","ROUNDDOWN","TEXT"]) {
   const f = F[name]; F[name] = (a, ...rest) => (isArr(a) ? mapArr(a, (x) => f(x, ...rest)) : f(a, ...rest));
 }
 F.ISNA = (v) => { v = isArr(v) ? v : [[v]]; const out = v.map((row) => row.map((x) => isErr(x) && x.code === "#N/A")); return out.length === 1 && out[0].length === 1 ? out[0][0] : out; };
@@ -232,6 +235,8 @@ F.ISERROR = (v) => { v = isArr(v) ? v : [[v]]; const out = v.map((row) => row.ma
   ["MATCH", "XLOOKUP", "VLOOKUP", "HLOOKUP"].forEach(liftKey);
   const liftCrit = (name, pos) => { const f = F[name]; F[name] = (...a) => (isArr(a[pos]) && !(a[pos].length === 1 && a[pos][0].length === 1) ? mapArr(a[pos], (c) => { const b = [...a]; b[pos] = c; return f(...b); }) : f(...a)); };
   liftCrit("SUMIF", 1); liftCrit("COUNTIF", 1); liftCrit("AVERAGEIF", 1);
+  const liftIfs = (name, start) => { const f = F[name]; F[name] = (...a) => { const crit = []; for (let i = start; i < a.length; i += 2) if (isArr(a[i]) && !(a[i].length === 1 && a[i][0].length === 1)) crit.push(i); if (!crit.length) return f(...a); const shape = a[crit[0]]; return shape.map((row, r) => row.map((_, c) => { const b = [...a]; for (const i of crit) b[i] = a[i][r]?.[c]; try { return f(...b); } catch (e) { return isErr(e) ? e : ERR("#VALUE!"); } })); }; };
+  liftIfs("COUNTIFS", 1); liftIfs("SUMIFS", 2); liftIfs("AVERAGEIFS", 2); liftIfs("MAXIFS", 2); liftIfs("MINIFS", 2);
   const liftK = (name) => { const f = F[name]; F[name] = (r, k) => (isArr(k) ? mapArr(k, (x) => f(r, x)) : f(r, k)); };
   liftK("LARGE"); liftK("SMALL");
 }

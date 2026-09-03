@@ -19,5 +19,5 @@ wb={"key":"sales","name":"Sales Ledger","tagline":"Orders · Products · Reps","
   {"name":"Products","anchor":"J1","headers":["Product","Category","Cost"],"types":["s","s","money"],"rows":products},
   {"name":"Reps","anchor":"N1","headers":["Rep","Region","Target","HireDate"],"types":["s","s","money","date"],"rows":reps}],
  "answerCell":"A44"}
-json.dump(wb,open('workbook_sales.json','w'),indent=0)
+json.dump(wb,open('workbook.json','w'),indent=0)
 print("orders",len(orders),"first date serial",orders[0][1])

@@ -1,0 +1,332 @@
+[
+{
+"id": "hr-m-01",
+"tier": "medium",
+"topic": "SUMIFS",
+"title": "Active Engineering payroll",
+"context": "Salary bill for active engineers only.",
+"task": "Sum F2:F51 where Dept is \"Engineering\" and Status is \"Active\".",
+"hint": "SUMIFS with two criteria.",
+"answer": "=SUMIFS(F2:F51,C2:C51,\"Engineering\",I2:I51,\"Active\")"
+},
+{
+"id": "hr-m-02",
+"tier": "medium",
+"topic": "SUMIFS",
+"title": "Payroll for G3 in Bengaluru",
+"context": "Grade × location slice.",
+"task": "Sum Salary where Grade is \"G3\" and Location is \"Bengaluru\".",
+"hint": "SUMIFS.",
+"answer": "=SUMIFS(F2:F51,D2:D51,\"G3\",H2:H51,\"Bengaluru\")"
+},
+{
+"id": "hr-m-03",
+"tier": "medium",
+"topic": "COUNTIFS",
+"title": "Active remote staff",
+"context": "Remote AND Active.",
+"task": "Count rows where Location is \"Remote\" and Status is \"Active\".",
+"hint": "COUNTIFS.",
+"answer": "=COUNTIFS(H2:H51,\"Remote\",I2:I51,\"Active\")"
+},
+{
+"id": "hr-m-04",
+"tier": "medium",
+"topic": "COUNTIFS",
+"title": "Hired in 2022",
+"context": "Date-range criteria.",
+"task": "Count employees with HireDate between 1 Jan 2022 and 31 Dec 2022 inclusive.",
+"hint": "\">=\"&DATE(2022,1,1) and \"<=\"&DATE(2022,12,31).",
+"answer": "=COUNTIFS(E2:E51,\">=\"&DATE(2022,1,1),E2:E51,\"<=\"&DATE(2022,12,31))"
+},
+{
+"id": "hr-m-05",
+"tier": "medium",
+"topic": "AVERAGEIFS",
+"title": "Average active Sales salary",
+"context": "Two-condition average.",
+"task": "Average F2:F51 where Dept is \"Sales\" and Status is \"Active\".",
+"hint": "AVERAGEIFS.",
+"answer": "=AVERAGEIFS(F2:F51,C2:C51,\"Sales\",I2:I51,\"Active\")"
+},
+{
+"id": "hr-m-06",
+"tier": "medium",
+"topic": "MAXIFS",
+"title": "Top Finance salary",
+"context": "Highest salary in Finance.",
+"task": "Return MAXIFS(F2:F51, C2:C51, \"Finance\").",
+"hint": "MAXIFS.",
+"answer": "=MAXIFS(F2:F51,C2:C51,\"Finance\")"
+},
+{
+"id": "hr-m-07",
+"tier": "medium",
+"topic": "MINIFS",
+"title": "Lowest G4 salary",
+"context": "Floor check for grade G4.",
+"task": "Return MINIFS(F2:F51, D2:D51, \"G4\").",
+"hint": "MINIFS.",
+"answer": "=MINIFS(F2:F51,D2:D51,\"G4\")"
+},
+{
+"id": "hr-m-08",
+"tier": "medium",
+"topic": "SUMPRODUCT",
+"title": "Total monthly bonus pool",
+"context": "Σ Salary × BonusPct / 100 across all rows.",
+"task": "Return SUMPRODUCT(F2:F51, G2:G51) / 100.",
+"hint": "SUMPRODUCT then divide.",
+"answer": "=SUMPRODUCT(F2:F51,G2:G51)/100"
+},
+{
+"id": "hr-m-09",
+"tier": "medium",
+"topic": "SUMPRODUCT",
+"title": "Active total compensation",
+"context": "Salary + bonus for active staff only.",
+"task": "Return SUMPRODUCT((I2:I51=\"Active\") × F2:F51 × (1 + G2:G51/100)).",
+"hint": "Boolean mask × arrays.",
+"answer": "=SUMPRODUCT((I2:I51=\"Active\")*F2:F51*(1+G2:G51/100))"
+},
+{
+"id": "hr-m-10",
+"tier": "medium",
+"topic": "INDEX/MATCH",
+"title": "Who earns the most?",
+"context": "Name of the top earner.",
+"task": "Return INDEX(B2:B51, MATCH(MAX(F2:F51), F2:F51, 0)).",
+"hint": "INDEX/MATCH on MAX.",
+"answer": "=INDEX(B2:B51,MATCH(MAX(F2:F51),F2:F51,0))"
+},
+{
+"id": "hr-m-11",
+"tier": "medium",
+"topic": "INDEX/MATCH",
+"title": "Grade max by two-way lookup",
+"context": "Look up the MaxSalary column by header name.",
+"task": "Return INDEX(P2:S6, MATCH(D2, P2:P6, 0), MATCH(\"MaxSalary\", P1:S1, 0)).",
+"hint": "Two MATCHes.",
+"answer": "=INDEX(P2:S6,MATCH(D2,P2:P6,0),MATCH(\"MaxSalary\",P1:S1,0))"
+},
+{
+"id": "hr-m-12",
+"tier": "medium",
+"topic": "XLOOKUP",
+"title": "Department of employee 1010",
+"context": "Look up by EmpID.",
+"task": "Return XLOOKUP(1010, A2:A51, C2:C51).",
+"hint": "XLOOKUP.",
+"answer": "=XLOOKUP(1010,A2:A51,C2:C51)"
+},
+{
+"id": "hr-m-13",
+"tier": "medium",
+"topic": "XLOOKUP",
+"title": "Salary of a named employee, safely",
+"context": "Handle a name that isn't there.",
+"task": "Return XLOOKUP(\"Nobody Here\", B2:B51, F2:F51, \"Not found\").",
+"hint": "if_not_found argument.",
+"answer": "=XLOOKUP(\"Nobody Here\",B2:B51,F2:F51,\"Not found\")"
+},
+{
+"id": "hr-m-14",
+"tier": "medium",
+"topic": "IFS",
+"title": "Tenure band",
+"context": "< 2 yrs Junior, < 5 Mid, else Senior (as of TODAY()).",
+"task": "For row 2 return IFS(DATEDIF(E2,TODAY(),\"Y\")<2,\"Junior\", DATEDIF(E2,TODAY(),\"Y\")<5,\"Mid\", TRUE,\"Senior\").",
+"hint": "IFS with DATEDIF.",
+"answer": "=IFS(DATEDIF(E2,TODAY(),\"Y\")<2,\"Junior\",DATEDIF(E2,TODAY(),\"Y\")<5,\"Mid\",TRUE,\"Senior\")"
+},
+{
+"id": "hr-m-15",
+"tier": "medium",
+"topic": "Nested IF",
+"title": "Bonus multiplier by grade",
+"context": "G5 → 1.5, G4 → 1.25, others → 1.",
+"task": "For row 2 return IF(D2=\"G5\",1.5,IF(D2=\"G4\",1.25,1)).",
+"hint": "Nested IF.",
+"answer": "=IF(D2=\"G5\",1.5,IF(D2=\"G4\",1.25,1))"
+},
+{
+"id": "hr-m-16",
+"tier": "medium",
+"topic": "IFERROR",
+"title": "Safe lookup by EmpID",
+"context": "An unknown ID should show a message, not #N/A.",
+"task": "Return IFERROR(VLOOKUP(9999, A2:I51, 2, FALSE), \"Unknown ID\").",
+"hint": "IFERROR around VLOOKUP.",
+"answer": "=IFERROR(VLOOKUP(9999,A2:I51,2,FALSE),\"Unknown ID\")"
+},
+{
+"id": "hr-m-17",
+"tier": "medium",
+"topic": "Dates",
+"title": "Months of service",
+"context": "Whole months since hire for row 2.",
+"task": "Return DATEDIF(E2,TODAY(),\"M\").",
+"hint": "\"M\".",
+"answer": "=DATEDIF(E2,TODAY(),\"M\")"
+},
+{
+"id": "hr-m-18",
+"tier": "medium",
+"topic": "Dates",
+"title": "Next work anniversary",
+"context": "The next anniversary date after TODAY() for row 2.",
+"task": "Return DATE(YEAR(TODAY()) + IF(DATE(YEAR(TODAY()),MONTH(E2),DAY(E2)) < TODAY(), 1, 0), MONTH(E2), DAY(E2)).",
+"hint": "Rebuild the date in this year, bump if passed.",
+"answer": "=DATE(YEAR(TODAY())+IF(DATE(YEAR(TODAY()),MONTH(E2),DAY(E2))<TODAY(),1,0),MONTH(E2),DAY(E2))"
+},
+{
+"id": "hr-m-19",
+"tier": "medium",
+"topic": "Dates",
+"title": "Leave end date",
+"context": "Row 2 of Leave: start + days − 1.",
+"task": "Return M2 + N2 − 1.",
+"hint": "Date arithmetic.",
+"answer": "=M2+N2-1"
+},
+{
+"id": "hr-m-20",
+"tier": "medium",
+"topic": "Dates",
+"title": "Working days in Q1 2025",
+"context": "Business days excluding the Holidays list.",
+"task": "Return NETWORKDAYS(DATE(2025,1,1), DATE(2025,3,31), U2:U9).",
+"hint": "Third argument is the holiday list.",
+"answer": "=NETWORKDAYS(DATE(2025,1,1),DATE(2025,3,31),U2:U9)"
+},
+{
+"id": "hr-m-21",
+"tier": "medium",
+"topic": "Dates",
+"title": "Return-to-work date",
+"context": "10 working days after 2025-03-10, skipping weekends and holidays.",
+"task": "Return WORKDAY(DATE(2025,3,10), 10, U2:U9).",
+"hint": "WORKDAY.",
+"answer": "=WORKDAY(DATE(2025,3,10),10,U2:U9)"
+},
+{
+"id": "hr-m-22",
+"tier": "medium",
+"topic": "Leave",
+"title": "Leave days for employee 1005",
+"context": "Total days across all types.",
+"task": "Return SUMIF(K2:K61, 1005, N2:N61).",
+"hint": "SUMIF with a number criterion.",
+"answer": "=SUMIF(K2:K61,1005,N2:N61)"
+},
+{
+"id": "hr-m-23",
+"tier": "medium",
+"topic": "Leave",
+"title": "Sick days for employee 1005",
+"context": "Two criteria on the Leave table.",
+"task": "Return SUMIFS(N2:N61, K2:K61, 1005, L2:L61, \"Sick\").",
+"hint": "SUMIFS.",
+"answer": "=SUMIFS(N2:N61,K2:K61,1005,L2:L61,\"Sick\")"
+},
+{
+"id": "hr-m-24",
+"tier": "medium",
+"topic": "Leave",
+"title": "Earned leave balance",
+"context": "Employee 1005 gets 18 earned days a year; how many remain?",
+"task": "Return 18 − SUMIFS(N2:N61, K2:K61, 1005, L2:L61, \"Earned\").",
+"hint": "Subtract used from entitlement.",
+"answer": "=18-SUMIFS(N2:N61,K2:K61,1005,L2:L61,\"Earned\")"
+},
+{
+"id": "hr-m-25",
+"tier": "medium",
+"topic": "Leave",
+"title": "Leave taken in March 2025",
+"context": "Days for leave starting in March.",
+"task": "Return SUMIFS(N2:N61, M2:M61, \">=\"&DATE(2025,3,1), M2:M61, \"<=\"&DATE(2025,3,31)).",
+"hint": "Date-window SUMIFS.",
+"answer": "=SUMIFS(N2:N61,M2:M61,\">=\"&DATE(2025,3,1),M2:M61,\"<=\"&DATE(2025,3,31))"
+},
+{
+"id": "hr-m-26",
+"tier": "medium",
+"topic": "Compliance",
+"title": "Below grade minimum?",
+"context": "Row 6's salary vs its grade floor.",
+"task": "Return IF(F6 < VLOOKUP(D6,P2:S6,2,FALSE), \"Below band\", \"OK\").",
+"hint": "VLOOKUP inside IF.",
+"answer": "=IF(F6<VLOOKUP(D6,P2:S6,2,FALSE),\"Below band\",\"OK\")"
+},
+{
+"id": "hr-m-27",
+"tier": "medium",
+"topic": "Compliance",
+"title": "How many are outside their band?",
+"context": "Count employees below min or above max for their grade.",
+"task": "Return SUMPRODUCT((F2:F51 < XLOOKUP(D2:D51,P2:P6,Q2:Q6)) + (F2:F51 > XLOOKUP(D2:D51,P2:P6,R2:R6))).",
+"hint": "Array XLOOKUP for the band edges.",
+"answer": "=SUMPRODUCT((F2:F51<XLOOKUP(D2:D51,P2:P6,Q2:Q6))+(F2:F51>XLOOKUP(D2:D51,P2:P6,R2:R6)))"
+},
+{
+"id": "hr-m-28",
+"tier": "medium",
+"topic": "Ranking",
+"title": "Salary rank of row 2",
+"context": "1 = highest.",
+"task": "Return RANK(F2, F2:F51).",
+"hint": "RANK.",
+"answer": "=RANK(F2,F2:F51)"
+},
+{
+"id": "hr-m-29",
+"tier": "medium",
+"topic": "Statistics",
+"title": "Median salary",
+"context": "Robust middle.",
+"task": "Return MEDIAN(F2:F51).",
+"hint": "MEDIAN.",
+"answer": "=MEDIAN(F2:F51)"
+},
+{
+"id": "hr-m-30",
+"tier": "medium",
+"topic": "Statistics",
+"title": "Salary standard deviation",
+"context": "Pay dispersion (sample), rounded.",
+"task": "Return ROUND(STDEV.S(F2:F51),0).",
+"hint": "STDEV.S.",
+"answer": "=ROUND(STDEV.S(F2:F51),0)"
+},
+{
+"id": "hr-m-31",
+"tier": "medium",
+"topic": "TEXT",
+"title": "Hire date label",
+"context": "Format E2 as \"Mar-2021\".",
+"task": "Return TEXT(E2, \"mmm-yyyy\").",
+"hint": "TEXT.",
+"answer": "=TEXT(E2,\"mmm-yyyy\")"
+},
+{
+"id": "hr-m-32",
+"tier": "medium",
+"topic": "TEXT",
+"title": "Salary with separators",
+"context": "Display F2 with thousands separators, e.g. 125,000.",
+"task": "Return TEXT(F2, \"#,##0\").",
+"hint": "TEXT with #,##0.",
+"answer": "=TEXT(F2,\"#,##0\")"
+},
+{
+"id": "hr-m-33",
+"tier": "medium",
+"topic": "Data cleaning",
+"title": "Standardise a department",
+"context": "Row 21's dept is lowercase.",
+"task": "Return PROPER(TRIM(C21)).",
+"hint": "PROPER(TRIM()).",
+"answer": "=PROPER(TRIM(C21))"
+}
+]

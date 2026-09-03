@@ -1,0 +1,332 @@
+[
+{
+"id": "hr-h-01",
+"tier": "hard",
+"topic": "Dynamic arrays",
+"title": "Distinct departments, sorted",
+"context": "Clean picklist for a dropdown.",
+"task": "Return SORT(UNIQUE(C2:C51)).",
+"hint": "SORT(UNIQUE()).",
+"answer": "=SORT(UNIQUE(C2:C51))"
+},
+{
+"id": "hr-h-02",
+"tier": "hard",
+"topic": "FILTER",
+"title": "Resigned employees' names",
+"context": "Exit list.",
+"task": "Return FILTER(B2:B51, I2:I51=\"Resigned\").",
+"hint": "FILTER.",
+"answer": "=FILTER(B2:B51,I2:I51=\"Resigned\")"
+},
+{
+"id": "hr-h-03",
+"tier": "hard",
+"topic": "FILTER",
+"title": "Active G5s in Mumbai",
+"context": "Three conditions.",
+"task": "Return FILTER(B2:B51, (D2:D51=\"G5\")*(H2:H51=\"Mumbai\")*(I2:I51=\"Active\"), \"None\").",
+"hint": "Multiply masks; if_empty.",
+"answer": "=FILTER(B2:B51,(D2:D51=\"G5\")*(H2:H51=\"Mumbai\")*(I2:I51=\"Active\"),\"None\")"
+},
+{
+"id": "hr-h-04",
+"tier": "hard",
+"topic": "SORT",
+"title": "Top 5 salaries",
+"context": "Descending list of the five highest.",
+"task": "Return LARGE(F2:F51, SEQUENCE(5)).",
+"hint": "LARGE with SEQUENCE.",
+"answer": "=LARGE(F2:F51,SEQUENCE(5))"
+},
+{
+"id": "hr-h-05",
+"tier": "hard",
+"topic": "SORTBY",
+"title": "Names ordered by salary desc",
+"context": "Leaderboard of names.",
+"task": "Return SORTBY(B2:B51, F2:F51, -1).",
+"hint": "SORTBY(array, by, order).",
+"answer": "=SORTBY(B2:B51,F2:F51,-1)"
+},
+{
+"id": "hr-h-06",
+"tier": "hard",
+"topic": "SUMPRODUCT",
+"title": "Headcount per dept via array",
+"context": "Spill headcount for each unique dept.",
+"task": "Return COUNTIF(C2:C51, UNIQUE(C2:C51)).",
+"hint": "COUNTIF with an array of criteria spills.",
+"answer": "=COUNTIF(C2:C51,UNIQUE(C2:C51))"
+},
+{
+"id": "hr-h-07",
+"tier": "hard",
+"topic": "SUMPRODUCT",
+"title": "Payroll share of Engineering",
+"context": "Engineering salary ÷ total salary, as percent text.",
+"task": "Return TEXT(SUMIF(C2:C51,\"Engineering\",F2:F51)/SUM(F2:F51), \"0.0%\").",
+"hint": "TEXT with percent format.",
+"answer": "=TEXT(SUMIF(C2:C51,\"Engineering\",F2:F51)/SUM(F2:F51),\"0.0%\")"
+},
+{
+"id": "hr-h-08",
+"tier": "hard",
+"topic": "SUMPRODUCT",
+"title": "Average tenure in years (active)",
+"context": "Mean of DATEDIF across active staff.",
+"task": "Return ROUND(SUMPRODUCT((I2:I51=\"Active\")*(TODAY()-E2:E51))/COUNTIF(I2:I51,\"Active\")/365, 1).",
+"hint": "Days ÷ 365 averaged over actives.",
+"answer": "=ROUND(SUMPRODUCT((I2:I51=\"Active\")*(TODAY()-E2:E51))/COUNTIF(I2:I51,\"Active\")/365,1)"
+},
+{
+"id": "hr-h-09",
+"tier": "hard",
+"topic": "Attrition",
+"title": "Attrition rate",
+"context": "Resigned ÷ total, 1 decimal percent.",
+"task": "Return ROUND(COUNTIF(I2:I51,\"Resigned\")/COUNTA(I2:I51)*100, 1).",
+"hint": "COUNTIF / COUNTA.",
+"answer": "=ROUND(COUNTIF(I2:I51,\"Resigned\")/COUNTA(I2:I51)*100,1)"
+},
+{
+"id": "hr-h-10",
+"tier": "hard",
+"topic": "Attrition",
+"title": "Attrition by department",
+"context": "Spill resigned % for each unique dept.",
+"task": "Return COUNTIFS(C2:C51, UNIQUE(C2:C51), I2:I51, \"Resigned\") / COUNTIF(C2:C51, UNIQUE(C2:C51)).",
+"hint": "Two spilled arrays divided.",
+"answer": "=COUNTIFS(C2:C51,UNIQUE(C2:C51),I2:I51,\"Resigned\")/COUNTIF(C2:C51,UNIQUE(C2:C51))"
+},
+{
+"id": "hr-h-11",
+"tier": "hard",
+"topic": "Compliance",
+"title": "Names below their grade minimum",
+"context": "Spill the list of underpaid employees.",
+"task": "Return FILTER(B2:B51, F2:F51 < XLOOKUP(D2:D51, P2:P6, Q2:Q6), \"None\").",
+"hint": "Array XLOOKUP inside FILTER.",
+"answer": "=FILTER(B2:B51,F2:F51<XLOOKUP(D2:D51,P2:P6,Q2:Q6),\"None\")"
+},
+{
+"id": "hr-h-12",
+"tier": "hard",
+"topic": "Compliance",
+"title": "Cost to bring everyone to band minimum",
+"context": "Σ max(0, min − salary).",
+"task": "Return SUMPRODUCT((F2:F51 < XLOOKUP(D2:D51,P2:P6,Q2:Q6)) × (XLOOKUP(D2:D51,P2:P6,Q2:Q6) − F2:F51)).",
+"hint": "Mask × gap.",
+"answer": "=SUMPRODUCT((F2:F51<XLOOKUP(D2:D51,P2:P6,Q2:Q6))*(XLOOKUP(D2:D51,P2:P6,Q2:Q6)-F2:F51))"
+},
+{
+"id": "hr-h-13",
+"tier": "hard",
+"topic": "Compa-ratio",
+"title": "Compa-ratio for row 2",
+"context": "Salary ÷ band midpoint.",
+"task": "Return ROUND(F2 / ((VLOOKUP(D2,P2:S6,2,FALSE)+VLOOKUP(D2,P2:S6,3,FALSE))/2), 2).",
+"hint": "Midpoint = (min+max)/2.",
+"answer": "=ROUND(F2/((VLOOKUP(D2,P2:S6,2,FALSE)+VLOOKUP(D2,P2:S6,3,FALSE))/2),2)"
+},
+{
+"id": "hr-h-14",
+"tier": "hard",
+"topic": "Compa-ratio",
+"title": "Count of compa-ratio > 1.1",
+"context": "Employees paid well above midpoint.",
+"task": "Return SUMPRODUCT(--(F2:F51 / ((XLOOKUP(D2:D51,P2:P6,Q2:Q6)+XLOOKUP(D2:D51,P2:P6,R2:R6))/2) > 1.1)).",
+"hint": "Array compa-ratio then count.",
+"answer": "=SUMPRODUCT(--(F2:F51/((XLOOKUP(D2:D51,P2:P6,Q2:Q6)+XLOOKUP(D2:D51,P2:P6,R2:R6))/2)>1.1))"
+},
+{
+"id": "hr-h-15",
+"tier": "hard",
+"topic": "Bonus",
+"title": "Bonus using the grade table, not the row",
+"context": "Total bonus if every employee got their grade's standard BonusPct.",
+"task": "Return SUMPRODUCT(F2:F51 × XLOOKUP(D2:D51,P2:P6,S2:S6)) / 100.",
+"hint": "Lookup array of rates.",
+"answer": "=SUMPRODUCT(F2:F51*XLOOKUP(D2:D51,P2:P6,S2:S6))/100"
+},
+{
+"id": "hr-h-16",
+"tier": "hard",
+"topic": "Bonus",
+"title": "Employees whose BonusPct differs from grade standard",
+"context": "Data consistency check.",
+"task": "Return SUMPRODUCT(--(G2:G51 <> XLOOKUP(D2:D51,P2:P6,S2:S6))).",
+"hint": "Compare arrays.",
+"answer": "=SUMPRODUCT(--(G2:G51<>XLOOKUP(D2:D51,P2:P6,S2:S6)))"
+},
+{
+"id": "hr-h-17",
+"tier": "hard",
+"topic": "Dates",
+"title": "Hires in 2022",
+"context": "How many people were hired in 2022?",
+"task": "Return the number of rows where YEAR(E2:E51) equals 2022, using SUMPRODUCT.",
+"hint": "SUMPRODUCT(--(YEAR(range)=2022)).",
+"answer": "=SUMPRODUCT(--(YEAR(E2:E51)=2022))"
+},
+{
+"id": "hr-h-18",
+"tier": "hard",
+"topic": "Dates",
+"title": "Anniversaries this month",
+"context": "Employees whose hire month equals TODAY()'s month.",
+"task": "Return SUMPRODUCT(--(MONTH(E2:E51)=MONTH(TODAY()))).",
+"hint": "MONTH over the array.",
+"answer": "=SUMPRODUCT(--(MONTH(E2:E51)=MONTH(TODAY())))"
+},
+{
+"id": "hr-h-19",
+"tier": "hard",
+"topic": "Dates",
+"title": "Longest-serving active employee",
+"context": "Name of the active employee with the earliest hire date.",
+"task": "Return INDEX(B2:B51, MATCH(MINIFS(E2:E51, I2:I51, \"Active\"), E2:E51, 0)).",
+"hint": "MINIFS then INDEX/MATCH.",
+"answer": "=INDEX(B2:B51,MATCH(MINIFS(E2:E51,I2:I51,\"Active\"),E2:E51,0))"
+},
+{
+"id": "hr-h-20",
+"tier": "hard",
+"topic": "Dates",
+"title": "Employees past 5-year mark",
+"context": "Count of DATEDIF ≥ 5 years.",
+"task": "Return the number of employees with 5 or more years of service as of TODAY(), using (TODAY()-E2:E51)/365.25 inside SUMPRODUCT.",
+"hint": "Days ÷ 365.25 ≥ 5.",
+"answer": "=SUMPRODUCT(--((TODAY()-E2:E51)/365.25>=5))"
+},
+{
+"id": "hr-h-21",
+"tier": "hard",
+"topic": "Leave",
+"title": "Leave days per employee, spilled",
+"context": "Total leave for every EmpID in A2:A51.",
+"task": "Return SUMIF(K2:K61, A2:A51, N2:N61).",
+"hint": "SUMIF with an array of criteria spills 50 values.",
+"answer": "=SUMIF(K2:K61,A2:A51,N2:N61)"
+},
+{
+"id": "hr-h-22",
+"tier": "hard",
+"topic": "Leave",
+"title": "Who took the most leave?",
+"context": "Name with the highest total leave days.",
+"task": "Return INDEX(B2:B51, MATCH(MAX(SUMIF(K2:K61,A2:A51,N2:N61)), SUMIF(K2:K61,A2:A51,N2:N61), 0)).",
+"hint": "MATCH on the spilled SUMIF.",
+"answer": "=INDEX(B2:B51,MATCH(MAX(SUMIF(K2:K61,A2:A51,N2:N61)),SUMIF(K2:K61,A2:A51,N2:N61),0))"
+},
+{
+"id": "hr-h-23",
+"tier": "hard",
+"topic": "Leave",
+"title": "Employees with zero leave",
+"context": "Count of employees with no leave rows.",
+"task": "Return SUMPRODUCT(--(COUNTIF(K2:K61, A2:A51)=0)).",
+"hint": "COUNTIF array = 0.",
+"answer": "=SUMPRODUCT(--(COUNTIF(K2:K61,A2:A51)=0))"
+},
+{
+"id": "hr-h-24",
+"tier": "hard",
+"topic": "Leave",
+"title": "Unpaid leave cost",
+"context": "Σ days × (salary/22) for Unpaid rows, using each employee's salary.",
+"task": "Return ROUND(SUMPRODUCT((L2:L61=\"Unpaid\") × N2:N61 × XLOOKUP(K2:K61, A2:A51, F2:F51) / 22), 0).",
+"hint": "Array XLOOKUP for salary per leave row.",
+"answer": "=ROUND(SUMPRODUCT((L2:L61=\"Unpaid\")*N2:N61*XLOOKUP(K2:K61,A2:A51,F2:F51)/22),0)"
+},
+{
+"id": "hr-h-25",
+"tier": "hard",
+"topic": "Leave",
+"title": "Leave overlapping a holiday",
+"context": "Leave rows whose date range contains a holiday.",
+"task": "Return SUMPRODUCT(--(COUNTIFS(U2:U9,\">=\"&M2:M61, U2:U9,\"<=\"&(M2:M61+N2:N61-1))>0)).",
+"hint": "COUNTIFS with array criteria then count non-zero.",
+"answer": "=SUMPRODUCT(--(COUNTIFS(U2:U9,\">=\"&M2:M61,U2:U9,\"<=\"&(M2:M61+N2:N61-1))>0))"
+},
+{
+"id": "hr-h-26",
+"tier": "hard",
+"topic": "Percentiles",
+"title": "90th percentile salary",
+"context": "Top-decile threshold.",
+"task": "Return PERCENTILE.INC(F2:F51, 0.9).",
+"hint": "PERCENTILE.INC.",
+"answer": "=PERCENTILE.INC(F2:F51,0.9)"
+},
+{
+"id": "hr-h-27",
+"tier": "hard",
+"topic": "Percentiles",
+"title": "Quartile of row 2's salary",
+"context": "Which quartile (1–4) is row 2 in?",
+"task": "Return IFS(F2<=QUARTILE.INC(F2:F51,1),1, F2<=QUARTILE.INC(F2:F51,2),2, F2<=QUARTILE.INC(F2:F51,3),3, TRUE,4).",
+"hint": "Compare to three quartile cut-offs.",
+"answer": "=IFS(F2<=QUARTILE.INC(F2:F51,1),1,F2<=QUARTILE.INC(F2:F51,2),2,F2<=QUARTILE.INC(F2:F51,3),3,TRUE,4)"
+},
+{
+"id": "hr-h-28",
+"tier": "hard",
+"topic": "Statistics",
+"title": "Median salary per grade (G3)",
+"context": "MEDIANIF via FILTER.",
+"task": "Return MEDIAN(FILTER(F2:F51, D2:D51=\"G3\")).",
+"hint": "MEDIAN(FILTER()).",
+"answer": "=MEDIAN(FILTER(F2:F51,D2:D51=\"G3\"))"
+},
+{
+"id": "hr-h-29",
+"tier": "hard",
+"topic": "Statistics",
+"title": "Salary vs tenure correlation",
+"context": "Do longer-serving staff earn more?",
+"task": "Return ROUND(CORREL(TODAY()-E2:E51, F2:F51), 3).",
+"hint": "CORREL with a computed array.",
+"answer": "=ROUND(CORREL(TODAY()-E2:E51,F2:F51),3)"
+},
+{
+"id": "hr-h-30",
+"tier": "hard",
+"topic": "TEXTJOIN",
+"title": "All Finance names in one cell",
+"context": "Comma-separated list.",
+"task": "Return TEXTJOIN(\", \", TRUE, FILTER(B2:B51, C2:C51=\"Finance\")).",
+"hint": "TEXTJOIN(FILTER()).",
+"answer": "=TEXTJOIN(\", \",TRUE,FILTER(B2:B51,C2:C51=\"Finance\"))"
+},
+{
+"id": "hr-h-31",
+"tier": "hard",
+"topic": "Audit",
+"title": "Names that aren't clean",
+"context": "Count names that change under TRIM+PROPER.",
+"task": "Return the number of names in B2:B51 that are not exactly equal (case-sensitive) to PROPER(TRIM(name)).",
+"hint": "EXACT is case-sensitive; NOT it inside SUMPRODUCT.",
+"answer": "=SUMPRODUCT(--NOT(EXACT(B2:B51,PROPER(TRIM(B2:B51)))))"
+},
+{
+"id": "hr-h-32",
+"tier": "hard",
+"topic": "Audit",
+"title": "Departments with wrong casing",
+"context": "Dept values should be in Proper Case.",
+"task": "Return the number of Dept cells in C2:C51 that are not exactly equal (case-sensitive) to PROPER(C2:C51).",
+"hint": "EXACT + NOT + SUMPRODUCT.",
+"answer": "=SUMPRODUCT(--NOT(EXACT(C2:C51,PROPER(C2:C51))))"
+},
+{
+"id": "hr-h-33",
+"tier": "hard",
+"topic": "Payroll",
+"title": "Annual cost of active staff incl. bonus, in lakhs",
+"context": "12 × Σ salary×(1+bonus) for actives, ÷ 100,000, 2 dp.",
+"task": "Return ROUND(12*SUMPRODUCT((I2:I51=\"Active\")*F2:F51*(1+G2:G51/100))/100000, 2).",
+"hint": "Scale to lakhs.",
+"answer": "=ROUND(12*SUMPRODUCT((I2:I51=\"Active\")*F2:F51*(1+G2:G51/100))/100000,2)"
+}
+]
