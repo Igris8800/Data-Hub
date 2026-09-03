@@ -199,7 +199,7 @@ export default function Home() {
                   </>)}
                   <button
                     onClick={() => setAuthOpen(true)}
-                    className={`w-full ${GOOGLE_AUTH ? "bg-transparent border border-white/15 hover:border-white/30 hover:bg-white/5 text-white" : "bg-[#00FF88] hover:bg-[#33FFA1] text-[#0D1117] font-semibold"} rounded-md py-3 font-medium flex items-center justify-center gap-2 transition-colors"
+                    className={`w-full ${GOOGLE_AUTH ? "bg-transparent border border-white/15 hover:border-white/30 hover:bg-white/5 text-white" : "bg-[#00FF88] hover:bg-[#33FFA1] text-[#0D1117] font-semibold"} rounded-md py-3 font-medium flex items-center justify-center gap-2 transition-colors`}
                     data-testid="hero-email-btn"
                   >
                     <Mail className="w-4 h-4" /> {GOOGLE_AUTH ? "Email" : "Sign up with email"}
