@@ -25,77 +25,7 @@ import { AMAZON } from "./companies/amazon";
 
 import { NETFLIX } from "./companies/netflix";
 
-// ============ UBER ============
-export const UBER = {
-  key: "uber",
-  name: "Uber",
-  tagline: "Rideshare · Drivers · Payments",
-  color: "#000000",
-  logo: "🚗",
-  logoUrl: "https://cdn.simpleicons.org/uber/FFFFFF",
-  tables: [
-    {
-      name: "drivers", color: "#00D4FF",
-      columns: [
-        { name: "driver_id",   type: "INTEGER", tag: "PK" },
-        { name: "name",        type: "TEXT" },
-        { name: "city",        type: "TEXT" },
-        { name: "rating",      type: "REAL" },
-        { name: "join_date",   type: "TEXT" },
-      ],
-      rows: [
-        [1, "James Fox",     "San Francisco", 4.92, "2020-03-15"],
-        [2, "Ravi Patel",    "Mumbai",         4.85, "2021-07-01"],
-        [3, "Sofia Lopez",   "Mexico City",    4.79, "2021-11-20"],
-        [4, "Ahmed Ali",     "Dubai",          4.95, "2022-02-10"],
-        [5, "Elena Ivanov",  "London",         4.68, "2023-01-05"],
-      ],
-    },
-    {
-      name: "riders", color: "#00D4FF",
-      columns: [
-        { name: "rider_id",   type: "INTEGER", tag: "PK" },
-        { name: "name",       type: "TEXT" },
-        { name: "city",       type: "TEXT" },
-        { name: "signup_date",type: "TEXT" },
-      ],
-      rows: [
-        [1, "Ava Reed",       "San Francisco", "2022-05-10"],
-        [2, "Karan Mehta",    "Mumbai",         "2023-01-15"],
-        [3, "Lucia Garcia",   "Mexico City",    "2023-04-22"],
-        [4, "Sara Al-Hashem", "Dubai",          "2023-09-01"],
-      ],
-    },
-    {
-      name: "rides", color: "#00D4FF",
-      columns: [
-        { name: "ride_id",    type: "INTEGER", tag: "PK" },
-        { name: "driver_id",  type: "INTEGER", tag: "FK" },
-        { name: "rider_id",   type: "INTEGER", tag: "FK" },
-        { name: "fare",       type: "REAL" },
-        { name: "distance_km",type: "REAL" },
-        { name: "ride_date",  type: "TEXT" },
-        { name: "status",     type: "TEXT" },
-      ],
-      rows: [
-        [1001, 1, 1, 18.50, 4.2,  "2024-01-05", "completed"],
-        [1002, 1, 1, 22.00, 5.6,  "2024-01-11", "completed"],
-        [1003, 2, 2, 12.00, 8.1,  "2024-01-15", "completed"],
-        [1004, 3, 3, 15.75, 6.3,  "2024-02-01", "completed"],
-        [1005, 4, 4, 42.30, 15.2, "2024-02-14", "completed"],
-        [1006, 2, 2,  9.50, 3.4,  "2024-02-20", "cancelled"],
-        [1007, 1, 1, 31.00, 8.9,  "2024-03-05", "completed"],
-        [1008, 5, null, 0,   0,   "2024-03-08", "cancelled"],
-      ],
-    },
-  ],
-  questions: [
-    { id: "ubr-e-1", difficulty: "beginner", title: "5-star drivers", context: "Ops wants to shortlist candidates for a Diamond program.", task: "Return name and city of drivers with rating ≥ 4.9.", output: "name, city", rules: "Filter rating >= 4.9.", answer: "SELECT name, city FROM drivers WHERE rating >= 4.9;", hint: "WHERE rating >= 4.9.", solution: "SELECT name, city FROM drivers WHERE rating >= 4.9;" },
-    { id: "ubr-e-2", difficulty: "beginner", title: "Completed rides", context: "Finance is closing the month.", task: "Sum the fare of all completed rides. Return one row with column total_revenue.", output: "total_revenue", rules: "Filter status = 'completed'. SUM(fare).", answer: "SELECT SUM(fare) AS total_revenue FROM rides WHERE status = 'completed';", hint: "SUM with WHERE.", solution: "SELECT SUM(fare) AS total_revenue FROM rides WHERE status = 'completed';" },
-    { id: "ubr-m-1", difficulty: "intermediate", title: "Revenue per driver", context: "Payroll needs completed-ride earnings by driver.", task: "For each driver, return their name and total earnings from completed rides, ordered desc.", output: "name, earnings", rules: "JOIN + SUM + GROUP BY + only completed status.", answer: "SELECT d.name, SUM(r.fare) AS earnings FROM drivers d JOIN rides r ON r.driver_id = d.driver_id WHERE r.status = 'completed' GROUP BY d.driver_id ORDER BY earnings DESC;", hint: "GROUP BY driver.", solution: "SELECT d.name, SUM(r.fare) AS earnings FROM drivers d JOIN rides r ON r.driver_id = d.driver_id WHERE r.status = 'completed' GROUP BY d.driver_id ORDER BY earnings DESC;" },
-    { id: "ubr-h-1", difficulty: "advanced", title: "Cancellation rate by city", context: "Trust & Safety wants a heat-map of ride cancellations per driver city.", task: "Return each driver city with cancellation rate = cancelled_rides / total_rides, rounded to 2 decimals, ordered desc.", output: "city, cancellation_rate", rules: "Use conditional aggregation (SUM CASE WHEN).", answer: "SELECT d.city, ROUND(1.0 * SUM(CASE WHEN r.status='cancelled' THEN 1 ELSE 0 END) / COUNT(*), 2) AS cancellation_rate FROM drivers d JOIN rides r ON r.driver_id = d.driver_id GROUP BY d.city ORDER BY cancellation_rate DESC;", hint: "SUM(CASE WHEN...) / COUNT(*).", solution: "SELECT d.city, ROUND(1.0 * SUM(CASE WHEN r.status='cancelled' THEN 1 ELSE 0 END) / COUNT(*), 2) AS cancellation_rate FROM drivers d JOIN rides r ON r.driver_id = d.driver_id GROUP BY d.city ORDER BY cancellation_rate DESC;" },
-  ],
-};
+import { UBER } from "./companies/uber";
 
 // ============ GOOGLE ============
 export const GOOGLE = {
