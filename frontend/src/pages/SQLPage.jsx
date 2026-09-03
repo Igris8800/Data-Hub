@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Database, ChevronRight, ChevronDown, Search, Play, Sparkles, Lightbulb,
   Eye, X, Loader2, RotateCcw, ChevronLeft, HelpCircle, BookOpen,
@@ -272,11 +272,17 @@ export default function SQLPage() {
   const { theme } = useTheme();
   const nav = useNavigate();
 
-  const [companyKey, setCompanyKey] = useState(COMPANIES[0].key);
+  const [searchParams] = useSearchParams();
+  // Deep link from the roadmap: /sql?company=amazon&q=amz-e-01
+  const pendingJump = useRef(searchParams.get("q") ? { company: searchParams.get("company"), q: searchParams.get("q") } : null);
+  const [companyKey, setCompanyKey] = useState(() => (COMPANIES.some(c => c.key === searchParams.get("company")) ? searchParams.get("company") : COMPANIES[0].key));
   const company = COMPANIES.find(c => c.key === companyKey);
   const [mode, setMode] = useState("practice");
   const [collapsed, setCollapsed] = useState(false);
-  const [difficulty, setDifficulty] = useState("beginner");
+  const [difficulty, setDifficulty] = useState(() => {
+    const j = pendingJump.current; if (!j) return "beginner";
+    const c = COMPANIES.find(c => c.key === j.company); const q = c?.questions.find(q => q.id === j.q); return q?.difficulty || "beginner";
+  });
   const [idx, setIdx] = useState(0);
   const [code, setCode] = useState("");
   const [running, setRunning] = useState(false);
@@ -344,6 +350,11 @@ export default function SQLPage() {
   const [tally, setTally] = useState({ beginner: 0, intermediate: 0, advanced: 0 });
 
   useEffect(() => { setIdx(0); }, [companyKey, difficulty, mode]);
+  useEffect(() => {
+    const j = pendingJump.current; if (!j) return;
+    const i = questions.findIndex(q => q.id === j.q);
+    if (i >= 0) { pendingJump.current = null; if (isQuestionLocked(i, difficulty, user)) setUpgradeOpen(true); else setIdx(i); }
+  }, [questions, difficulty, user]);
 
   // Interview timer — 5 min per question, resets on question change
   useEffect(() => {

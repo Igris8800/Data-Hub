@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Sheet, ChevronRight, ChevronLeft, Play, Lightbulb, Eye, BookOpen, Circle, CircleCheck,
   Lock, Crown, HelpCircle, RotateCcw, FunctionSquare,
@@ -112,11 +112,16 @@ function ResultView({ result }) {
 export default function ExcelPage() {
   const { user, setUser } = useAuth();
   const nav = useNavigate();
-  const [wbKey, setWbKey] = useState(EXCEL_WORKBOOKS[0].key);
+  const [searchParams] = useSearchParams();
+  const jumpQ = searchParams.get("q");
+  const jumpWb = EXCEL_WORKBOOKS.find((w) => w.key === searchParams.get("company")) || EXCEL_WORKBOOKS[0];
+  const jumpTarget = jumpQ ? jumpWb.questions.find((q) => q.id === jumpQ) : null;
+  const [pending, setPending] = useState(!!jumpTarget);
+  const [wbKey, setWbKey] = useState(jumpWb.key);
   const workbook = EXCEL_WORKBOOKS.find((w) => w.key === wbKey);
   const sheet = useMemo(() => buildSheet(workbook.tables), [workbook]);
   const [mode, setMode] = useState("practice");
-  const [difficulty, setDifficulty] = useState("beginner");
+  const [difficulty, setDifficulty] = useState(jumpTarget?.difficulty || "beginner");
   const [idx, setIdx] = useState(0);
   const [formula, setFormula] = useState("=");
   const [result, setResult] = useState(null);
@@ -135,6 +140,11 @@ export default function ExcelPage() {
   const highlight = useMemo(() => referencedCells(formula), [formula]);
 
   useEffect(() => { setIdx(0); }, [wbKey, difficulty, mode]);
+  useEffect(() => {
+    if (!pending || !jumpTarget) return;
+    const i = questions.findIndex((q) => q.id === jumpTarget.id);
+    if (i >= 0) { setPending(false); if (isQuestionLocked(i, difficulty, user)) setUpgradeOpen(true); else setIdx(i); }
+  }, [questions, pending, jumpTarget, difficulty, user]);
   const [modeGuideOpen, setModeGuideOpen] = useFirstVisitGuide();
   const [tally, setTally] = useState({ beginner: 0, intermediate: 0, advanced: 0 });
   const wsKey = cur ? `${wbKey}-${cur.id}` : null;
