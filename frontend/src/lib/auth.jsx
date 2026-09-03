@@ -10,7 +10,8 @@ export function AuthProvider({ children }) {
   const checkAuth = useCallback(async () => {
     try {
       const { data } = await api.get("/auth/me");
-      setUser(data);
+      // Only accept a real user payload — a misconfigured backend URL can return HTML or an empty body.
+      setUser(data && typeof data === "object" && data.user_id ? data : null);
     } catch (e) {
       setUser(null);
     } finally {

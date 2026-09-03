@@ -715,6 +715,10 @@ async def leaderboard():
         })
     return result
 
+@api_router.get("/health")
+async def health():
+    return {"ok": True}
+
 app.include_router(api_router)
 
 app.add_middleware(
