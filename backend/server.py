@@ -724,7 +724,9 @@ app.include_router(api_router)
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
+    allow_origins=[o.strip() for o in os.environ.get('CORS_ORIGINS', '*').split(',') if o.strip()],
+    # Also accept Vercel preview/deployment URLs (e.g. data-hub-abc123-user.vercel.app) and localhost dev servers.
+    allow_origin_regex=os.environ.get('CORS_ORIGIN_REGEX', r"https://.*\.vercel\.app|http://localhost:\d+"),
     allow_methods=["*"],
     allow_headers=["*"],
 )
