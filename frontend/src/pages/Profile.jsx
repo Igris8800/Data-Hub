@@ -5,17 +5,20 @@ import { Flame, Zap, Trophy, Crown, Award, Sheet, Database, Code2, BarChart3, Si
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import UpgradeModal from "@/components/UpgradeModal";
+import { computeBelt, tallyAttempts, nextBeltHint, BELTS } from "@/lib/belts";
 import { MODULES } from "@/lib/questions";
 import api from "@/lib/api";
 import { toast } from "sonner";
 
 const ICONS = { Sheet, Database, Code2, BarChart3, Sigma };
-const CERT_THRESHOLD = 20;
+const CERT_THRESHOLD = 20; // backend minimum for the skill report
+const REPORT_BELT_RANK = 3; // Green and above
 
 export default function Profile() {
   const { user, logout, loading, refresh } = useAuth();
   const nav = useNavigate();
   const [modules, setModules] = useState({});
+  const [attempts, setAttempts] = useState([]);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [downloadingCert, setDownloadingCert] = useState(null);
 
@@ -23,7 +26,7 @@ export default function Profile() {
     if (loading) return;
     if (!user) { nav("/"); return; }
     api.get("/progress").then(({ data }) => {
-      setModules(data.modules || {});
+      setModules(data.modules || {}); setAttempts(data.attempts || []);
       // refresh user so top cards reflect latest server state
       refresh?.();
     }).catch(() => {});
@@ -36,12 +39,12 @@ export default function Profile() {
       const url = URL.createObjectURL(res.data);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `datahub-${moduleKey}-certificate.pdf`;
+      a.download = `datahub-${moduleKey}-skill-report.pdf`;
       document.body.appendChild(a); a.click(); a.remove();
       URL.revokeObjectURL(url);
-      toast.success(`${moduleName} certificate downloaded!`);
+      toast.success(`${moduleName} skill report downloaded!`);
     } catch (e) {
-      let msg = "Failed to download certificate";
+      let msg = "Failed to download skill report";
       if (e?.response?.data instanceof Blob) {
         try {
           const txt = await e.response.data.text();
@@ -95,7 +98,7 @@ export default function Profile() {
             <Crown className="w-8 h-8 text-yellow-400" />
             <div>
               <div className="font-heading text-lg">Unlock 4,900+ premium questions</div>
-              <div className="text-sm text-slate-400">All modules · AI hints · certificate on completion.</div>
+              <div className="text-sm text-slate-400">All modules · AI hints · every belt reachable.</div>
             </div>
           </div>
           <Button onClick={() => setUpgradeOpen(true)} data-testid="profile-upgrade-btn"
@@ -106,40 +109,42 @@ export default function Profile() {
       )}
 
       <div className="mb-4 flex items-center justify-between flex-wrap gap-2">
-        <div className="text-xs uppercase tracking-[0.2em] text-slate-500">Progress & certificates</div>
-        <div className="text-xs text-slate-500">Solve {CERT_THRESHOLD}+ questions in a module to unlock its certificate</div>
+        <div className="text-xs uppercase tracking-[0.2em] text-slate-500">Skill levels</div>
+        <div className="text-xs text-slate-500">Ranks are computed from what you've solved — harder belts need medium and hard problems</div>
       </div>
       <div className="grid md:grid-cols-2 gap-4 mb-10">
         {MODULES.map(m => {
           const Icon = ICONS[m.icon];
-          const solved = modules[m.key]?.solved || 0;
-          const certReady = solved >= CERT_THRESHOLD;
+          const belt = computeBelt(tallyAttempts(attempts, m.key));
+          const reportReady = belt.rank >= REPORT_BELT_RANK && belt.total >= CERT_THRESHOLD;
           return (
             <div key={m.key} className="p-4 rounded-lg border border-white/10 bg-[#151B23]" data-testid={`profile-module-${m.key}`}>
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-9 h-9 rounded-md flex items-center justify-center" style={{ background: `${m.accent}15`, border: `1px solid ${m.accent}55` }}>
+                <div className="w-9 h-9 rounded-md flex items-center justify-center" style={{ background: `${m.accent}15`, border: `1px solid ${m.accent}40` }}>
                   <Icon className="w-4 h-4" style={{ color: m.accent }} />
                 </div>
                 <div className="flex-1">
                   <div className="font-heading text-lg tracking-tight">{m.name}</div>
-                  <div className="text-xs text-slate-500">{solved} solved · certificate at {CERT_THRESHOLD}</div>
+                  <div className="text-xs text-slate-500">{belt.total} solved · {belt.medium} medium · {belt.hard} hard</div>
                 </div>
-                <div className="font-mono-editor text-sm text-slate-400">{Math.round((solved / CERT_THRESHOLD) * 100)}%</div>
+                <div className="inline-flex items-center gap-2 px-2 py-1 rounded-full border border-white/10 bg-white/5" data-testid={`belt-${m.key}`}>
+                  <span className="w-4 h-4 rounded-sm border border-white/20" style={{ background: belt.color }} />
+                  <span className="text-xs font-semibold" style={{ color: belt.name === "Black" ? "#fff" : belt.color }}>{belt.name} belt</span>
+                </div>
               </div>
-              <Progress value={Math.min(100, (solved / CERT_THRESHOLD) * 100)} className="h-1.5 mb-3" />
+              <div className="flex gap-1 mb-2">{BELTS.map((b, i) => <span key={b.name} title={b.name} className="flex-1 h-1.5 rounded-sm" style={{ background: i <= belt.rank ? b.color : "rgba(255,255,255,0.08)" }} />)}</div>
+              <div className="text-[11px] text-slate-400 mb-3">{belt.blurb} <span className="text-slate-500">· {nextBeltHint(belt)}</span></div>
               <Button
                 size="sm"
-                disabled={!certReady || downloadingCert === m.key}
+                disabled={!reportReady || downloadingCert === m.key}
                 onClick={() => downloadCert(m.key, m.name)}
                 data-testid={`cert-download-${m.key}`}
-                className={certReady
+                className={reportReady
                   ? "w-full rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 text-[#0D1117] hover:from-yellow-300 hover:to-amber-400 font-medium"
                   : "w-full rounded-full border border-white/10 bg-transparent text-slate-500 hover:bg-white/5"}
               >
-                {downloadingCert === m.key
-                  ? <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  : certReady ? <Download className="w-4 h-4 mr-2" /> : <Award className="w-4 h-4 mr-2" />}
-                {certReady ? "Download certificate" : `Unlocks at ${CERT_THRESHOLD} solved`}
+                {downloadingCert === m.key ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : reportReady ? <Download className="w-4 h-4 mr-2" /> : <Award className="w-4 h-4 mr-2" />}
+                {reportReady ? "Download skill report" : "Skill report unlocks at Green belt"}
               </Button>
             </div>
           );

@@ -12,7 +12,7 @@ export default function PremiumLock({ onUpgrade, count = 950 }) {
         </div>
         <h3 className="font-heading text-2xl tracking-tight text-yellow-300 mb-2">Premium Content</h3>
         <p className="text-slate-300 text-sm mb-1"><span className="text-yellow-300 font-medium">{count}+</span> more questions locked</p>
-        <p className="text-slate-500 text-xs mb-6">Unlock the full question bank, AI-powered hints, cheat sheets & certificate.</p>
+        <p className="text-slate-500 text-xs mb-6">Unlock the full question bank, AI-powered hints, cheat sheets & skill reports.</p>
         <Button
           onClick={onUpgrade}
           data-testid="premium-lock-upgrade-btn"

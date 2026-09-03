@@ -11,6 +11,8 @@ import { useAuth } from "@/lib/auth";
 import api from "@/lib/api";
 import AuthModal from "@/components/AuthModal";
 import UpgradeModal from "@/components/UpgradeModal";
+import { BELTS } from "@/lib/belts";
+import { MODE_GUIDE } from "@/components/ModeGuide";
 import { toast } from "sonner";
 
 const ICONS = { Sheet, Database, Code2, BarChart3, Sigma };
@@ -71,11 +73,7 @@ const TECH_LOGOS = [
   { name: "Excel", color: "#217346", glyph: "X" },
 ];
 
-const CERTIFICATIONS = [
-  { title: "SQL Associate", tint: "#00D4FF", desc: "Extract insights from databases and answer business questions with SQL.", module: "sql" },
-  { title: "Python for Data", tint: "#FFD166", desc: "Clean, transform and analyze real datasets with Pandas + NumPy.", module: "python" },
-  { title: "Data Analyst", tint: "#00FF88", desc: "End-to-end analyst pipeline: Excel → SQL → Python → Dashboards.", module: "excel" },
-];
+
 
 const COMPANY_LOGOS = ["Google", "Microsoft", "Amazon", "Flipkart", "Swiggy", "Adobe"];
 
@@ -392,56 +390,47 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CERTIFICATIONS dark panel */}
+      {/* HOW PRACTICE WORKS — the three modes */}
+      <section className="max-w-7xl mx-auto px-6 pb-16" id="modes">
+        <div className="mb-6">
+          <div className="uppercase text-[11px] tracking-[0.25em] text-[#00D4FF] mb-2">How practice works</div>
+          <h2 className="font-heading text-3xl sm:text-4xl tracking-tight">Three modes. One workbench.</h2>
+          <p className="text-slate-400 mt-2 text-sm max-w-xl">Every module runs real code in your browser — SQL against a database, formulas in a live sheet. Choose how you want to work through the problems.</p>
+        </div>
+        <div className="grid md:grid-cols-3 gap-4">
+          {MODE_GUIDE.map((m) => { const Icon = m.icon; return (
+            <div key={m.key} className="p-5 rounded-xl bg-[#0D1117] border border-white/10" data-testid={`home-mode-${m.key}`}>
+              <div className="flex items-center gap-2 mb-1"><Icon className="w-4 h-4" style={{ color: m.color }} /><div className="font-heading text-lg tracking-tight">{m.title}</div></div>
+              <div className="text-[10px] uppercase tracking-widest mb-3" style={{ color: m.color }}>{m.tagline}</div>
+              <ul className="text-xs text-slate-400 space-y-1.5">{m.points.slice(0, 3).map((pt) => <li key={pt} className="flex gap-2"><span style={{ color: m.color }}>•</span>{pt}</li>)}</ul>
+            </div>
+          ); })}
+        </div>
+      </section>
+
+      {/* SKILL LEVELS dark panel */}
       <section className="max-w-7xl mx-auto px-6 pb-16" id="pricing-anchor">
-        <div
-          className="rounded-2xl p-8 md:p-12 relative overflow-hidden"
-          style={{
-            background:
-              "radial-gradient(ellipse at top left, rgba(0, 212, 255, 0.15), transparent 50%), radial-gradient(ellipse at bottom right, rgba(124, 58, 237, 0.2), transparent 50%), #0A0F16",
-            border: "1px solid rgba(255,255,255,0.08)",
-          }}
-        >
+        <div className="rounded-2xl p-8 md:p-12 relative overflow-hidden" style={{ background: "radial-gradient(ellipse at top left, rgba(0, 212, 255, 0.15), transparent 50%), radial-gradient(ellipse at bottom right, rgba(255, 209, 102, 0.12), transparent 50%), #0F1520", border: "1px solid rgba(255,255,255,0.08)" }}>
           <div className="flex items-end justify-between mb-8 flex-wrap gap-3">
             <div>
-              <div className="uppercase text-[11px] tracking-[0.25em] text-yellow-300 mb-2 flex items-center gap-2">
-                <Award className="w-4 h-4" /> Certifications
-              </div>
-              <h2 className="font-heading text-3xl sm:text-4xl tracking-tight">Prove you're job-ready.</h2>
-              <p className="text-slate-400 mt-2 text-sm max-w-xl">Solve 20+ questions in a module and download a branded PDF certificate. Free while we're in launch mode.</p>
+              <div className="uppercase text-[11px] tracking-[0.25em] text-yellow-300 mb-2 flex items-center gap-2"><Award className="w-4 h-4" /> Skill assessment</div>
+              <h2 className="font-heading text-3xl sm:text-4xl tracking-tight">Your belt is earned, not awarded.</h2>
+              <p className="text-slate-400 mt-2 text-sm max-w-xl">No course completion badges. Your rank in each module is computed from the problems you can actually solve — and harder belts need harder problems. It's an honest answer to "how good am I at SQL right now?"</p>
             </div>
-            <Link to={user ? "/profile" : "#"} onClick={(e) => { if (!user) { e.preventDefault(); setAuthOpen(true); } }} className="text-sm text-[#00D4FF] hover:underline flex items-center gap-1" data-testid="link-see-certs">
-              See all certifications <ChevronRight className="w-4 h-4" />
+            <Link to={user ? "/profile" : "#"} onClick={(e) => { if (!user) { e.preventDefault(); setAuthOpen(true); } }} className="text-sm text-[#00D4FF] hover:underline inline-flex items-center gap-1" data-testid="see-skill-levels">
+              See my skill levels <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {CERTIFICATIONS.map((c) => (
-              <div key={c.title} className="p-5 rounded-xl bg-[#0D1117] border border-white/10 flex items-start gap-4" data-testid={`cert-card-${c.module}`}>
-                <div
-                  className="w-16 h-16 rounded-full flex items-center justify-center shrink-0 relative"
-                  style={{ background: `conic-gradient(${c.tint} 0deg, ${c.tint} 220deg, rgba(255,255,255,0.05) 220deg, rgba(255,255,255,0.05) 360deg)` }}
-                >
-                  <div className="w-14 h-14 rounded-full bg-[#0D1117] flex items-center justify-center">
-                    <Award className="w-6 h-6" style={{ color: c.tint }} />
-                  </div>
-                </div>
-                <div className="min-w-0">
-                  <div className="text-[10px] uppercase tracking-widest text-slate-500 mb-1">Certified</div>
-                  <div className="font-heading text-lg tracking-tight mb-1">{c.title}</div>
-                  <p className="text-xs text-slate-400 mb-3 leading-relaxed">{c.desc}</p>
-                  <Button
-                    size="sm"
-                    onClick={() => user ? nav("/profile") : setAuthOpen(true)}
-                    data-testid={`cert-cta-${c.module}`}
-                    className="rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white text-xs h-8"
-                  >
-                    Get certified <ChevronRight className="w-3 h-3 ml-1" />
-                  </Button>
-                </div>
+          <div className="grid grid-cols-4 md:grid-cols-8 gap-2" data-testid="belt-ladder">
+            {BELTS.map((b, i) => (
+              <div key={b.name} className="p-3 rounded-xl bg-[#0D1117] border border-white/10 text-center">
+                <div className="mx-auto w-10 h-3 rounded-sm border border-white/20 mb-2" style={{ background: b.color }} />
+                <div className="font-heading text-sm">{b.name}</div>
+                <div className="text-[10px] text-slate-500 mt-1 leading-snug">{i === 0 ? "Start here" : `${b.total} solved${b.hard ? ` · ${b.hard} hard` : b.medium ? ` · ${b.medium} medium` : ""}`}</div>
               </div>
             ))}
           </div>
+          <p className="text-xs text-slate-500 mt-4">Green belt and above can download a skill report (PDF) showing exactly which difficulty tiers you've cleared — useful for a CV or a hiring manager.</p>
         </div>
       </section>
 

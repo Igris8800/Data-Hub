@@ -58,6 +58,7 @@ class ProgressUpdate(BaseModel):
     question_id: str
     correct: bool
     difficulty: str = "beginner"
+    code: Optional[str] = None  # learner's last query / formula, restored when they return to the question
 
 class AIQuestionRequest(BaseModel):
     module: str
@@ -296,9 +297,11 @@ async def update_progress(payload: ProgressUpdate, request: Request):
     await db.attempts.update_one(
         key,
         {"$set": {
-            "correct": payload.correct,
+            # never downgrade a solved question to unsolved when a later attempt is wrong
+            "correct": bool(payload.correct or (existing or {}).get("correct")),
             "difficulty": payload.difficulty,
             "updated_at": now.isoformat(),
+            **({"code": payload.code[:20000]} if payload.code else {}),
         },
          "$setOnInsert": {"created_at": now.isoformat()},
          },
@@ -501,7 +504,22 @@ async def adaptive_progress(module: str, request: Request):
         ),
     }
 
-# --- Certificate PDF ---
+# --- Belt ranks (mirror of frontend/src/lib/belts.js) ---
+BELTS = [
+    ("White", 0, 0, 0), ("Yellow", 5, 0, 0), ("Orange", 15, 3, 0), ("Green", 30, 10, 0),
+    ("Blue", 50, 20, 5), ("Purple", 70, 28, 15), ("Brown", 85, 33, 25), ("Black", 100, 33, 33),
+]
+def compute_belt(t: Dict[str, int]) -> Dict[str, Any]:
+    total = sum(t.values()); medium = t.get("intermediate", 0); hard = t.get("advanced", 0)
+    rank = 0
+    for i, (_, need_total, need_med, need_hard) in enumerate(BELTS):
+        if total >= need_total and medium >= need_med and hard >= need_hard:
+            rank = i
+        else:
+            break
+    return {"rank": rank, "name": BELTS[rank][0], "total": total, "medium": medium, "hard": hard}
+
+# --- Skill report PDF (formerly "certificate") ---
 @api_router.get("/certificate/{module}")
 async def certificate(module: str, request: Request):
     from fastapi.responses import StreamingResponse
@@ -517,9 +535,14 @@ async def certificate(module: str, request: Request):
         {"user_id": user["user_id"], "module": module, "correct": True}, {"_id": 0}
     ).to_list(500)
     solved = len(attempts)
+    tally = {"beginner": 0, "intermediate": 0, "advanced": 0}
+    for a in attempts:
+        if a.get("difficulty") in tally:
+            tally[a["difficulty"]] += 1
+    belt = compute_belt(tally)
     threshold = 20
-    if solved < threshold:
-        raise HTTPException(status_code=400, detail=f"Complete at least {threshold} questions in this module to unlock the certificate (currently {solved}).")
+    if solved < threshold or belt["rank"] < 3:
+        raise HTTPException(status_code=400, detail=f"The skill report unlocks at Green belt (currently {belt['name']} belt, {solved} solved).")
 
     module_names = {
         "excel": "Excel Analytics",
@@ -549,7 +572,7 @@ async def certificate(module: str, request: Request):
     # Header
     c.setFillColor(HexColor("#00D4FF"))
     c.setFont("Helvetica-Bold", 42)
-    c.drawCentredString(w / 2, h - 110, "Certificate of Completion")
+    c.drawCentredString(w / 2, h - 110, "Skill Assessment Report")
 
     c.setFillColor(HexColor("#94A3B8"))
     c.setFont("Helvetica", 14)
@@ -569,7 +592,7 @@ async def certificate(module: str, request: Request):
 
     c.setFillColor(HexColor("#94A3B8"))
     c.setFont("Helvetica", 14)
-    c.drawCentredString(w / 2, h - 310, "for successfully completing the")
+    c.drawCentredString(w / 2, h - 310, f"has demonstrated {belt['name']} belt proficiency in")
 
     c.setFillColor(HexColor("#00FF88"))
     c.setFont("Helvetica-Bold", 28)
@@ -577,12 +600,12 @@ async def certificate(module: str, request: Request):
 
     c.setFillColor(HexColor("#94A3B8"))
     c.setFont("Helvetica", 12)
-    c.drawCentredString(w / 2, h - 390, f"Solved {solved} questions · XP earned: {user.get('xp', 0)} · Level: {compute_level(user.get('xp', 0))}")
+    c.drawCentredString(w / 2, h - 390, f"Solved {solved} problems · {tally['beginner']} easy · {tally['intermediate']} medium · {tally['advanced']} hard · XP {user.get('xp', 0)}")
 
     # Footer
     cert_id = f"DH-{module.upper()}-{user['user_id'][-6:].upper()}-{datetime.now(timezone.utc).strftime('%Y%m%d')}"
     c.setFont("Helvetica", 10)
-    c.drawString(60, 60, f"Certificate ID · {cert_id}")
+    c.drawString(60, 60, f"Report ID · {cert_id}")
     c.drawRightString(w - 60, 60, f"Issued · {datetime.now(timezone.utc).strftime('%d %b %Y')}")
 
     c.setFillColor(HexColor("#00D4FF"))
@@ -593,7 +616,7 @@ async def certificate(module: str, request: Request):
     c.save()
     buf.seek(0)
 
-    filename = f"datahub-{module}-certificate-{user['user_id'][-6:]}.pdf"
+    filename = f"datahub-{module}-skill-report-{user['user_id'][-6:]}.pdf"
     return StreamingResponse(
         buf,
         media_type="application/pdf",

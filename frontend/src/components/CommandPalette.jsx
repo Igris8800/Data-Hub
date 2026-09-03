@@ -27,7 +27,7 @@ export default function CommandPalette({ open, onOpenChange, actions = [] }) {
   }, [onOpenChange]);
 
   const themeAction = useMemo(() => ({
-    id: "toggle-theme", label: "Toggle theme (Terminal ↔ Dashboard)", group: "App", icon: Terminal, onSelect: toggleTheme,
+    id: "toggle-theme", label: "Switch appearance (Dark ↔ Light)", group: "App", icon: Terminal, onSelect: toggleTheme,
   }), [toggleTheme]);
 
   const groups = useMemo(() => {

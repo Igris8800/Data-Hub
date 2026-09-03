@@ -5,8 +5,12 @@ import {
   Eye, X, Loader2, RotateCcw, ChevronLeft, HelpCircle, BookOpen,
   Briefcase, Circle, CircleCheck, Flag, PanelLeftClose, PanelLeftOpen,
   Table as TableIcon, Download, History, Command as CmdIcon, Timer,
-  GitBranch, ExternalLink, KeyRound, Lock, Crown,
+  GitBranch, ExternalLink, KeyRound, Lock, Crown, MoreHorizontal, Check, Copy, Layers,
 } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel } from "@/components/ui/dropdown-menu";
+import ModeGuide, { useFirstVisitGuide, ModeGuideButton } from "@/components/ModeGuide";
+import BeltBadge from "@/components/BeltBadge";
+import { loadWorkspace, saveWorkspace, hydrateFromAttempts, localSolvedSet } from "@/lib/practiceState";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import api from "@/lib/api";
@@ -19,6 +23,8 @@ import CommandPalette from "@/components/CommandPalette";
 import ERDModal from "@/components/ERDModal";
 import SamplePreviewModal from "@/components/SamplePreviewModal";
 import { isQuestionLocked, lockedCount } from "@/lib/premium";
+
+const tallyFromAttempts = (attempts) => { const t = { beginner: 0, intermediate: 0, advanced: 0 }; for (const a of attempts || []) if (a.module === "sql" && a.correct && t[a.difficulty] !== undefined) t[a.difficulty]++; return t; };
 
 // --- SQL.js loader ---
 let sqlJsPromise = null;
@@ -307,12 +313,35 @@ export default function SQLPage() {
     getDbFor(company).then(() => setDbReady(true)).catch(e => setError(e.message));
   }, [company.key]);
 
+  // Restore the learner's saved workspace for this question (code, last output, status) — or start blank.
   useEffect(() => {
-    setCode(""); setOutput(null); setError(null);
+    const ws = cur ? loadWorkspace("sql", `${companyKey}-${cur.id}`) : null;
+    setCode(ws?.code || ""); setOutput(ws?.output || null); setError(ws?.error || null);
     setShowHint(false); setShowSolution(false);
-    setStatus({ text: "Not Started", tone: "muted" });
+    setStatus(ws?.solved ? { text: "Solved", tone: "good" } : ws?.code ? { text: "In progress", tone: "muted" } : { text: "Not Started", tone: "muted" });
     setOutputTab("output");
   }, [cur?.id, companyKey]);
+
+  // Solved ticks: local storage immediately, then merged with the account's attempts when signed in.
+  useEffect(() => { setSolvedIds(localSolvedSet("sql")); }, []);
+  useEffect(() => {
+    if (!user) return;
+    api.get("/progress").then(({ data }) => {
+      const fromServer = hydrateFromAttempts("sql", data.attempts);
+      setSolvedIds(prev => new Set([...prev, ...fromServer]));
+      setTally(tallyFromAttempts(data.attempts));
+    }).catch(() => {});
+  }, [user?.user_id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Autosave code while typing (debounced) so nothing is lost on navigation or refresh.
+  useEffect(() => {
+    if (!cur) return;
+    const t = setTimeout(() => { const key = `${companyKey}-${cur.id}`; const prev = loadWorkspace("sql", key) || {}; if ((prev.code || "") !== code) saveWorkspace("sql", key, { ...prev, code }); }, 500);
+    return () => clearTimeout(t);
+  }, [code, cur?.id, companyKey]);
+
+  const [modeGuideOpen, setModeGuideOpen] = useFirstVisitGuide();
+  const [tally, setTally] = useState({ beginner: 0, intermediate: 0, advanced: 0 });
 
   useEffect(() => { setIdx(0); }, [companyKey, difficulty, mode]);
 
@@ -367,21 +396,22 @@ export default function SQLPage() {
 
       setHistory(h => [{ sql: code, ms, rows: gotRows.length, ts: Date.now(), ok: correct }, ...h].slice(0, 10));
 
+      const wsKey = `${companyKey}-${cur.id}`;
+      const prevWs = loadWorkspace("sql", wsKey) || {};
+      saveWorkspace("sql", wsKey, { ...prevWs, code, output: { columns: gotCols, values: gotRows }, error: null, solved: correct || !!prevWs.solved });
       if (correct) {
         setStatus({ text: `Solved · ${ms}ms`, tone: "good" });
         setSolvedIds(s => { const n = new Set(s); n.add(cur.id); return n; });
+        if (!prevWs.solved) setTally(t => ({ ...t, [difficulty]: (t[difficulty] || 0) + 1 }));
         toast.success("Correct! Query matches expected output.");
-        if (user) {
-          try {
-            const { data } = await api.post("/progress", {
-              module: "sql", question_id: `${companyKey}-${cur.id}`,
-              correct: true, difficulty,
-            });
-            if (data?.user) setUser(data.user);
-          } catch (e) { void e; }
-        }
       } else {
         setStatus({ text: "Wrong output", tone: "bad" });
+      }
+      if (user) {
+        try {
+          const { data } = await api.post("/progress", { module: "sql", question_id: wsKey, correct, difficulty, code });
+          if (data?.user) setUser(data.user);
+        } catch (e) { void e; }
       }
     } catch (e) {
       const ms = Math.round(performance.now() - t0);
@@ -473,78 +503,52 @@ export default function SQLPage() {
             <ModeTab mode="interview" active={mode === "interview"} onClick={() => setMode("interview")} icon={Briefcase} label="Interview" testId="mode-interview" />
           </div>
 
-          {/* Company selector — pushed to the right */}
-          <div className="flex items-center gap-2 flex-wrap ml-auto" data-testid="company-selector">
-            {COMPANIES.map(c => {
-              const active = c.key === companyKey;
-              return (
-                <button
-                  key={c.key}
-                  onClick={() => setCompanyKey(c.key)}
-                  data-testid={`company-${c.key}`}
-                  title={c.name}
-                  className={`relative inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${active ? "text-white -translate-y-0.5" : "text-slate-400 hover:text-white hover:bg-white/5 border border-white/5"}`}
-                  style={active ? {
-                    background: `linear-gradient(135deg, ${c.color}22, ${c.color}11)`,
-                    border: `1px solid ${c.color}`,
-                    boxShadow: `0 0 0 3px ${c.color}22, 0 8px 24px -6px ${c.color}88`,
-                  } : undefined}
-                >
-                  <img
-                    src={c.logoUrl}
-                    alt={c.name}
-                    className={`w-4 h-4 object-contain transition-all ${active ? "" : "opacity-70 grayscale group-hover:grayscale-0"}`}
-                    onError={(e) => { e.currentTarget.style.display = "none"; }}
-                  />
-                  <span className={active ? "font-semibold" : ""}>{c.name}</span>
-                  <span className={`text-[9px] font-mono-editor px-1.5 py-0.5 rounded ${active ? "bg-white/10 text-white" : "bg-white/5 text-slate-400"}`}>{c.questions.length}Q</span>
-                  {active && (
-                    <span
-                      className="absolute -bottom-1 left-3 right-3 h-0.5 rounded-full"
-                      style={{ background: c.color, boxShadow: `0 0 8px ${c.color}` }}
-                    />
-                  )}
+          {/* Dataset picker — one dropdown instead of a row of buttons */}
+          <div className="ml-auto flex items-center gap-2">
+            <ModeGuideButton onClick={() => setModeGuideOpen(true)} />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button data-testid="company-selector" className="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium border text-white hover:bg-white/5"
+                  style={{ borderColor: `${company.color}66`, background: `${company.color}12` }}>
+                  <img src={company.logoUrl} alt="" className="w-4 h-4 object-contain" onError={(e) => { e.currentTarget.style.display = "none"; }} />
+                  <span className="font-semibold">{company.name}</span>
+                  <span className="text-[9px] font-mono-editor px-1.5 py-0.5 rounded bg-white/10">{company.questions.length}Q</span>
+                  <ChevronDown className="w-3.5 h-3.5 opacity-70" />
                 </button>
-              );
-            })}
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-[#0F1520] border-white/10 text-white min-w-[240px]">
+                <DropdownMenuLabel className="text-[10px] uppercase tracking-widest text-slate-500">Dataset</DropdownMenuLabel>
+                {COMPANIES.map(c => (
+                  <DropdownMenuItem key={c.key} onClick={() => setCompanyKey(c.key)} data-testid={`company-${c.key}`} className="gap-2 cursor-pointer focus:bg-white/10">
+                    <img src={c.logoUrl} alt="" className="w-4 h-4 object-contain" onError={(e) => { e.currentTarget.style.display = "none"; }} />
+                    <span className="flex-1">{c.name}</span>
+                    <span className="text-[9px] font-mono-editor text-slate-500">{c.questions.length}Q</span>
+                    {c.key === companyKey && <Check className="w-3.5 h-3.5" style={{ color: c.color }} />}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
-        </div>
-
-        {/* Mode description strip — reinforces what each mode does */}
-        <div className="max-w-[1600px] mx-auto px-4 pb-2 -mt-1 flex items-center gap-2 text-[11px]">
-          <span
-            className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md font-mono-editor"
-            style={{
-              color: MODE_META[mode].color,
-              background: `${MODE_META[mode].color}12`,
-              border: `1px solid ${MODE_META[mode].color}40`,
-            }}
-            data-testid="mode-badge"
-          >
-            <span className="w-1.5 h-1.5 rounded-full" style={{ background: MODE_META[mode].color }} />
-            {mode === "learning" ? "Learning Mode" : mode === "practice" ? "Practice Mode" : "Interview Mode"}
-          </span>
-          <span className="text-slate-400">{MODE_META[mode].desc}</span>
         </div>
 
         {/* Sub-bar */}
         <div className="max-w-[1600px] mx-auto px-4 py-2 border-t border-white/5 flex items-center gap-4 flex-wrap text-sm">
-          <div className="flex items-center gap-2">
-            <span className="text-slate-500 text-xs uppercase tracking-widest">Schema</span>
-            <span className="px-2 py-1 rounded-md bg-[#0D1117] border font-mono-editor text-xs"
-                  style={{ borderColor: `${company.color}55`, color: company.color }}>
-              {company.name.toLowerCase()}
-            </span>
-            <span className="text-[10px] text-slate-500 font-mono-editor">{questions.length}Q</span>
-            <Button onClick={() => setErdOpen(true)} variant="outline" size="sm" data-testid="btn-erd"
-              className="h-7 border-white/15 bg-transparent hover:bg-white/5 ml-1">
-              <GitBranch className="w-3.5 h-3.5 mr-1" /> ERD
-            </Button>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-slate-500 text-xs uppercase tracking-widest">Engine</span>
-            <span className="px-2 py-1 rounded-md bg-[#0D1117] border border-white/10 font-mono-editor text-xs">SQLite · sql.js</span>
-          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button data-testid="schema-menu" className="inline-flex items-center gap-1.5 h-7 px-2 rounded-md border border-white/15 text-xs hover:bg-white/5">
+                <Layers className="w-3.5 h-3.5" style={{ color: company.color }} /> Schema <ChevronDown className="w-3 h-3 opacity-60" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="bg-[#0F1520] border-white/10 text-white">
+              <DropdownMenuLabel className="text-[10px] uppercase tracking-widest text-slate-500">{company.name} · {company.tables.length} tables · SQLite</DropdownMenuLabel>
+              <DropdownMenuItem onClick={() => setErdOpen(true)} data-testid="btn-erd" className="gap-2 cursor-pointer focus:bg-white/10"><GitBranch className="w-3.5 h-3.5" /> Entity-relationship diagram</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setCollapsed(false)} className="gap-2 cursor-pointer focus:bg-white/10"><PanelLeftOpen className="w-3.5 h-3.5" /> Show table browser</DropdownMenuItem>
+              <DropdownMenuSeparator className="bg-white/10" />
+              {company.tables.map(t => (
+                <DropdownMenuItem key={t.name} onClick={() => setPreviewTable(t)} className="gap-2 cursor-pointer focus:bg-white/10 font-mono-editor text-xs"><TableIcon className="w-3.5 h-3.5 text-slate-500" /> {t.name} <span className="ml-auto text-slate-500">{t.rows.length} rows</span></DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
           <div className="flex items-center gap-2">
             <span className="text-slate-500 text-xs uppercase tracking-widest">Level</span>
             <div className="flex gap-1">
@@ -561,6 +565,7 @@ export default function SQLPage() {
           </div>
 
           <div className="ml-auto flex items-center gap-2">
+            <BeltBadge tally={tally} compact />
             {mode === "interview" && (
               <div
                 className={`inline-flex items-center gap-1.5 text-xs px-2 py-1 rounded-full border font-mono-editor font-medium ${interviewSeconds <= 30 ? "border-red-400/50 bg-red-400/10 text-red-300 animate-pulse" : "border-yellow-400/40 bg-yellow-400/10 text-yellow-300"}`}
@@ -642,18 +647,11 @@ export default function SQLPage() {
               {running ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : <Play className="w-4 h-4 mr-1" />}
               Run <span className="ml-2 text-[10px] opacity-70">Ctrl / ⌘ ⏎</span>
             </Button>
-            <Button onClick={() => setCode(c => formatSql(c))} variant="outline" size="sm" data-testid="btn-format"
-              className="h-8 border-white/15 bg-transparent hover:bg-white/5">Format</Button>
             <Button onClick={() => setShowHint(v => !v)} variant="outline" size="sm" data-testid="btn-hint"
               disabled={mode === "interview"}
               title={mode === "interview" ? "Hints disabled in Interview Mode" : "Show hint"}
               className="h-8 border-[#00D4FF]/40 bg-[#00D4FF]/5 text-[#00D4FF] hover:bg-[#00D4FF]/10 disabled:opacity-30">
               <Lightbulb className="w-3.5 h-3.5 mr-1" /> Hint
-            </Button>
-            <Button onClick={() => setPaletteOpen(true)} variant="outline" size="sm" data-testid="btn-palette"
-              className="h-8 border-white/15 bg-transparent hover:bg-white/5 gap-1.5">
-              <CmdIcon className="w-3.5 h-3.5" />
-              <kbd className="text-[10px] font-mono-editor bg-white/5 border border-white/10 px-1 py-0 rounded">K</kbd>
             </Button>
             <Button onClick={() => setShowSolution(v => !v)} variant="outline" size="sm" data-testid="btn-solution"
               disabled={mode === "interview"}
@@ -661,6 +659,18 @@ export default function SQLPage() {
               className="h-8 border-yellow-400/40 bg-yellow-400/5 text-yellow-300 hover:bg-yellow-400/10 ml-auto disabled:opacity-30">
               <Eye className="w-3.5 h-3.5 mr-1" /> Solution
             </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button data-testid="btn-editor-more" title="More editor actions" className="h-8 w-8 inline-flex items-center justify-center rounded-md border border-white/15 hover:bg-white/5"><MoreHorizontal className="w-4 h-4" /></button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-[#0F1520] border-white/10 text-white">
+                <DropdownMenuItem onClick={() => setCode(c => formatSql(c))} data-testid="btn-format" className="gap-2 cursor-pointer focus:bg-white/10"><Sparkles className="w-3.5 h-3.5" /> Format SQL</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => { navigator.clipboard?.writeText(code); toast.success("Copied"); }} className="gap-2 cursor-pointer focus:bg-white/10"><Copy className="w-3.5 h-3.5" /> Copy query</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => { setCode(""); setOutput(null); setError(null); setStatus({ text: "Not Started", tone: "muted" }); }} className="gap-2 cursor-pointer focus:bg-white/10"><RotateCcw className="w-3.5 h-3.5" /> Reset editor</DropdownMenuItem>
+                <DropdownMenuSeparator className="bg-white/10" />
+                <DropdownMenuItem onClick={() => setPaletteOpen(true)} data-testid="btn-palette" className="gap-2 cursor-pointer focus:bg-white/10"><CmdIcon className="w-3.5 h-3.5" /> Command palette <kbd className="ml-auto text-[10px] font-mono-editor bg-white/5 border border-white/10 px-1 rounded">⌘K</kbd></DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           <div className="relative flex-1 min-h-[240px] bg-[#0D1117] border-b border-white/5 overflow-hidden">
@@ -848,6 +858,7 @@ export default function SQLPage() {
       />
 
       <UpgradeModal open={upgradeOpen} onOpenChange={setUpgradeOpen} />
+      <ModeGuide open={modeGuideOpen} onOpenChange={setModeGuideOpen} onPick={setMode} />
     </div>
   );
 }

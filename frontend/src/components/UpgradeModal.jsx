@@ -7,10 +7,10 @@ import { useAuth } from "@/lib/auth";
 import { toast } from "sonner";
 
 const FEATURES = [
-  "Full ~975 questions per module (all difficulties)",
+  "Every question in every module — all belts reachable",
   "AI-powered hints on every question",
   "Downloadable cheat sheets per topic",
-  "Certificate of completion (PDF)",
+  "Downloadable skill report (PDF) from Green belt",
   "Ad-free experience",
   "Priority support",
 ];

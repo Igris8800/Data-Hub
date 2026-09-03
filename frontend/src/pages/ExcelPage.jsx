@@ -12,6 +12,10 @@ import UpgradeModal from "@/components/UpgradeModal";
 import { EXCEL_WORKBOOKS } from "@/lib/excelTrack";
 import { evaluate, resultsMatch, buildSheet, serialToISO, indexToCol, colToIndex, FUNCTION_NAMES } from "@/lib/excelEngine";
 import { isQuestionLocked, lockedCount } from "@/lib/premium";
+import ModeGuide, { useFirstVisitGuide, ModeGuideButton } from "@/components/ModeGuide";
+import BeltBadge from "@/components/BeltBadge";
+import { loadWorkspace, saveWorkspace, hydrateFromAttempts, localSolvedSet } from "@/lib/practiceState";
+import { tallyAttempts } from "@/lib/belts";
 
 const MODE_META = {
   learning: { color: "#00FF88", label: "Learning", desc: "Sequential · solve to unlock next" },
@@ -131,7 +135,27 @@ export default function ExcelPage() {
   const highlight = useMemo(() => referencedCells(formula), [formula]);
 
   useEffect(() => { setIdx(0); }, [wbKey, difficulty, mode]);
-  useEffect(() => { setFormula("="); setResult(null); setShowHint(false); setShowSolution(false); setStatus({ text: "Not Started", tone: "muted" }); setOutputTab("output"); }, [cur?.id]);
+  const [modeGuideOpen, setModeGuideOpen] = useFirstVisitGuide();
+  const [tally, setTally] = useState({ beginner: 0, intermediate: 0, advanced: 0 });
+  const wsKey = cur ? `${wbKey}-${cur.id}` : null;
+
+  // Restore saved formula / result for this question, or start blank.
+  useEffect(() => {
+    const ws = wsKey ? loadWorkspace("excel", wsKey) : null;
+    setFormula(ws?.formula || "="); setResult(ws?.result || null); setShowHint(false); setShowSolution(false);
+    setStatus(ws?.solved ? { text: "Solved", tone: "good" } : ws?.formula ? { text: "In progress", tone: "muted" } : { text: "Not Started", tone: "muted" });
+    setOutputTab("output");
+  }, [cur?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { setSolvedIds(localSolvedSet("excel")); }, []);
+  useEffect(() => {
+    if (!user) return;
+    api.get("/progress").then(({ data }) => { const fromServer = hydrateFromAttempts("excel", data.attempts); setSolvedIds((prev) => new Set([...prev, ...fromServer])); setTally(tallyAttempts(data.attempts, "excel")); }).catch(() => {});
+  }, [user?.user_id]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!wsKey) return;
+    const t = setTimeout(() => { const prev = loadWorkspace("excel", wsKey) || {}; if ((prev.formula || "=") !== formula) saveWorkspace("excel", wsKey, { ...prev, formula }); }, 500);
+    return () => clearTimeout(t);
+  }, [formula, wsKey]);
 
   const jumpTo = (i) => { if (i < 0 || i >= questions.length) return; if (isLocked(i)) { setUpgradeOpen(true); return; } setIdx(i); };
   const goPrev = () => jumpTo(idx - 1);
@@ -144,12 +168,15 @@ export default function ExcelPage() {
     if (r.error) { setStatus({ text: `Error ${r.error}`, tone: "bad" }); return; }
     const expected = evaluate(cur.answer, sheet);
     const correct = resultsMatch(r, expected);
+    const prevWs = loadWorkspace("excel", wsKey) || {};
+    saveWorkspace("excel", wsKey, { ...prevWs, formula, result: r, solved: correct || !!prevWs.solved });
     if (correct) {
       setStatus({ text: "Solved", tone: "good" });
       setSolvedIds((s) => { const n = new Set(s); n.add(cur.id); return n; });
+      if (!prevWs.solved) setTally((t) => ({ ...t, [difficulty]: (t[difficulty] || 0) + 1 }));
       toast.success("Correct! Your formula matches the expected result.");
-      if (user) { try { const { data } = await api.post("/progress", { module: "excel", question_id: `${wbKey}-${cur.id}`, correct: true, difficulty }); if (data?.user) setUser(data.user); } catch (e) { void e; } }
     } else setStatus({ text: "Wrong result", tone: "bad" });
+    if (user) { try { const { data } = await api.post("/progress", { module: "excel", question_id: wsKey, correct, difficulty, code: formula }); if (data?.user) setUser(data.user); } catch (e) { void e; } }
   };
   useEffect(() => { const onKey = (e) => { if ((e.metaKey || e.ctrlKey) && e.key === "Enter") { e.preventDefault(); run(); } }; window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey); }); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -175,6 +202,7 @@ export default function ExcelPage() {
             ))}
           </div>
           <div className="ml-auto flex items-center gap-2" data-testid="workbook-selector">
+            <ModeGuideButton onClick={() => setModeGuideOpen(true)} />
             {EXCEL_WORKBOOKS.map((w) => (
               <button key={w.key} onClick={() => setWbKey(w.key)} data-testid={`workbook-${w.key}`}
                 className={`inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium border ${w.key === wbKey ? "text-white" : "text-slate-400 border-white/5 hover:bg-white/5"}`}
@@ -203,6 +231,7 @@ export default function ExcelPage() {
             </div>
           </div>
           <div className="ml-auto flex items-center gap-2">
+            <BeltBadge tally={tally} compact />
             {mode === "learning" && cur && !solvedIds.has(cur.id) && (
               <div className="inline-flex items-center gap-1.5 text-xs px-2 py-1 rounded-full border border-[#00FF88]/40 bg-[#00FF88]/10 text-[#00FF88] font-medium"><BookOpen className="w-3.5 h-3.5" /> Solve to unlock next</div>
             )}
@@ -308,6 +337,7 @@ export default function ExcelPage() {
         </div>
       </div>
       <UpgradeModal open={upgradeOpen} onOpenChange={setUpgradeOpen} />
+      <ModeGuide open={modeGuideOpen} onOpenChange={setModeGuideOpen} modes={["learning", "practice"]} onPick={setMode} />
     </div>
   );
 }
