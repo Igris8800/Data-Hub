@@ -18,6 +18,7 @@ import { toast } from "sonner";
 const ICONS = { Sheet, Database, Code2, BarChart3, Sigma };
 
 // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
+const GOOGLE_AUTH = process.env.REACT_APP_GOOGLE_AUTH === "1";
 const startGoogleAuth = () => {
   const redirectUrl = window.location.origin + "/";
   window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
@@ -174,6 +175,7 @@ export default function Home() {
                 </div>
               ) : (
                 <>
+                  {GOOGLE_AUTH && (<>
                   <button
                     onClick={startGoogleAuth}
                     className="w-full bg-[#00FF88] hover:bg-[#33FFA1] text-[#0D1117] rounded-md py-3 font-semibold flex items-center justify-center gap-2 transition-colors"
@@ -194,12 +196,13 @@ export default function Home() {
                   <div className="flex items-center gap-3 my-4 text-[10px] uppercase tracking-widest text-slate-500">
                     <span className="h-px bg-white/10 flex-1" /> or <span className="h-px bg-white/10 flex-1" />
                   </div>
+                  </>)}
                   <button
                     onClick={() => setAuthOpen(true)}
-                    className="w-full bg-transparent border border-white/15 hover:border-white/30 hover:bg-white/5 text-white rounded-md py-3 font-medium flex items-center justify-center gap-2 transition-colors"
+                    className={`w-full ${GOOGLE_AUTH ? "bg-transparent border border-white/15 hover:border-white/30 hover:bg-white/5 text-white" : "bg-[#00FF88] hover:bg-[#33FFA1] text-[#0D1117] font-semibold"} rounded-md py-3 font-medium flex items-center justify-center gap-2 transition-colors"
                     data-testid="hero-email-btn"
                   >
-                    <Mail className="w-4 h-4" /> Email
+                    <Mail className="w-4 h-4" /> {GOOGLE_AUTH ? "Email" : "Sign up with email"}
                   </button>
                   <p className="text-[11px] text-slate-500 leading-relaxed mt-4">
                     By continuing, you accept our <span className="text-[#00D4FF]">Terms</span> and <span className="text-[#00D4FF]">Privacy Policy</span>. Your data is stored securely.
