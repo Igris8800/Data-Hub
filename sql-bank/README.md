@@ -9,7 +9,7 @@ answer against the generated database (fails on error or empty result) and write
 Question JSON fields: id, tier (easy|medium|hard), topic, title, context, task, hint, answer, order (bool, optional).
 Tiers map to the app's beginner / intermediate / advanced levels.
 
-## Progress toward 500 (100 per company: 34 easy · 33 medium · 33 hard)
+## Progress: 500 / 500 ✅ (100 per company: 34 easy · 33 medium · 33 hard)
 | Company | Easy | Medium | Hard | Status |
 |---------|------|--------|------|--------|
 | Amazon  | 34   | 33     | 33   | done — seed expanded to 30 customers, 24 products, 150 orders, order_items table added |
