@@ -165,7 +165,7 @@ F.AVERAGEIFS = (s, ...rc) => { const pairs = []; for (let i = 0; i < rc.length; 
 F.MAXIFS = (s, ...rc) => { const pairs = []; for (let i = 0; i < rc.length; i += 2) pairs.push([rc[i], rc[i + 1]]); const m = ifsMask(pairs); const v = flat(s).filter((x, i) => m[i] && typeof x === "number"); return v.length ? Math.max(...v) : 0; };
 F.MINIFS = (s, ...rc) => { const pairs = []; for (let i = 0; i < rc.length; i += 2) pairs.push([rc[i], rc[i + 1]]); const m = ifsMask(pairs); const v = flat(s).filter((x, i) => m[i] && typeof x === "number"); return v.length ? Math.min(...v) : 0; };
 // logic
-F.IF = (c, a, b = false) => { c = scalar(c); if (isErr(c)) throw c; return bool(c) ? a : b; };
+F.IF = (c, a, b = false) => { if (isArr(c) && !(c.length === 1 && c[0].length === 1)) { const pick = (v, r, i) => (isArr(v) ? v[v.length === 1 ? 0 : r]?.[v[0].length === 1 ? 0 : i] : v); return c.map((row, r) => row.map((x, i) => { if (isErr(x)) return x; try { return bool(x) ? pick(a, r, i) : pick(b, r, i); } catch (e) { return isErr(e) ? e : ERR("#VALUE!"); } })); } c = scalar(c); if (isErr(c)) throw c; return bool(c) ? a : b; };
 F.IFS = (...a) => { for (let i = 0; i < a.length; i += 2) if (bool(scalar(a[i]))) return a[i + 1]; throw ERR("#N/A"); };
 F.AND = (...a) => a.flatMap(flat).filter((v) => v !== null && v !== "").every((v) => bool(v));
 F.OR = (...a) => a.flatMap(flat).filter((v) => v !== null && v !== "").some((v) => bool(v));
@@ -239,6 +239,8 @@ F.ISERROR = (v) => { v = isArr(v) ? v : [[v]]; const out = v.map((row) => row.ma
   liftIfs("COUNTIFS", 1); liftIfs("SUMIFS", 2); liftIfs("AVERAGEIFS", 2); liftIfs("MAXIFS", 2); liftIfs("MINIFS", 2);
   const liftK = (name) => { const f = F[name]; F[name] = (r, k) => (isArr(k) ? mapArr(k, (x) => f(r, x)) : f(r, k)); };
   liftK("LARGE"); liftK("SMALL");
+  { const f = F.INDEX; F.INDEX = (r, row, col) => (isArr(row) && !(row.length === 1 && row[0].length === 1) ? mapArr(row, (x) => f(r, x, col)) : f(r, row, col)); }
+  { const f = F.RANK; F.RANK = F["RANK.EQ"] = (v, r, o) => (isArr(v) && !(v.length === 1 && v[0].length === 1) ? mapArr(v, (x) => f(x, r, o)) : f(v, r, o)); }
 }
 
 // ---------- evaluator ----------

@@ -1,0 +1,332 @@
+[
+{
+"id": "inv-h-01",
+"tier": "hard",
+"topic": "FILTER",
+"title": "Reorder list",
+"context": "SKUs at or below reorder point.",
+"task": "Return FILTER(A2:A41, F2:F41<=G2:G41, \"None\").",
+"hint": "FILTER with a row-vs-row mask.",
+"answer": "=FILTER(A2:A41,F2:F41<=G2:G41,\"None\")"
+},
+{
+"id": "inv-h-02",
+"tier": "hard",
+"topic": "FILTER",
+"title": "A-class stockouts",
+"context": "Critical: A items with zero or negative stock.",
+"task": "Return FILTER(B2:B41, (I2:I41=\"A\")*(F2:F41<=0), \"None\").",
+"hint": "Two masks.",
+"answer": "=FILTER(B2:B41,(I2:I41=\"A\")*(F2:F41<=0),\"None\")"
+},
+{
+"id": "inv-h-03",
+"tier": "hard",
+"topic": "SORT",
+"title": "Top 5 SKUs by value",
+"context": "Most valuable stock, descending.",
+"task": "Return INDEX(SORTBY(A2:A41, E2:E41*F2:F41, -1), SEQUENCE(5)).",
+"hint": "SORTBY on a computed array, then SEQUENCE.",
+"answer": "=INDEX(SORTBY(A2:A41,E2:E41*F2:F41,-1),SEQUENCE(5))"
+},
+{
+"id": "inv-h-04",
+"tier": "hard",
+"topic": "Dynamic arrays",
+"title": "Categories, sorted",
+"context": "Picklist.",
+"task": "Return SORT(UNIQUE(C2:C41)).",
+"hint": "SORT(UNIQUE()).",
+"answer": "=SORT(UNIQUE(C2:C41))"
+},
+{
+"id": "inv-h-05",
+"tier": "hard",
+"topic": "Dynamic arrays",
+"title": "Value of the first category in the unique list",
+"context": "Inventory value for whichever category UNIQUE(C2:C41) returns first.",
+"task": "Return SUMPRODUCT((C2:C41=INDEX(UNIQUE(C2:C41),1))*E2:E41*F2:F41).",
+"hint": "INDEX(UNIQUE(...),1) picks the first unique value.",
+"answer": "=SUMPRODUCT((C2:C41=INDEX(UNIQUE(C2:C41),1))*E2:E41*F2:F41)"
+},
+{
+"id": "inv-h-06",
+"tier": "hard",
+"topic": "Reorder",
+"title": "Total reorder spend",
+"context": "Σ over SKUs below reorder point of (30 days demand − on hand) × cost.",
+"task": "Return ROUND(SUMPRODUCT((F2:F41<=G2:G41)*(H2:H41*30−F2:F41)*E2:E41),2).",
+"hint": "Mask × gap × cost.",
+"answer": "=ROUND(SUMPRODUCT((F2:F41<=G2:G41)*(H2:H41*30-F2:F41)*E2:E41),2)"
+},
+{
+"id": "inv-h-07",
+"tier": "hard",
+"topic": "Reorder",
+"title": "Reorder points recomputed from lead time, spilled",
+"context": "(lead + safety) × daily demand for every SKU.",
+"task": "Return ROUNDUP((XLOOKUP(D2:D41,Q2:Q7,T2:T7)+VLOOKUP(\"Safety days\",W2:X4,2,FALSE))*H2:H41,0).",
+"hint": "Array XLOOKUP.",
+"answer": "=ROUNDUP((XLOOKUP(D2:D41,Q2:Q7,T2:T7)+VLOOKUP(\"Safety days\",W2:X4,2,FALSE))*H2:H41,0)"
+},
+{
+"id": "inv-h-08",
+"tier": "hard",
+"topic": "Reorder",
+"title": "SKUs whose stored reorder point is below the computed one",
+"context": "Rules drift.",
+"task": "Return SUMPRODUCT(--(G2:G41 < (XLOOKUP(D2:D41,Q2:Q7,T2:T7)+VLOOKUP(\"Safety days\",W2:X4,2,FALSE))*H2:H41)).",
+"hint": "Compare arrays.",
+"answer": "=SUMPRODUCT(--(G2:G41<(XLOOKUP(D2:D41,Q2:Q7,T2:T7)+VLOOKUP(\"Safety days\",W2:X4,2,FALSE))*H2:H41))"
+},
+{
+"id": "inv-h-09",
+"tier": "hard",
+"topic": "Days of cover",
+"title": "Average days of cover (demand > 0)",
+"context": "Mean of OnHand/DailyDemand across SKUs with demand.",
+"task": "Return ROUND(AVERAGE(FILTER(F2:F41/IF(H2:H41=0,1,H2:H41), H2:H41>0)),1).",
+"hint": "FILTER a computed array.",
+"answer": "=ROUND(AVERAGE(FILTER(F2:F41/IF(H2:H41=0,1,H2:H41),H2:H41>0)),1)"
+},
+{
+"id": "inv-h-10",
+"tier": "hard",
+"topic": "Days of cover",
+"title": "SKU that runs out first",
+"context": "Lowest days of cover among items with demand.",
+"task": "Return INDEX(A2:A41, MATCH(MIN(FILTER(F2:F41/IF(H2:H41=0,1,H2:H41), H2:H41>0)), F2:F41/IF(H2:H41=0,1,H2:H41), 0)).",
+"hint": "MATCH the min back to the array.",
+"answer": "=INDEX(A2:A41,MATCH(MIN(FILTER(F2:F41/IF(H2:H41=0,1,H2:H41),H2:H41>0)),F2:F41/IF(H2:H41=0,1,H2:H41),0))"
+},
+{
+"id": "inv-h-11",
+"tier": "hard",
+"topic": "Movements",
+"title": "Net movement per SKU, spilled",
+"context": "IN − OUT + ADJ for every SKU in A2:A41.",
+"task": "Return SUMIFS(N2:N81,L2:L81,A2:A41,M2:M81,\"IN\") − SUMIFS(N2:N81,L2:L81,A2:A41,M2:M81,\"OUT\") + SUMIFS(N2:N81,L2:L81,A2:A41,M2:M81,\"ADJ\").",
+"hint": "Array-criteria SUMIFS ×3.",
+"answer": "=SUMIFS(N2:N81,L2:L81,A2:A41,M2:M81,\"IN\")-SUMIFS(N2:N81,L2:L81,A2:A41,M2:M81,\"OUT\")+SUMIFS(N2:N81,L2:L81,A2:A41,M2:M81,\"ADJ\")"
+},
+{
+"id": "inv-h-12",
+"tier": "hard",
+"topic": "Movements",
+"title": "SKUs with no movements",
+"context": "Dead stock candidates.",
+"task": "Return SUMPRODUCT(--(COUNTIF(L2:L81,A2:A41)=0)).",
+"hint": "COUNTIF array = 0.",
+"answer": "=SUMPRODUCT(--(COUNTIF(L2:L81,A2:A41)=0))"
+},
+{
+"id": "inv-h-13",
+"tier": "hard",
+"topic": "Movements",
+"title": "Most active SKU",
+"context": "SKU with the most movement rows.",
+"task": "Return INDEX(A2:A41, MATCH(MAX(COUNTIF(L2:L81,A2:A41)), COUNTIF(L2:L81,A2:A41), 0)).",
+"hint": "MATCH on the spilled COUNTIF.",
+"answer": "=INDEX(A2:A41,MATCH(MAX(COUNTIF(L2:L81,A2:A41)),COUNTIF(L2:L81,A2:A41),0))"
+},
+{
+"id": "inv-h-14",
+"tier": "hard",
+"topic": "Movements",
+"title": "Units shipped per month (March)",
+"context": "OUT quantity in a given month via SUMPRODUCT.",
+"task": "Return SUMPRODUCT((MONTH(K2:K81)=3)*(M2:M81=\"OUT\")*N2:N81).",
+"hint": "MONTH over the array.",
+"answer": "=SUMPRODUCT((MONTH(K2:K81)=3)*(M2:M81=\"OUT\")*N2:N81)"
+},
+{
+"id": "inv-h-15",
+"tier": "hard",
+"topic": "Movements",
+"title": "Busiest warehouse by units out",
+"context": "Which warehouse ships more?",
+"task": "Return IF(SUMIFS(N2:N81,M2:M81,\"OUT\",O2:O81,\"WH-A\")>=SUMIFS(N2:N81,M2:M81,\"OUT\",O2:O81,\"WH-B\"),\"WH-A\",\"WH-B\").",
+"hint": "Compare two SUMIFS.",
+"answer": "=IF(SUMIFS(N2:N81,M2:M81,\"OUT\",O2:O81,\"WH-A\")>=SUMIFS(N2:N81,M2:M81,\"OUT\",O2:O81,\"WH-B\"),\"WH-A\",\"WH-B\")"
+},
+{
+"id": "inv-h-16",
+"tier": "hard",
+"topic": "Turnover",
+"title": "Inventory turnover (units)",
+"context": "Units OUT ÷ average on hand.",
+"task": "Return ROUND(SUMIF(M2:M81,\"OUT\",N2:N81)/AVERAGE(F2:F41),2).",
+"hint": "OUT ÷ AVERAGE.",
+"answer": "=ROUND(SUMIF(M2:M81,\"OUT\",N2:N81)/AVERAGE(F2:F41),2)"
+},
+{
+"id": "inv-h-17",
+"tier": "hard",
+"topic": "Turnover",
+"title": "Value shipped",
+"context": "Σ OUT qty × unit cost (cost looked up per movement).",
+"task": "Return ROUND(SUMPRODUCT((M2:M81=\"OUT\")*N2:N81*XLOOKUP(L2:L81,A2:A41,E2:E41,0)),2).",
+"hint": "Array XLOOKUP with default 0 for orphans.",
+"answer": "=ROUND(SUMPRODUCT((M2:M81=\"OUT\")*N2:N81*XLOOKUP(L2:L81,A2:A41,E2:E41,0)),2)"
+},
+{
+"id": "inv-h-18",
+"tier": "hard",
+"topic": "ABC",
+"title": "Value share of A-class items",
+"context": "Share of total inventory value held in A-class SKUs.",
+"task": "Return SUMPRODUCT((I2:I41=\"A\")*E2:E41*F2:F41) divided by SUMPRODUCT(E2:E41,F2:F41), rounded to 3 decimals.",
+"hint": "Class value ÷ total value.",
+"answer": "=ROUND(SUMPRODUCT((I2:I41=\"A\")*E2:E41*F2:F41)/SUMPRODUCT(E2:E41,F2:F41),3)"
+},
+{
+"id": "inv-h-19",
+"tier": "hard",
+"topic": "ABC",
+"title": "Re-derive ABC from cumulative value (row 2)",
+"context": "Is row 2 in the top 20% of value-ranked SKUs?",
+"task": "Return IF(RANK(E2*F2, E2:E41*F2:F41) <= 0.2*COUNTA(A2:A41), \"A\", \"not A\").",
+"hint": "RANK vs 20% of count.",
+"answer": "=IF(RANK(E2*F2,E2:E41*F2:F41)<=0.2*COUNTA(A2:A41),\"A\",\"not A\")"
+},
+{
+"id": "inv-h-20",
+"tier": "hard",
+"topic": "ABC",
+"title": "Misclassified A items",
+"context": "Items labelled A whose value rank is worse than 20% of SKUs.",
+"task": "Return SUMPRODUCT((I2:I41=\"A\")*(RANK(E2:E41*F2:F41, E2:E41*F2:F41) > 0.2*COUNTA(A2:A41))).",
+"hint": "RANK over arrays.",
+"answer": "=SUMPRODUCT((I2:I41=\"A\")*(RANK(E2:E41*F2:F41,E2:E41*F2:F41)>0.2*COUNTA(A2:A41)))"
+},
+{
+"id": "inv-h-21",
+"tier": "hard",
+"topic": "Supplier",
+"title": "Lead-time-weighted exposure",
+"context": "Σ value × lead days per supplier / total value → days.",
+"task": "Return ROUND(SUMPRODUCT(E2:E41*F2:F41*XLOOKUP(D2:D41,Q2:Q7,T2:T7))/SUMPRODUCT(E2:E41,F2:F41),1).",
+"hint": "Weighted average of lead time by value.",
+"answer": "=ROUND(SUMPRODUCT(E2:E41*F2:F41*XLOOKUP(D2:D41,Q2:Q7,T2:T7))/SUMPRODUCT(E2:E41,F2:F41),1)"
+},
+{
+"id": "inv-h-22",
+"tier": "hard",
+"topic": "Supplier",
+"title": "Riskiest supplier by value",
+"context": "Supplier with the largest value among those with on-time < 0.95.",
+"task": "Return INDEX(Q2:Q7, MATCH(MAX(IF(U2:U7<0.95, SUMIF(D2:D41,Q2:Q7,F2:F41), 0)), IF(U2:U7<0.95, SUMIF(D2:D41,Q2:Q7,F2:F41), 0), 0)).",
+"hint": "IF over arrays inside MAX/MATCH.",
+"answer": "=INDEX(Q2:Q7,MATCH(MAX(IF(U2:U7<0.95,SUMIF(D2:D41,Q2:Q7,F2:F41),0)),IF(U2:U7<0.95,SUMIF(D2:D41,Q2:Q7,F2:F41),0),0))"
+},
+{
+"id": "inv-h-23",
+"tier": "hard",
+"topic": "Supplier",
+"title": "Units on hand per supplier, spilled",
+"context": "One number per supplier in Q2:Q7 order.",
+"task": "Return SUMIF(D2:D41, Q2:Q7, F2:F41).",
+"hint": "SUMIF with an array of criteria.",
+"answer": "=SUMIF(D2:D41,Q2:Q7,F2:F41)"
+},
+{
+"id": "inv-h-24",
+"tier": "hard",
+"topic": "Dates",
+"title": "Days since last movement per SKU (SKU001)",
+"context": "Staleness.",
+"task": "Return TODAY() − MAXIFS(K2:K81, L2:L81, \"SKU001\").",
+"hint": "MAXIFS on dates.",
+"answer": "=TODAY()-MAXIFS(K2:K81,L2:L81,\"SKU001\")"
+},
+{
+"id": "inv-h-25",
+"tier": "hard",
+"topic": "Dates",
+"title": "SKUs untouched for 90+ days",
+"context": "Count SKUs whose last movement is over 90 days before TODAY() (ignore SKUs with no movement).",
+"task": "Return SUMPRODUCT((COUNTIF(L2:L81,A2:A41)>0)*(TODAY()−MAXIFS(K2:K81,L2:L81,A2:A41)>90)).",
+"hint": "Array MAXIFS.",
+"answer": "=SUMPRODUCT((COUNTIF(L2:L81,A2:A41)>0)*(TODAY()-MAXIFS(K2:K81,L2:L81,A2:A41)>90))"
+},
+{
+"id": "inv-h-26",
+"tier": "hard",
+"topic": "Dates",
+"title": "Working days until stock-out (row 2)",
+"context": "Business days between today and estimated stock-out.",
+"task": "Return NETWORKDAYS(TODAY(), TODAY()+INT(F2/H2)).",
+"hint": "NETWORKDAYS.",
+"answer": "=NETWORKDAYS(TODAY(),TODAY()+INT(F2/H2))"
+},
+{
+"id": "inv-h-27",
+"tier": "hard",
+"topic": "Percentiles",
+"title": "90th percentile unit cost",
+"context": "Premium threshold.",
+"task": "Return PERCENTILE.INC(E2:E41,0.9).",
+"hint": "PERCENTILE.INC.",
+"answer": "=PERCENTILE.INC(E2:E41,0.9)"
+},
+{
+"id": "inv-h-28",
+"tier": "hard",
+"topic": "Statistics",
+"title": "Median stock value",
+"context": "Median of cost × on hand.",
+"task": "Return MEDIAN(E2:E41*F2:F41).",
+"hint": "MEDIAN over a computed array.",
+"answer": "=MEDIAN(E2:E41*F2:F41)"
+},
+{
+"id": "inv-h-29",
+"tier": "hard",
+"topic": "Statistics",
+"title": "Demand vs stock correlation",
+"context": "Do we hold more of what sells?",
+"task": "Return ROUND(CORREL(H2:H41,F2:F41),3).",
+"hint": "CORREL.",
+"answer": "=ROUND(CORREL(H2:H41,F2:F41),3)"
+},
+{
+"id": "inv-h-30",
+"tier": "hard",
+"topic": "TEXTJOIN",
+"title": "Reorder list as text",
+"context": "Comma-separated SKUs at or below reorder point.",
+"task": "Return TEXTJOIN(\", \", TRUE, FILTER(A2:A41, F2:F41<=G2:G41)).",
+"hint": "TEXTJOIN(FILTER()).",
+"answer": "=TEXTJOIN(\", \",TRUE,FILTER(A2:A41,F2:F41<=G2:G41))"
+},
+{
+"id": "inv-h-31",
+"tier": "hard",
+"topic": "Audit",
+"title": "Movements dated in the future",
+"context": "Rows after TODAY().",
+"task": "Return COUNTIF(K2:K81,\">\"&TODAY()).",
+"hint": "COUNTIF with concatenated date.",
+"answer": "=COUNTIF(K2:K81,\">\"&TODAY())"
+},
+{
+"id": "inv-h-32",
+"tier": "hard",
+"topic": "Audit",
+"title": "Adjustments that are suspiciously large",
+"context": "ADJ rows with |Qty| ≥ 5.",
+"task": "Return SUMPRODUCT((M2:M81=\"ADJ\")*(ABS(N2:N81)>=5)).",
+"hint": "ABS over an array.",
+"answer": "=SUMPRODUCT((M2:M81=\"ADJ\")*(ABS(N2:N81)>=5))"
+},
+{
+"id": "inv-h-33",
+"tier": "hard",
+"topic": "Service level",
+"title": "Fill rate proxy",
+"context": "Share of SKUs with positive stock, percent text.",
+"task": "Return TEXT(COUNTIF(F2:F41,\">0\")/COUNTA(A2:A41),\"0.0%\").",
+"hint": "COUNTIF/COUNTA.",
+"answer": "=TEXT(COUNTIF(F2:F41,\">0\")/COUNTA(A2:A41),\"0.0%\")"
+}
+]
