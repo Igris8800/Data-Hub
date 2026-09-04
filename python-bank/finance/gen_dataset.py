@@ -41,6 +41,10 @@ while d<=end:
     d+=datetime.timedelta(days=1)
 # a big anomaly + a missing amount
 tid+=1; tx.append({'tx_id':tid,'account_id':3,'date':'2025-04-15','merchant':'GadgetWorld','category':'Shopping','amount':-185000.0,'type':'debit'})
+# duplicate charges (billing error) — same merchant, date, amount
+dup={'tx_id':None,'account_id':3,'date':'2025-02-10','merchant':'StreamFlix','category':'Entertainment','amount':-499.0,'type':'debit'}
+for _ in range(2):
+    tid+=1; d2=dict(dup); d2['tx_id']=tid; tx.append(d2)
 tx[20]['amount']=None
 budgets=[{'category':c,'monthly_budget':b} for c,b in
     [('Groceries',15000),('Dining',8000),('Transport',6000),('Utilities',6000),('Rent',25000),('Entertainment',4000),('Health',5000),('Shopping',10000)]]
