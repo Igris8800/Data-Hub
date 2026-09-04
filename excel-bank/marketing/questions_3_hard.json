@@ -1,0 +1,332 @@
+[
+{
+"id": "mkt-h-01",
+"tier": "hard",
+"topic": "Dynamic arrays",
+"title": "Spend per channel, spilled",
+"context": "One total per channel in K2:K7 order.",
+"task": "Return SUMIF(B2:B79,K2:K7,C2:C79).",
+"hint": "Array-criteria SUMIF.",
+"answer": "=SUMIF(B2:B79,K2:K7,C2:C79)"
+},
+{
+"id": "mkt-h-02",
+"tier": "hard",
+"topic": "Dynamic arrays",
+"title": "ROAS per channel, spilled",
+"context": "Revenue ÷ spend per channel, 2 dp.",
+"task": "Return ROUND(SUMIF(B2:B79,K2:K7,G2:G79)/SUMIF(B2:B79,K2:K7,C2:C79),2).",
+"hint": "Two spilled SUMIFs divided.",
+"answer": "=ROUND(SUMIF(B2:B79,K2:K7,G2:G79)/SUMIF(B2:B79,K2:K7,C2:C79),2)"
+},
+{
+"id": "mkt-h-03",
+"tier": "hard",
+"topic": "Dynamic arrays",
+"title": "CPA per channel vs target, spilled",
+"context": "1 if a channel's overall CPA beats its target, else 0.",
+"task": "Return --(SUMIF(B2:B79,K2:K7,C2:C79)/SUMIF(B2:B79,K2:K7,F2:F79) <= N2:N7).",
+"hint": "Compare spilled CPA to target column.",
+"answer": "=--(SUMIF(B2:B79,K2:K7,C2:C79)/SUMIF(B2:B79,K2:K7,F2:F79)<=N2:N7)"
+},
+{
+"id": "mkt-h-04",
+"tier": "hard",
+"topic": "Dynamic arrays",
+"title": "Weekly totals, spilled",
+"context": "Total spend for each distinct week.",
+"task": "Return SUMIF(A2:A79, UNIQUE(A2:A79), C2:C79).",
+"hint": "UNIQUE weeks as criteria.",
+"answer": "=SUMIF(A2:A79,UNIQUE(A2:A79),C2:C79)"
+},
+{
+"id": "mkt-h-05",
+"tier": "hard",
+"topic": "FILTER",
+"title": "Weeks where Meta lost money",
+"context": "Dates where Meta revenue < spend.",
+"task": "Return FILTER(A2:A79,(B2:B79=\"Meta\")*(G2:G79<C2:C79),\"None\").",
+"hint": "FILTER with two masks.",
+"answer": "=FILTER(A2:A79,(B2:B79=\"Meta\")*(G2:G79<C2:C79),\"None\")"
+},
+{
+"id": "mkt-h-06",
+"tier": "hard",
+"topic": "FILTER",
+"title": "Channels beating ROAS 3",
+"context": "Names of channels with overall ROAS ≥ 3.",
+"task": "Return FILTER(K2:K7, SUMIF(B2:B79,K2:K7,G2:G79)/SUMIF(B2:B79,K2:K7,C2:C79)>=3, \"None\").",
+"hint": "FILTER over a spilled ratio.",
+"answer": "=FILTER(K2:K7,SUMIF(B2:B79,K2:K7,G2:G79)/SUMIF(B2:B79,K2:K7,C2:C79)>=3,\"None\")"
+},
+{
+"id": "mkt-h-07",
+"tier": "hard",
+"topic": "SORT",
+"title": "Channels ranked by revenue",
+"context": "Names, best first.",
+"task": "Return SORTBY(K2:K7, SUMIF(B2:B79,K2:K7,G2:G79), -1).",
+"hint": "SORTBY on a spilled SUMIF.",
+"answer": "=SORTBY(K2:K7,SUMIF(B2:B79,K2:K7,G2:G79),-1)"
+},
+{
+"id": "mkt-h-08",
+"tier": "hard",
+"topic": "Trend",
+"title": "Week-over-week spend change, spilled (Google Search)",
+"context": "% change for weeks 2–13 of Google Search (rows 2–14).",
+"task": "Return (C3:C14−C2:C13)/C2:C13.",
+"hint": "Offset ranges.",
+"answer": "=(C3:C14-C2:C13)/C2:C13"
+},
+{
+"id": "mkt-h-09",
+"tier": "hard",
+"topic": "Trend",
+"title": "Best WoW revenue jump (Google Search)",
+"context": "Largest week-over-week % increase in rows 2–14.",
+"task": "Return TEXT(MAX((G3:G14−G2:G13)/G2:G13),\"0.0%\").",
+"hint": "MAX over the array.",
+"answer": "=TEXT(MAX((G3:G14-G2:G13)/G2:G13),\"0.0%\")"
+},
+{
+"id": "mkt-h-10",
+"tier": "hard",
+"topic": "Trend",
+"title": "First-half vs second-half revenue",
+"context": "Weeks 1–6 vs 8–13 across all channels (percent text).",
+"task": "Return TEXT(SUMIFS(G2:G79,A2:A79,\">=\"&DATE(2025,5,26))/SUMIFS(G2:G79,A2:A79,\"<=\"&DATE(2025,5,12))−1,\"0.0%\").",
+"hint": "Two date-window SUMIFS.",
+"answer": "=TEXT(SUMIFS(G2:G79,A2:A79,\">=\"&DATE(2025,5,26))/SUMIFS(G2:G79,A2:A79,\"<=\"&DATE(2025,5,12))-1,\"0.0%\")"
+},
+{
+"id": "mkt-h-11",
+"tier": "hard",
+"topic": "Trend",
+"title": "Cumulative revenue per week, spilled",
+"context": "Running total across distinct weeks.",
+"task": "Return SUMIFS(G2:G79,A2:A79,\"<=\"&UNIQUE(A2:A79)).",
+"hint": "Array criteria with <= gives a running total.",
+"answer": "=SUMIFS(G2:G79,A2:A79,\"<=\"&UNIQUE(A2:A79))"
+},
+{
+"id": "mkt-h-12",
+"tier": "hard",
+"topic": "Marginal",
+"title": "Marginal ROAS between weeks 1 and 2 (Google Search)",
+"context": "Δrevenue ÷ Δspend.",
+"task": "Return ROUND((G3−G2)/(C3−C2),2).",
+"hint": "Difference ratio.",
+"answer": "=ROUND((G3-G2)/(C3-C2),2)"
+},
+{
+"id": "mkt-h-13",
+"tier": "hard",
+"topic": "Marginal",
+"title": "Correlation of spend and revenue (Meta)",
+"context": "Does more spend mean more revenue?",
+"task": "Return ROUND(CORREL(FILTER(C2:C79,B2:B79=\"Meta\"),FILTER(G2:G79,B2:B79=\"Meta\")),3).",
+"hint": "CORREL over two FILTERs.",
+"answer": "=ROUND(CORREL(FILTER(C2:C79,B2:B79=\"Meta\"),FILTER(G2:G79,B2:B79=\"Meta\")),3)"
+},
+{
+"id": "mkt-h-14",
+"tier": "hard",
+"topic": "Mix",
+"title": "Spend share per channel, spilled",
+"context": "Share of total spend, 3 dp.",
+"task": "Return ROUND(SUMIF(B2:B79,K2:K7,C2:C79)/SUM(C2:C79),3).",
+"hint": "Spilled SUMIF ÷ SUM.",
+"answer": "=ROUND(SUMIF(B2:B79,K2:K7,C2:C79)/SUM(C2:C79),3)"
+},
+{
+"id": "mkt-h-15",
+"tier": "hard",
+"topic": "Mix",
+"title": "Revenue share minus spend share (Email)",
+"context": "Positive = punches above its weight.",
+"task": "Return ROUND(SUMIF(B2:B79,\"Email\",G2:G79)/SUM(G2:G79) − SUMIF(B2:B79,\"Email\",C2:C79)/SUM(C2:C79),3).",
+"hint": "Difference of two shares.",
+"answer": "=ROUND(SUMIF(B2:B79,\"Email\",G2:G79)/SUM(G2:G79)-SUMIF(B2:B79,\"Email\",C2:C79)/SUM(C2:C79),3)"
+},
+{
+"id": "mkt-h-16",
+"tier": "hard",
+"topic": "Mix",
+"title": "Channels punching above weight",
+"context": "Count channels whose revenue share exceeds spend share.",
+"task": "Return SUMPRODUCT(--(SUMIF(B2:B79,K2:K7,G2:G79)/SUM(G2:G79) > SUMIF(B2:B79,K2:K7,C2:C79)/SUM(C2:C79))).",
+"hint": "Compare two spilled shares.",
+"answer": "=SUMPRODUCT(--(SUMIF(B2:B79,K2:K7,G2:G79)/SUM(G2:G79)>SUMIF(B2:B79,K2:K7,C2:C79)/SUM(C2:C79)))"
+},
+{
+"id": "mkt-h-17",
+"tier": "hard",
+"topic": "Funnel",
+"title": "Impressions → clicks → conversions (Brand)",
+"context": "Overall CVR for Brand rows as percent text.",
+"task": "Return TEXT(SUMIF(H2:H79,\"Brand\",F2:F79)/SUMIF(H2:H79,\"Brand\",E2:E79),\"0.00%\").",
+"hint": "Ratio of SUMIFs.",
+"answer": "=TEXT(SUMIF(H2:H79,\"Brand\",F2:F79)/SUMIF(H2:H79,\"Brand\",E2:E79),\"0.00%\")"
+},
+{
+"id": "mkt-h-18",
+"tier": "hard",
+"topic": "Funnel",
+"title": "Cost per thousand impressions (CPM) per channel, spilled",
+"context": "Spend ÷ impressions × 1000, 2 dp.",
+"task": "Return ROUND(SUMIF(B2:B79,K2:K7,C2:C79)/SUMIF(B2:B79,K2:K7,D2:D79)*1000,2).",
+"hint": "×1000.",
+"answer": "=ROUND(SUMIF(B2:B79,K2:K7,C2:C79)/SUMIF(B2:B79,K2:K7,D2:D79)*1000,2)"
+},
+{
+"id": "mkt-h-19",
+"tier": "hard",
+"topic": "Funnel",
+"title": "Revenue per conversion (AOV) overall",
+"context": "Σ revenue ÷ Σ conversions, 2 dp.",
+"task": "Return ROUND(SUM(G2:G79)/SUM(F2:F79),2).",
+"hint": "Ratio of sums.",
+"answer": "=ROUND(SUM(G2:G79)/SUM(F2:F79),2)"
+},
+{
+"id": "mkt-h-20",
+"tier": "hard",
+"topic": "Campaigns",
+"title": "Spend attributed to CAMP02's window",
+"context": "YouTube spend between its start and end dates.",
+"task": "Return SUMIFS(C2:C79,B2:B79,R3,A2:A79,\">=\"&S3,A2:A79,\"<=\"&T3).",
+"hint": "SUMIFS with campaign row references.",
+"answer": "=SUMIFS(C2:C79,B2:B79,R3,A2:A79,\">=\"&S3,A2:A79,\"<=\"&T3)"
+},
+{
+"id": "mkt-h-21",
+"tier": "hard",
+"topic": "Campaigns",
+"title": "Budget utilisation for every campaign, spilled",
+"context": "Spend in window ÷ budget, 3 dp.",
+"task": "Return ROUND(SUMIFS(C2:C79,B2:B79,R2:R9,A2:A79,\">=\"&S2:S9,A2:A79,\"<=\"&T2:T9)/U2:U9,3).",
+"hint": "Array criteria in three positions.",
+"answer": "=ROUND(SUMIFS(C2:C79,B2:B79,R2:R9,A2:A79,\">=\"&S2:S9,A2:A79,\"<=\"&T2:T9)/U2:U9,3)"
+},
+{
+"id": "mkt-h-22",
+"tier": "hard",
+"topic": "Campaigns",
+"title": "Campaigns over budget",
+"context": "Count where window spend > budget.",
+"task": "Return SUMPRODUCT(--(SUMIFS(C2:C79,B2:B79,R2:R9,A2:A79,\">=\"&S2:S9,A2:A79,\"<=\"&T2:T9) > U2:U9)).",
+"hint": "Compare spilled spend to budgets.",
+"answer": "=SUMPRODUCT(--(SUMIFS(C2:C79,B2:B79,R2:R9,A2:A79,\">=\"&S2:S9,A2:A79,\"<=\"&T2:T9)>U2:U9))"
+},
+{
+"id": "mkt-h-23",
+"tier": "hard",
+"topic": "Campaigns",
+"title": "Longest campaign",
+"context": "Name of the campaign with the most days.",
+"task": "Return INDEX(Q2:Q9, MATCH(MAX(T2:T9−S2:S9), T2:T9−S2:S9, 0)).",
+"hint": "MATCH on a computed array.",
+"answer": "=INDEX(Q2:Q9,MATCH(MAX(T2:T9-S2:S9),T2:T9-S2:S9,0))"
+},
+{
+"id": "mkt-h-24",
+"tier": "hard",
+"topic": "Campaigns",
+"title": "Overlapping Meta campaigns",
+"context": "Do CAMP05 and CAMP07 overlap in time?",
+"task": "Return IF(AND(S6<=T8, S8<=T6), \"Overlap\", \"No overlap\").",
+"hint": "Interval overlap test.",
+"answer": "=IF(AND(S6<=T8,S8<=T6),\"Overlap\",\"No overlap\")"
+},
+{
+"id": "mkt-h-25",
+"tier": "hard",
+"topic": "Percentiles",
+"title": "90th percentile weekly revenue",
+"context": "Top-decile threshold.",
+"task": "Return PERCENTILE.INC(G2:G79,0.9).",
+"hint": "PERCENTILE.INC.",
+"answer": "=PERCENTILE.INC(G2:G79,0.9)"
+},
+{
+"id": "mkt-h-26",
+"tier": "hard",
+"topic": "Percentiles",
+"title": "Quartile of row 2's ROAS",
+"context": "Where does row 2 sit among all weeks' ROAS?",
+"task": "Return IFS(G2/C2<=QUARTILE.INC(G2:G79/C2:C79,1),1, G2/C2<=QUARTILE.INC(G2:G79/C2:C79,2),2, G2/C2<=QUARTILE.INC(G2:G79/C2:C79,3),3, TRUE,4).",
+"hint": "QUARTILE over a computed array.",
+"answer": "=IFS(G2/C2<=QUARTILE.INC(G2:G79/C2:C79,1),1,G2/C2<=QUARTILE.INC(G2:G79/C2:C79,2),2,G2/C2<=QUARTILE.INC(G2:G79/C2:C79,3),3,TRUE,4)"
+},
+{
+"id": "mkt-h-27",
+"tier": "hard",
+"topic": "Statistics",
+"title": "Median CPA across weeks (conversions > 0)",
+"context": "Robust CPA.",
+"task": "Return ROUND(MEDIAN(FILTER(C2:C79/IF(F2:F79=0,1,F2:F79), F2:F79>0)),2).",
+"hint": "MEDIAN(FILTER()).",
+"answer": "=ROUND(MEDIAN(FILTER(C2:C79/IF(F2:F79=0,1,F2:F79),F2:F79>0)),2)"
+},
+{
+"id": "mkt-h-28",
+"tier": "hard",
+"topic": "Statistics",
+"title": "Channel with the most consistent spend",
+"context": "Lowest stdev of weekly spend (compare Meta and Email only).",
+"task": "Return IF(STDEV.S(FILTER(C2:C79,B2:B79=\"Meta\"))<STDEV.S(FILTER(C2:C79,B2:B79=\"Email\")),\"Meta\",\"Email\").",
+"hint": "Two STDEVs over FILTERs.",
+"answer": "=IF(STDEV.S(FILTER(C2:C79,B2:B79=\"Meta\"))<STDEV.S(FILTER(C2:C79,B2:B79=\"Email\")),\"Meta\",\"Email\")"
+},
+{
+"id": "mkt-h-29",
+"tier": "hard",
+"topic": "Dates",
+"title": "June revenue via SUMPRODUCT",
+"context": "Revenue for weeks starting in June, without a helper column.",
+"task": "Return SUMPRODUCT((MONTH(A2:A79)=6)*G2:G79).",
+"hint": "MONTH over the array.",
+"answer": "=SUMPRODUCT((MONTH(A2:A79)=6)*G2:G79)"
+},
+{
+"id": "mkt-h-30",
+"tier": "hard",
+"topic": "Dates",
+"title": "Best month by revenue",
+"context": "Which month (4–7) had the highest revenue? Build the four monthly totals as one spilled SUMIFS.",
+"task": "Return INDEX({4,5,6,7}, MATCH(MAX(m), m, 0)) where m = SUMIFS(G2:G79, A2:A79, \">=\"&DATE(2025,{4,5,6,7},1), A2:A79, \"<=\"&EOMONTH(DATE(2025,{4,5,6,7},1),0)).",
+"hint": "DATE with an array month spills four dates; SUMIFS with array criteria spills four totals.",
+"answer": "=INDEX({4,5,6,7},MATCH(MAX(SUMIFS(G2:G79,A2:A79,\">=\"&DATE(2025,{4,5,6,7},1),A2:A79,\"<=\"&EOMONTH(DATE(2025,{4,5,6,7},1),0))),SUMIFS(G2:G79,A2:A79,\">=\"&DATE(2025,{4,5,6,7},1),A2:A79,\"<=\"&EOMONTH(DATE(2025,{4,5,6,7},1),0)),0))"
+},
+{
+"id": "mkt-h-31",
+"tier": "hard",
+"topic": "Audit",
+"title": "Channel rows with wrong casing",
+"context": "Count rows whose Channel isn't exactly one of K2:K7.",
+"task": "Return SUMPRODUCT(--NOT(EXACT(B2:B79,XLOOKUP(B2:B79,K2:K7,K2:K7)))).",
+"hint": "XLOOKUP canonical, EXACT compare.",
+"answer": "=SUMPRODUCT(--NOT(EXACT(B2:B79,XLOOKUP(B2:B79,K2:K7,K2:K7))))"
+},
+{
+"id": "mkt-h-32",
+"tier": "hard",
+"topic": "TEXTJOIN",
+"title": "Channels over CPA target, listed",
+"context": "Comma-separated names.",
+"task": "Return TEXTJOIN(\", \",TRUE,FILTER(K2:K7, SUMIF(B2:B79,K2:K7,C2:C79)/SUMIF(B2:B79,K2:K7,F2:F79)>N2:N7, \"None\")).",
+"hint": "TEXTJOIN(FILTER()).",
+"answer": "=TEXTJOIN(\", \",TRUE,FILTER(K2:K7,SUMIF(B2:B79,K2:K7,C2:C79)/SUMIF(B2:B79,K2:K7,F2:F79)>N2:N7,\"None\"))"
+},
+{
+"id": "mkt-h-33",
+"tier": "hard",
+"topic": "Scenario",
+"title": "Revenue if CVR hit target everywhere",
+"context": "Σ clicks × target CVR × AOV (revenue/conversions overall).",
+"task": "Return ROUND(SUMPRODUCT(E2:E79*XLOOKUP(B2:B79,K2:K7,M2:M7))*SUM(G2:G79)/SUM(F2:F79),2).",
+"hint": "Array XLOOKUP for target CVR.",
+"answer": "=ROUND(SUMPRODUCT(E2:E79*XLOOKUP(B2:B79,K2:K7,M2:M7))*SUM(G2:G79)/SUM(F2:F79),2)"
+}
+]

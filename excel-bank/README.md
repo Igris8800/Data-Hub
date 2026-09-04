@@ -18,5 +18,5 @@ so any correct approach passes.
 | sales | Sales Ledger | Orders, Products, Reps | 100 |
 | hr | HR & Payroll | Employees, Leave, Grades, Holidays | 100 — tenure, bands/compa-ratio, leave balances, attrition, NETWORKDAYS/WORKDAY with holidays |
 | inventory | Inventory & Supply | Stock, Movements, Suppliers, Rules | 100 — reorder points from lead time, days of cover, turnover, ABC, supplier exposure, dead stock, audits |
-| marketing | Marketing Campaigns | | next |
-| finance | Budget vs Actuals | | |
+| marketing | Marketing Campaigns | Weekly, Channels, Campaigns | 100 — CTR/CPC/CPA/ROAS, targets, WoW trends, spilled per-channel metrics, budget utilisation, mix analysis |
+| finance | Budget vs Actuals | | next |

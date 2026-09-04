@@ -1,0 +1,332 @@
+[
+{
+"id": "mkt-m-01",
+"tier": "medium",
+"topic": "SUMIFS",
+"title": "Meta Performance spend",
+"context": "Channel × objective.",
+"task": "Sum C2:C79 where Channel is \"Meta\" and Objective is \"Performance\".",
+"hint": "SUMIFS.",
+"answer": "=SUMIFS(C2:C79,B2:B79,\"Meta\",H2:H79,\"Performance\")"
+},
+{
+"id": "mkt-m-02",
+"tier": "medium",
+"topic": "SUMIFS",
+"title": "May revenue",
+"context": "Revenue for weeks starting in May 2025.",
+"task": "Sum G2:G79 where WeekStart is within May 2025.",
+"hint": "Date-window SUMIFS.",
+"answer": "=SUMIFS(G2:G79,A2:A79,\">=\"&DATE(2025,5,1),A2:A79,\"<=\"&DATE(2025,5,31))"
+},
+{
+"id": "mkt-m-03",
+"tier": "medium",
+"topic": "Ratios",
+"title": "Channel ROAS (Google Search)",
+"context": "Revenue ÷ spend for one channel, 2 dp.",
+"task": "Return ROUND(SUMIF(B2:B79,\"Google Search\",G2:G79)/SUMIF(B2:B79,\"Google Search\",C2:C79),2).",
+"hint": "Two SUMIFs.",
+"answer": "=ROUND(SUMIF(B2:B79,\"Google Search\",G2:G79)/SUMIF(B2:B79,\"Google Search\",C2:C79),2)"
+},
+{
+"id": "mkt-m-04",
+"tier": "medium",
+"topic": "Ratios",
+"title": "Channel CPA (LinkedIn)",
+"context": "Spend ÷ conversions, 2 dp.",
+"task": "Return ROUND(SUMIF(B2:B79,\"LinkedIn\",C2:C79)/SUMIF(B2:B79,\"LinkedIn\",F2:F79),2).",
+"hint": "Ratio of SUMIFs.",
+"answer": "=ROUND(SUMIF(B2:B79,\"LinkedIn\",C2:C79)/SUMIF(B2:B79,\"LinkedIn\",F2:F79),2)"
+},
+{
+"id": "mkt-m-05",
+"tier": "medium",
+"topic": "Ratios",
+"title": "Blended CTR",
+"context": "Total clicks ÷ total impressions as percent text.",
+"task": "Return TEXT(SUM(E2:E79)/SUM(D2:D79),\"0.00%\").",
+"hint": "Ratio of sums, not average of ratios.",
+"answer": "=TEXT(SUM(E2:E79)/SUM(D2:D79),\"0.00%\")"
+},
+{
+"id": "mkt-m-06",
+"tier": "medium",
+"topic": "Ratios",
+"title": "Safe CPC for row 22",
+"context": "Row 22 has zero clicks.",
+"task": "Return IFERROR(C22/E22,\"No clicks\").",
+"hint": "IFERROR.",
+"answer": "=IFERROR(C22/E22,\"No clicks\")"
+},
+{
+"id": "mkt-m-07",
+"tier": "medium",
+"topic": "Targets",
+"title": "CPA vs target (row 2)",
+"context": "Actual CPA compared with channel target.",
+"task": "Return IF(C2/F2 <= VLOOKUP(B2,K2:N7,4,FALSE), \"On target\", \"Over\").",
+"hint": "Lookup inside IF.",
+"answer": "=IF(C2/F2<=VLOOKUP(B2,K2:N7,4,FALSE),\"On target\",\"Over\")"
+},
+{
+"id": "mkt-m-08",
+"tier": "medium",
+"topic": "Targets",
+"title": "Weeks over CPA target",
+"context": "Count rows where actual CPA > channel target (conversions > 0).",
+"task": "Return SUMPRODUCT((F2:F79>0)*(C2:C79/IF(F2:F79=0,1,F2:F79) > XLOOKUP(B2:B79,K2:K7,N2:N7))).",
+"hint": "Array XLOOKUP for targets; guard divide.",
+"answer": "=SUMPRODUCT((F2:F79>0)*(C2:C79/IF(F2:F79=0,1,F2:F79)>XLOOKUP(B2:B79,K2:K7,N2:N7)))"
+},
+{
+"id": "mkt-m-09",
+"tier": "medium",
+"topic": "Targets",
+"title": "CVR gap for row 2",
+"context": "Actual CVR minus target CVR, as percent text.",
+"task": "Return TEXT(F2/E2 − VLOOKUP(B2,K2:N7,3,FALSE),\"0.0%\").",
+"hint": "Difference in TEXT.",
+"answer": "=TEXT(F2/E2-VLOOKUP(B2,K2:N7,3,FALSE),\"0.0%\")"
+},
+{
+"id": "mkt-m-10",
+"tier": "medium",
+"topic": "SUMPRODUCT",
+"title": "Spend-weighted average CPC",
+"context": "Σ spend ÷ Σ clicks vs naive mean.",
+"task": "Return ROUND(SUM(C2:C79)/SUM(E2:E79),2).",
+"hint": "Ratio of sums.",
+"answer": "=ROUND(SUM(C2:C79)/SUM(E2:E79),2)"
+},
+{
+"id": "mkt-m-11",
+"tier": "medium",
+"topic": "SUMPRODUCT",
+"title": "Revenue from Retargeting on Meta",
+"context": "Two masks.",
+"task": "Return SUMPRODUCT((B2:B79=\"Meta\")*(H2:H79=\"Retargeting\")*G2:G79).",
+"hint": "Masks × revenue.",
+"answer": "=SUMPRODUCT((B2:B79=\"Meta\")*(H2:H79=\"Retargeting\")*G2:G79)"
+},
+{
+"id": "mkt-m-12",
+"tier": "medium",
+"topic": "SUMPRODUCT",
+"title": "Profit (revenue − spend), Performance only",
+"context": "Net contribution.",
+"task": "Return ROUND(SUMPRODUCT((H2:H79=\"Performance\")*(G2:G79−C2:C79)),2).",
+"hint": "Mask × difference.",
+"answer": "=ROUND(SUMPRODUCT((H2:H79=\"Performance\")*(G2:G79-C2:C79)),2)"
+},
+{
+"id": "mkt-m-13",
+"tier": "medium",
+"topic": "INDEX/MATCH",
+"title": "Best channel by revenue",
+"context": "Channel name with the highest total revenue.",
+"task": "Return INDEX(K2:K7, MATCH(MAX(SUMIF(B2:B79,K2:K7,G2:G79)), SUMIF(B2:B79,K2:K7,G2:G79), 0)).",
+"hint": "MATCH on a spilled SUMIF.",
+"answer": "=INDEX(K2:K7,MATCH(MAX(SUMIF(B2:B79,K2:K7,G2:G79)),SUMIF(B2:B79,K2:K7,G2:G79),0))"
+},
+{
+"id": "mkt-m-14",
+"tier": "medium",
+"topic": "INDEX/MATCH",
+"title": "Week with the highest total spend",
+"context": "Date of the biggest spending week.",
+"task": "Return INDEX(A2:A79, MATCH(MAX(SUMIF(A2:A79,A2:A79,C2:C79)), SUMIF(A2:A79,A2:A79,C2:C79), 0)).",
+"hint": "SUMIF by week then MATCH.",
+"answer": "=INDEX(A2:A79,MATCH(MAX(SUMIF(A2:A79,A2:A79,C2:C79)),SUMIF(A2:A79,A2:A79,C2:C79),0))"
+},
+{
+"id": "mkt-m-15",
+"tier": "medium",
+"topic": "XLOOKUP",
+"title": "Channel of a campaign",
+"context": "CAMP05's channel.",
+"task": "Return XLOOKUP(\"CAMP05\",P2:P9,R2:R9).",
+"hint": "XLOOKUP.",
+"answer": "=XLOOKUP(\"CAMP05\",P2:P9,R2:R9)"
+},
+{
+"id": "mkt-m-16",
+"tier": "medium",
+"topic": "XLOOKUP",
+"title": "Target CPC with default",
+"context": "Row 34's channel is misspelled.",
+"task": "Return XLOOKUP(B34,K2:K7,L2:L7,\"Unknown channel\").",
+"hint": "if_not_found.",
+"answer": "=XLOOKUP(B34,K2:K7,L2:L7,\"Unknown channel\")"
+},
+{
+"id": "mkt-m-17",
+"tier": "medium",
+"topic": "IFS",
+"title": "ROAS grade for row 2",
+"context": "≥4 A, ≥2 B, ≥1 C, else D.",
+"task": "Return IFS(G2/C2>=4,\"A\",G2/C2>=2,\"B\",G2/C2>=1,\"C\",TRUE,\"D\").",
+"hint": "IFS.",
+"answer": "=IFS(G2/C2>=4,\"A\",G2/C2>=2,\"B\",G2/C2>=1,\"C\",TRUE,\"D\")"
+},
+{
+"id": "mkt-m-18",
+"tier": "medium",
+"topic": "Dates",
+"title": "Weeks active for CAMP02",
+"context": "Campaign duration in weeks.",
+"task": "Return ROUNDUP((T3−S3+1)/7,0).",
+"hint": "Days ÷ 7.",
+"answer": "=ROUNDUP((T3-S3+1)/7,0)"
+},
+{
+"id": "mkt-m-19",
+"tier": "medium",
+"topic": "Dates",
+"title": "Campaigns live on 2025-05-15",
+"context": "Count campaigns whose window contains the date.",
+"task": "Return COUNTIFS(S2:S9,\"<=\"&DATE(2025,5,15),T2:T9,\">=\"&DATE(2025,5,15)).",
+"hint": "Two date criteria.",
+"answer": "=COUNTIFS(S2:S9,\"<=\"&DATE(2025,5,15),T2:T9,\">=\"&DATE(2025,5,15))"
+},
+{
+"id": "mkt-m-20",
+"tier": "medium",
+"topic": "Dates",
+"title": "Daily budget of CAMP01",
+"context": "Budget ÷ days.",
+"task": "Return ROUND(U2/(T2−S2+1),2).",
+"hint": "Divide by duration.",
+"answer": "=ROUND(U2/(T2-S2+1),2)"
+},
+{
+"id": "mkt-m-21",
+"tier": "medium",
+"topic": "Dates",
+"title": "Month label for row 2",
+"context": "\"Apr-2025\".",
+"task": "Return TEXT(A2,\"mmm-yyyy\").",
+"hint": "TEXT.",
+"answer": "=TEXT(A2,\"mmm-yyyy\")"
+},
+{
+"id": "mkt-m-22",
+"tier": "medium",
+"topic": "Trend",
+"title": "Week-over-week spend change (Google Search)",
+"context": "Row 3 vs row 2 (consecutive Google Search weeks), percent text.",
+"task": "Return TEXT((C3−C2)/C2,\"0.0%\").",
+"hint": "(new − old)/old.",
+"answer": "=TEXT((C3-C2)/C2,\"0.0%\")"
+},
+{
+"id": "mkt-m-23",
+"tier": "medium",
+"topic": "Trend",
+"title": "Cumulative spend to row 5 (Google Search)",
+"context": "Running total for the first 4 weeks.",
+"task": "Return SUM(C2:C5).",
+"hint": "Fixed-start SUM.",
+"answer": "=SUM(C2:C5)"
+},
+{
+"id": "mkt-m-24",
+"tier": "medium",
+"topic": "Trend",
+"title": "4-week moving average revenue (rows 2–5)",
+"context": "Smoothing.",
+"task": "Return ROUND(AVERAGE(G2:G5),2).",
+"hint": "AVERAGE of a window.",
+"answer": "=ROUND(AVERAGE(G2:G5),2)"
+},
+{
+"id": "mkt-m-25",
+"tier": "medium",
+"topic": "Ranking",
+"title": "Rank of row 2 by revenue",
+"context": "1 = highest.",
+"task": "Return RANK(G2,G2:G79).",
+"hint": "RANK.",
+"answer": "=RANK(G2,G2:G79)"
+},
+{
+"id": "mkt-m-26",
+"tier": "medium",
+"topic": "LARGE/SMALL",
+"title": "Second-best week revenue",
+"context": "Runner-up.",
+"task": "Return LARGE(G2:G79,2).",
+"hint": "LARGE.",
+"answer": "=LARGE(G2:G79,2)"
+},
+{
+"id": "mkt-m-27",
+"tier": "medium",
+"topic": "Statistics",
+"title": "Median weekly conversions",
+"context": "Typical week.",
+"task": "Return MEDIAN(F2:F79).",
+"hint": "MEDIAN.",
+"answer": "=MEDIAN(F2:F79)"
+},
+{
+"id": "mkt-m-28",
+"tier": "medium",
+"topic": "Statistics",
+"title": "Spend volatility",
+"context": "Sample stdev of spend, 2 dp.",
+"task": "Return ROUND(STDEV.S(C2:C79),2).",
+"hint": "STDEV.S.",
+"answer": "=ROUND(STDEV.S(C2:C79),2)"
+},
+{
+"id": "mkt-m-29",
+"tier": "medium",
+"topic": "Data quality",
+"title": "Rows with zero clicks",
+"context": "Tracking gaps.",
+"task": "Return COUNTIF(E2:E79,0).",
+"hint": "COUNTIF.",
+"answer": "=COUNTIF(E2:E79,0)"
+},
+{
+"id": "mkt-m-30",
+"tier": "medium",
+"topic": "Data quality",
+"title": "Channel names that don't match the table exactly",
+"context": "Case-sensitive mismatch check.",
+"task": "Return the number of rows in B2:B79 whose Channel text is not exactly (case-sensitive) equal to the canonical name from K2:K7.",
+"hint": "XLOOKUP the canonical spelling, then EXACT + NOT inside SUMPRODUCT.",
+"answer": "=SUMPRODUCT(--NOT(EXACT(B2:B79,XLOOKUP(B2:B79,K2:K7,K2:K7))))"
+},
+{
+"id": "mkt-m-31",
+"tier": "medium",
+"topic": "Data quality",
+"title": "Conversions exceeding clicks",
+"context": "Impossible rows.",
+"task": "Return SUMPRODUCT(--(F2:F79>E2:E79)).",
+"hint": "Row-vs-row compare.",
+"answer": "=SUMPRODUCT(--(F2:F79>E2:E79))"
+},
+{
+"id": "mkt-m-32",
+"tier": "medium",
+"topic": "COUNTIFS",
+"title": "Profitable Performance weeks",
+"context": "Count rows with Objective Performance and revenue > spend.",
+"task": "Return SUMPRODUCT((H2:H79=\"Performance\")*(G2:G79>C2:C79)).",
+"hint": "SUMPRODUCT for row-vs-row.",
+"answer": "=SUMPRODUCT((H2:H79=\"Performance\")*(G2:G79>C2:C79))"
+},
+{
+"id": "mkt-m-33",
+"tier": "medium",
+"topic": "Budget",
+"title": "Budget remaining for CAMP08",
+"context": "Budget − Google Search spend inside the campaign window.",
+"task": "Return U9 − SUMIFS(C2:C79,B2:B79,R9,A2:A79,\">=\"&S9,A2:A79,\"<=\"&T9).",
+"hint": "SUMIFS with the campaign's dates.",
+"answer": "=U9-SUMIFS(C2:C79,B2:B79,R9,A2:A79,\">=\"&S9,A2:A79,\"<=\"&T9)"
+}
+]

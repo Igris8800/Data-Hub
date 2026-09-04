@@ -210,7 +210,7 @@ F.TEXTBEFORE = (t, d) => { t = str(scalar(t)); const i = t.indexOf(str(scalar(d)
 F.TEXTAFTER = (t, d) => { t = str(scalar(t)); d = str(scalar(d)); const i = t.indexOf(d); if (i < 0) throw ERR("#N/A"); return t.slice(i + d.length); };
 F.CHAR = (n) => String.fromCharCode(num(scalar(n))); F.CODE = (t) => str(scalar(t)).charCodeAt(0);
 // dates (serials)
-F.DATE = (y, m, d) => { y = num(scalar(y)); m = num(scalar(m)); d = num(scalar(d)); return Math.round((Date.UTC(y, m - 1, d) - EPOCH) / 864e5); };
+F.DATE = (y, m, d) => { const one = (Y, M, D) => Math.round((Date.UTC(num(Y), num(M) - 1, num(D)) - EPOCH) / 864e5); if (isArr(y) || isArr(m) || isArr(d)) return broadcast(broadcast(y, m, (Y, M) => [Y, M]), d, (ym, D) => one(ym[0], ym[1], D)); return one(scalar(y), scalar(m), scalar(d)); };
 F.YEAR = (v) => fromSerial(num(scalar(v))).getUTCFullYear(); F.MONTH = (v) => fromSerial(num(scalar(v))).getUTCMonth() + 1; F.DAY = (v) => fromSerial(num(scalar(v))).getUTCDate();
 F.WEEKDAY = (v, t = 1) => { const d = fromSerial(num(scalar(v))).getUTCDay(); t = num(scalar(t)); return t === 2 ? (d === 0 ? 7 : d) : t === 3 ? (d === 0 ? 6 : d - 1) : d + 1; };
 F.TODAY = () => toSerial(2025, 7, 31); // fixed "today" so answers are deterministic
