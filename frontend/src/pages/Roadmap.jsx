@@ -6,6 +6,7 @@ import { Check, Circle, CircleDot, ExternalLink, Play, RotateCcw, Database, Shee
 import { ROADMAPS } from "@/lib/roadmaps";
 import { COMPANIES } from "@/lib/companies";
 import { EXCEL_WORKBOOKS } from "@/lib/excelTrack";
+import { PYTHON_DATASETS } from "@/lib/pythonTrack";
 import { localSolvedSet } from "@/lib/practiceState";
 import { BELTS } from "@/lib/belts";
 
@@ -18,6 +19,7 @@ function buildQuestionIndex(moduleKey) {
   const idx = {};
   const push = (topic, q) => { (idx[topic] = idx[topic] || []).push(q); };
   if (moduleKey === "sql") for (const c of COMPANIES) for (const q of c.questions) if (q.topic) push(q.topic, { key: `${c.key}-${q.id}`, id: q.id, title: q.title, difficulty: q.difficulty, company: c.key, companyName: c.name });
+  if (moduleKey === "python") for (const w of PYTHON_DATASETS) for (const q of w.questions) if (q.topic) push(q.topic, { key: `${w.key}-${q.id}`, id: q.id, title: q.title, difficulty: q.difficulty, company: w.key, companyName: w.name });
   if (moduleKey === "excel") for (const w of EXCEL_WORKBOOKS) for (const q of w.questions) if (q.topic) push(q.topic, { key: `${w.key}-${q.id}`, id: q.id, title: q.title, difficulty: q.difficulty, company: w.key, companyName: w.name });
   return idx;
 }

@@ -1,0 +1,336 @@
+[
+{
+"id": "py-m-01",
+"tier": "medium",
+"topic": "pandas: merge",
+"title": "Orders with customer names",
+"context": "Inner join.",
+"task": "Set result to orders merged with customers on customer_id, keeping order_id, first_name, last_name, total_amount.",
+"hint": "pd.merge(orders, customers, on='customer_id')[[...]].",
+"answer": "result = orders.merge(customers, on='customer_id')[['order_id', 'first_name', 'last_name', 'total_amount']]"
+},
+{
+"id": "py-m-02",
+"tier": "medium",
+"topic": "pandas: merge",
+"title": "Items with product names",
+"context": "Join detail to master.",
+"task": "Set result to order_items merged with products on product_id, keeping item_id, name, quantity, unit_price.",
+"hint": "merge on product_id.",
+"answer": "result = order_items.merge(products, on='product_id')[['item_id', 'name', 'quantity', 'unit_price']]"
+},
+{
+"id": "py-m-03",
+"tier": "medium",
+"topic": "pandas: merge",
+"title": "Customers who never ordered",
+"context": "Left join + isna.",
+"task": "Set result to a Series of first_name for customers with no orders.",
+"hint": "merge(how='left', indicator=True) or ~isin.",
+"answer": "result = customers.loc[~customers['customer_id'].isin(orders['customer_id']), 'first_name']"
+},
+{
+"id": "py-m-04",
+"tier": "medium",
+"topic": "pandas: groupby",
+"title": "Revenue per category",
+"context": "Merge then groupby.",
+"task": "Set result to a Series: delivered-order revenue (quantity*unit_price) summed per product category, rounded to 2 decimals.",
+"hint": "Merge items→orders (status) and items→products (category).",
+"answer": "m = order_items.merge(orders[['order_id', 'status']], on='order_id').merge(products[['product_id', 'category']], on='product_id')\nm = m[m['status'] == 'delivered']\nresult = (m['quantity'] * m['unit_price']).groupby(m['category']).sum().round(2)"
+},
+{
+"id": "py-m-05",
+"tier": "medium",
+"topic": "pandas: groupby",
+"title": "Multiple aggregations",
+"context": "agg with named outputs.",
+"task": "Set result to a DataFrame indexed by status with columns orders (count) and revenue (sum of total_amount, 2 dp).",
+"hint": "groupby('status').agg(orders=('order_id','count'), revenue=('total_amount','sum')).",
+"answer": "result = orders.groupby('status').agg(orders=('order_id', 'count'), revenue=('total_amount', 'sum')).round(2)"
+},
+{
+"id": "py-m-06",
+"tier": "medium",
+"topic": "pandas: groupby",
+"title": "Average order value per country",
+"context": "Merge then mean.",
+"task": "Set result to a Series of mean total_amount per customer country (2 dp), delivered orders only.",
+"hint": "Merge, filter, groupby, mean.",
+"answer": "m = orders[orders['status'] == 'delivered'].merge(customers[['customer_id', 'country']], on='customer_id')\nresult = m.groupby('country')['total_amount'].mean().round(2)"
+},
+{
+"id": "py-m-07",
+"tier": "medium",
+"topic": "pandas: groupby",
+"title": "Top spender",
+"context": "idxmax.",
+"task": "Set result to the customer_id with the highest total delivered spend (as an int).",
+"hint": "groupby sum then idxmax().",
+"answer": "d = orders[orders['status'] == 'delivered']\nresult = int(d.groupby('customer_id')['total_amount'].sum().idxmax())"
+},
+{
+"id": "py-m-08",
+"tier": "medium",
+"topic": "pandas: groupby",
+"title": "Units sold per product",
+"context": "Sum of quantity by name.",
+"task": "Set result to a Series of quantity summed per product name, sorted descending.",
+"hint": "merge, groupby, sum, sort_values.",
+"answer": "result = order_items.merge(products, on='product_id').groupby('name')['quantity'].sum().sort_values(ascending=False)",
+"order": true
+},
+{
+"id": "py-m-09",
+"tier": "medium",
+"topic": "pandas: filter",
+"title": "Repeat customers",
+"context": "Customers with 3+ orders.",
+"task": "Set result to a Series of order counts per customer_id, keeping only customers with 3 or more orders.",
+"hint": "value_counts() then boolean filter.",
+"answer": "c = orders['customer_id'].value_counts()\nresult = c[c >= 3]"
+},
+{
+"id": "py-m-10",
+"tier": "medium",
+"topic": "pandas: filter",
+"title": "Products never reviewed",
+"context": "Anti-join: products with no review rows.",
+"task": "Set result to a Series of product names with no rows in reviews.",
+"hint": "~products.product_id.isin(reviews.product_id).",
+"answer": "result = products.loc[~products['product_id'].isin(reviews['product_id']), 'name']"
+},
+{
+"id": "py-m-11",
+"tier": "medium",
+"topic": "pandas: apply",
+"title": "Full name column",
+"context": "String concatenation.",
+"task": "Set result to customers with a column full_name = first_name + ' ' + last_name.",
+"hint": "df.a + ' ' + df.b.",
+"answer": "result = customers.assign(full_name=customers['first_name'] + ' ' + customers['last_name'])"
+},
+{
+"id": "py-m-12",
+"tier": "medium",
+"topic": "pandas: apply",
+"title": "Size bucket with a function",
+"context": "apply a Python function.",
+"task": "Set result to orders with a column bucket: 'large' if total_amount >= 300, 'medium' if >= 100, else 'small'.",
+"hint": "Define a function and .apply it.",
+"answer": "def bucket(x):\n    return 'large' if x >= 300 else 'medium' if x >= 100 else 'small'\nresult = orders.assign(bucket=orders['total_amount'].apply(bucket))"
+},
+{
+"id": "py-m-13",
+"tier": "medium",
+"topic": "pandas: strings",
+"title": "Email domains",
+"context": ".str accessor.",
+"task": "Set result to a Series of counts per email domain (text after '@'), for customers with an email.",
+"hint": "str.split('@').str[1].value_counts().",
+"answer": "result = customers['email'].dropna().str.split('@').str[1].value_counts()"
+},
+{
+"id": "py-m-14",
+"tier": "medium",
+"topic": "pandas: strings",
+"title": "Products containing 'Pro'",
+"context": "str.contains.",
+"task": "Set result to product names containing 'Pro' (case-sensitive) as a Series.",
+"hint": "str.contains('Pro').",
+"answer": "result = products.loc[products['name'].str.contains('Pro'), 'name']"
+},
+{
+"id": "py-m-15",
+"tier": "medium",
+"topic": "pandas: dates",
+"title": "Orders per month",
+"context": "to_period or dt.to_period('M').",
+"task": "Set result to a Series of order counts per month, indexed by 'YYYY-MM' strings, sorted by month.",
+"hint": "dt.strftime('%Y-%m').value_counts().sort_index().",
+"answer": "result = orders['order_date'].dt.strftime('%Y-%m').value_counts().sort_index()",
+"order": true
+},
+{
+"id": "py-m-16",
+"tier": "medium",
+"topic": "pandas: dates",
+"title": "Days since signup",
+"context": "Date arithmetic.",
+"task": "Set result to customers with a column days_active = days between signup_date and 2025-07-31 (as int).",
+"hint": "(pd.Timestamp('2025-07-31') - df.col).dt.days.",
+"answer": "result = customers.assign(days_active=(pd.Timestamp('2025-07-31') - customers['signup_date']).dt.days)"
+},
+{
+"id": "py-m-17",
+"tier": "medium",
+"topic": "pandas: dates",
+"title": "Weekend orders share",
+"context": "dayofweek.",
+"task": "Set result to the percentage of orders placed on Saturday or Sunday, rounded to 1 decimal.",
+"hint": "dt.dayofweek >= 5.",
+"answer": "result = round(float((orders['order_date'].dt.dayofweek >= 5).mean() * 100), 1)"
+},
+{
+"id": "py-m-18",
+"tier": "medium",
+"topic": "pandas: pivot",
+"title": "Status by country pivot",
+"context": "crosstab.",
+"task": "Set result to pd.crosstab of customer country (rows) vs order status (columns) for all orders.",
+"hint": "Merge then pd.crosstab.",
+"answer": "m = orders.merge(customers[['customer_id', 'country']], on='customer_id')\nresult = pd.crosstab(m['country'], m['status'])"
+},
+{
+"id": "py-m-19",
+"tier": "medium",
+"topic": "pandas: pivot",
+"title": "Units by category and year",
+"context": "pivot_table.",
+"task": "Set result to a pivot_table with index=category, columns=order year, values=quantity summed, fill_value=0.",
+"hint": "Merge items→orders→products first.",
+"answer": "m = order_items.merge(orders[['order_id', 'order_date']], on='order_id').merge(products[['product_id', 'category']], on='product_id')\nm['year'] = m['order_date'].dt.year\nresult = m.pivot_table(index='category', columns='year', values='quantity', aggfunc='sum', fill_value=0)"
+},
+{
+"id": "py-m-20",
+"tier": "medium",
+"topic": "pandas: missing",
+"title": "Fill missing emails",
+"context": "fillna.",
+"task": "Set result to customers with email missing values replaced by 'no-email'.",
+"hint": "fillna.",
+"answer": "result = customers.assign(email=customers['email'].fillna('no-email'))"
+},
+{
+"id": "py-m-21",
+"tier": "medium",
+"topic": "pandas: rank",
+"title": "Rank products by price",
+"context": "rank(method='dense').",
+"task": "Set result to products with a column price_rank = dense rank by price descending (as int).",
+"hint": "rank(ascending=False, method='dense').astype(int).",
+"answer": "result = products.assign(price_rank=products['price'].rank(ascending=False, method='dense').astype(int))"
+},
+{
+"id": "py-m-22",
+"tier": "medium",
+"topic": "pandas: rank",
+"title": "Top 2 products per category by price",
+"context": "groupby + nlargest.",
+"task": "Set result to a DataFrame of the 2 most expensive products per category with columns category, name, price.",
+"hint": "sort_values then groupby('category').head(2).",
+"answer": "result = products.sort_values(['category', 'price'], ascending=[True, False]).groupby('category').head(2)[['category', 'name', 'price']]"
+},
+{
+"id": "py-m-23",
+"tier": "medium",
+"topic": "pandas: reviews",
+"title": "Average rating per product",
+"context": "Rounded.",
+"task": "Set result to a Series of mean rating per product name (2 dp), for products with reviews.",
+"hint": "merge, groupby, mean.",
+"answer": "result = reviews.merge(products, on='product_id').groupby('name')['rating'].mean().round(2)"
+},
+{
+"id": "py-m-24",
+"tier": "medium",
+"topic": "pandas: reviews",
+"title": "Products rated 4+ on average with 3+ reviews",
+"context": "Filter aggregates.",
+"task": "Set result to a DataFrame indexed by product name with columns avg_rating (2 dp) and n, keeping avg_rating >= 4 and n >= 3.",
+"hint": "agg then boolean mask.",
+"answer": "g = reviews.merge(products, on='product_id').groupby('name')['rating'].agg(avg_rating='mean', n='count')\ng['avg_rating'] = g['avg_rating'].round(2)\nresult = g[(g['avg_rating'] >= 4) & (g['n'] >= 3)]"
+},
+{
+"id": "py-m-25",
+"tier": "medium",
+"topic": "pandas: audit",
+"title": "Orders whose total doesn't match its items",
+"context": "Data validation.",
+"task": "Set result to a Series of order_id values where |total_amount − Σ quantity*unit_price| > 0.01.",
+"hint": "Group items, join, compare with abs.",
+"answer": "s = (order_items['quantity'] * order_items['unit_price']).groupby(order_items['order_id']).sum().rename('item_sum')\nm = orders.merge(s, left_on='order_id', right_index=True)\nresult = m.loc[(m['total_amount'] - m['item_sum']).abs() > 0.01, 'order_id']"
+},
+{
+"id": "py-m-26",
+"tier": "medium",
+"topic": "pandas: audit",
+"title": "Reviews without a purchase",
+"context": "Reviewer never bought the product.",
+"task": "Set result to the number of reviews where no order by that customer contains that product.",
+"hint": "Build a set of (customer_id, product_id) purchased pairs.",
+"answer": "bought = orders.merge(order_items, on='order_id')[['customer_id', 'product_id']].drop_duplicates()\nm = reviews.merge(bought, on=['customer_id', 'product_id'], how='left', indicator=True)\nresult = int((m['_merge'] == 'left_only').sum())"
+},
+{
+"id": "py-m-27",
+"tier": "medium",
+"topic": "Python: dicts",
+"title": "Group a list of tuples",
+"context": "defaultdict.",
+"task": "Given pairs = [('a',1),('b',2),('a',3),('c',4),('b',5)], set result to a dict mapping key → list of values.",
+"hint": "defaultdict(list).",
+"answer": "pairs = [('a',1),('b',2),('a',3),('c',4),('b',5)]\nd = defaultdict(list)\nfor k, v in pairs:\n    d[k].append(v)\nresult = dict(d)"
+},
+{
+"id": "py-m-28",
+"tier": "medium",
+"topic": "Python: functions",
+"title": "Safe division",
+"context": "Handle zero.",
+"task": "Define safe_div(a, b) returning a/b, or None when b is 0; set result to [safe_div(10, 4), safe_div(1, 0)].",
+"hint": "if b == 0: return None.",
+"answer": "def safe_div(a, b):\n    return None if b == 0 else a / b\nresult = [safe_div(10, 4), safe_div(1, 0)]"
+},
+{
+"id": "py-m-29",
+"tier": "medium",
+"topic": "Python: regex",
+"title": "Extract order numbers",
+"context": "re.findall.",
+"task": "Given text = 'Orders ORD-5001 and ORD-5017 shipped; ORD-5003 pending', set result to the list of integers after 'ORD-'.",
+"hint": "re.findall(r'ORD-(\\d+)', text) then int.",
+"answer": "text = 'Orders ORD-5001 and ORD-5017 shipped; ORD-5003 pending'\nresult = [int(x) for x in re.findall(r'ORD-(\\d+)', text)]"
+},
+{
+"id": "py-m-30",
+"tier": "medium",
+"topic": "Python: sorting",
+"title": "Sort by two keys",
+"context": "key with a tuple.",
+"task": "Given people = [('Ann', 30), ('Bob', 25), ('Cid', 30), ('Dee', 25)], set result to the list sorted by age ascending then name descending.",
+"hint": "sorted(people, key=lambda p: (p[1], ...)) — reverse the name by sorting twice or using a negative trick isn't possible for strings; sort by name desc first, then stable-sort by age.",
+"answer": "people = [('Ann', 30), ('Bob', 25), ('Cid', 30), ('Dee', 25)]\nresult = sorted(sorted(people, key=lambda p: p[0], reverse=True), key=lambda p: p[1])",
+"order": true
+},
+{
+"id": "py-m-31",
+"tier": "medium",
+"topic": "Python: comprehension",
+"title": "Nested to flat",
+"context": "Flatten a list of lists.",
+"task": "Given nested = [[1, 2], [3], [4, 5, 6]], set result to the flat list [1,2,3,4,5,6].",
+"hint": "[x for sub in nested for x in sub].",
+"answer": "nested = [[1, 2], [3], [4, 5, 6]]\nresult = [x for sub in nested for x in sub]",
+"order": true
+},
+{
+"id": "py-m-32",
+"tier": "medium",
+"topic": "Python: statistics",
+"title": "Median and stdev",
+"context": "statistics module.",
+"task": "Given nums = [4, 8, 15, 16, 23, 42], set result to (median, round(sample stdev, 3)).",
+"hint": "statistics.median, statistics.stdev.",
+"answer": "nums = [4, 8, 15, 16, 23, 42]\nresult = (statistics.median(nums), round(statistics.stdev(nums), 3))"
+},
+{
+"id": "py-m-33",
+"tier": "medium",
+"topic": "Python: json",
+"title": "Parse JSON",
+"context": "json.loads.",
+"task": "Given payload = '{\"order\": 5001, \"items\": [{\"sku\": 101, \"qty\": 2}, {\"sku\": 104, \"qty\": 1}]}', set result to the total qty across items.",
+"hint": "sum(i['qty'] for i in data['items']).",
+"answer": "payload = '{\"order\": 5001, \"items\": [{\"sku\": 101, \"qty\": 2}, {\"sku\": 104, \"qty\": 1}]}'\ndata = json.loads(payload)\nresult = sum(i['qty'] for i in data['items'])"
+}
+]
