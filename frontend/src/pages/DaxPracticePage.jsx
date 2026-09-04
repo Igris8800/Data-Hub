@@ -153,7 +153,7 @@ export default function DaxPracticePage() {
     try {
       const r = evaluateMeasure(formula, workbook); setResult(r);
       if (r.error) { setStatus({ text: "Error", tone: "bad" }); return; }
-      const ok = resultsMatchDax(r, cur.expected).valueOf ? resultsMatchDax(r, cur.expected) : resultsMatchDax(r, cur.expected);
+      const ok = resultsMatchDax(r, cur.expected);
       const prevWs = loadWorkspace("dax", wsKey) || {};
       saveWorkspace("dax", wsKey, { ...prevWs, formula, result: r, solved: ok || !!prevWs.solved });
       if (ok) {
@@ -194,7 +194,7 @@ export default function DaxPracticePage() {
           </div>
           <div className="ml-auto flex items-center gap-2" data-testid="workbook-selector">
             <ModeGuideButton onClick={() => setModeGuideOpen(true)} />
-            {PYTHON_DATASETS.map((w) => (
+            {DATASETS.map((w) => (
               <button key={w.key} onClick={() => setWbKey(w.key)} data-testid={`dax-model-${w.key}`}
                 className={`inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium border ${w.key === wbKey ? "text-white" : "text-slate-400 border-white/5 hover:bg-white/5"}`}
                 style={w.key === wbKey ? { borderColor: w.color, background: `${w.color}15` } : undefined}>
