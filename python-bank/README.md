@@ -15,3 +15,9 @@ Series by (index, value) pairs (index ignored when it is positional), scalars/li
 |---|---|---|
 | retail | customers, products, orders, order_items, reviews | 100 — Python basics, pandas selection/filter/groupby/merge/pivot, windows, cohorts, RFM, basket, audits |
 | (next) | hr, streaming, finance, sensors | planned to reach 500 |
+
+## Datasets
+| Key | Name | Frames | Questions |
+|---|---|---|---|
+| retail | Retail (pandas) | customers, products, orders, order_items, reviews | 100 |
+| hr | People Analytics (pandas) | employees, departments, reviews, leave | 100 — tenure, attrition, comp/compa-ratio, gender gap, reviews, org, leave |
