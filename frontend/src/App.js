@@ -13,6 +13,7 @@ import SQLPage from "@/pages/SQLPage";
 import PythonPage from "@/pages/PythonPage";
 import StatsPage from "@/pages/StatsPage";
 import PowerBIPage from "@/pages/PowerBIPage";
+import DaxPracticePage from "@/pages/DaxPracticePage";
 import Roadmap from "@/pages/Roadmap";
 import Profile from "@/pages/Profile";
 import Leaderboard from "@/pages/Leaderboard";
@@ -35,6 +36,7 @@ function AppShell() {
           <Route path="/sql" element={<SQLPage />} />
           <Route path="/python" element={<PythonPage />} />
           <Route path="/powerbi" element={<PowerBIPage />} />
+          <Route path="/powerbi/dax" element={<DaxPracticePage />} />
           <Route path="/stats" element={<StatsPage />} />
           <Route path="/roadmap" element={<Roadmap />} />
           <Route path="/profile" element={<Profile />} />

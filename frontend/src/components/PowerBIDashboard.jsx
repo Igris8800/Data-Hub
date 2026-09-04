@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { BarChart3, ChevronDown, ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import { BarChart3, ChevronDown, ChevronRight, Code2, BookOpen, ArrowRight } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, CartesianGrid } from "recharts";
 
 const REGION_SALES = [
@@ -28,6 +29,16 @@ export default function PowerBIDashboard() {
 
   return (
     <div className="rounded-lg border border-white/10 bg-[#151B23] overflow-hidden" data-testid="pbi-dashboard">
+      <div className="mb-5 grid sm:grid-cols-2 gap-3">
+        <div className="rounded-xl border border-[#F2C811]/30 bg-[#F2C811]/5 p-4 flex items-center gap-3">
+          <div className="w-9 h-9 rounded-lg bg-[#F2C811]/20 flex items-center justify-center"><BookOpen className="w-4 h-4 text-[#F2C811]" /></div>
+          <div className="min-w-0"><div className="font-heading text-sm">Power BI Concepts</div><div className="text-xs text-slate-400">You are here · 500+ questions on DAX, modelling, Power Query, visuals, RLS</div></div>
+        </div>
+        <Link to="/powerbi/dax" className="rounded-xl border border-white/10 bg-[#151B23] hover:border-[#F2C811]/40 hover:bg-[#F2C811]/5 transition-colors p-4 flex items-center gap-3 group" data-testid="goto-dax">
+          <div className="w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center"><Code2 className="w-4 h-4 text-[#F2C811]" /></div>
+          <div className="min-w-0 flex-1"><div className="font-heading text-sm flex items-center gap-1">DAX Practice <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" /></div><div className="text-xs text-slate-400">Write real measures against a star schema, graded live</div></div>
+        </Link>
+      </div>
       <button
         onClick={() => setOpen(v => !v)}
         className="w-full flex items-center gap-3 px-4 py-3 border-b border-white/5 hover:bg-white/5 transition-colors"

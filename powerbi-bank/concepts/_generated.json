@@ -1,0 +1,5266 @@
+[
+{
+"tier": "easy",
+"topic": "Fundamentals",
+"title": "What is Power BI",
+"q": "Power BI is primarily a tool for\u2026",
+"options": [
+"Version control",
+"Business intelligence and reporting",
+"Cloud file storage",
+"3D modelling"
+],
+"answer": "Business intelligence and reporting",
+"why": "Power BI is Microsoft's BI and reporting platform."
+},
+{
+"tier": "easy",
+"topic": "Fundamentals",
+"title": "Desktop file type",
+"q": "The Power BI Desktop save file has which extension?",
+"options": [
+".pbix",
+".xlsx",
+".rdl",
+".pptx"
+],
+"answer": ".pbix",
+"why": ".pbix is the native Power BI Desktop file."
+},
+{
+"tier": "easy",
+"topic": "Fundamentals",
+"title": "Three views",
+"q": "Which three views does Power BI Desktop provide on the left rail?",
+"options": [
+"Report, Data, Model",
+"Home, Insert, View",
+"Design, Build, Publish",
+"Query, DAX, Visual"
+],
+"answer": "Report, Data, Model",
+"why": "Report (canvas), Data (tables), and Model (relationships)."
+},
+{
+"tier": "easy",
+"topic": "Fundamentals",
+"title": "Report view purpose",
+"q": "You drag visuals onto the canvas in\u2026",
+"options": [
+"Report view",
+"Data view",
+"Model view",
+"Power Query Editor"
+],
+"answer": "Report view",
+"why": "Report view is where visuals are placed and arranged."
+},
+{
+"tier": "easy",
+"topic": "Fundamentals",
+"title": "Data view purpose",
+"q": "Data view is used to\u2026",
+"options": [
+"Preview the loaded table rows and columns",
+"Draw relationships",
+"Place visuals",
+"Schedule refresh"
+],
+"answer": "Preview the loaded table rows and columns",
+"why": "Data view shows the imported data grid."
+},
+{
+"tier": "easy",
+"topic": "Fundamentals",
+"title": "Model view purpose",
+"q": "Model view is where you\u2026",
+"options": [
+"Create and manage relationships between tables",
+"Write measures only",
+"Publish to the Service",
+"Format the canvas"
+],
+"answer": "Create and manage relationships between tables",
+"why": "Model view manages the data model and relationships."
+},
+{
+"tier": "easy",
+"topic": "Fundamentals",
+"title": "Where to publish",
+"q": "Reports are published to\u2026",
+"options": [
+"The Power BI Service (app.powerbi.com)",
+"OneDrive",
+"A local folder",
+"Excel Online"
+],
+"answer": "The Power BI Service (app.powerbi.com)",
+"why": "Publishing targets the Power BI Service / Fabric."
+},
+{
+"tier": "easy",
+"topic": "Fundamentals",
+"title": "Refresh source data",
+"q": "After the source Excel changes, you update the report by\u2026",
+"options": [
+"Clicking Refresh on the Home tab",
+"Republishing every visual",
+"Reinstalling Power BI",
+"Deleting and re-adding visuals"
+],
+"answer": "Clicking Refresh on the Home tab",
+"why": "Home \u25b8 Refresh re-imports the latest data."
+},
+{
+"tier": "easy",
+"topic": "Fundamentals",
+"title": "Free license name",
+"q": "The individual free authoring license is called\u2026",
+"options": [
+"Power BI Free / Fabric Free",
+"Power BI Pro",
+"Premium Per User",
+"Power BI Embedded"
+],
+"answer": "Power BI Free / Fabric Free",
+"why": "Free/Fabric Free covers personal authoring; sharing needs Pro."
+},
+{
+"tier": "easy",
+"topic": "Fundamentals",
+"title": "Pro license need",
+"q": "To share a report with colleagues in a workspace you generally need\u2026",
+"options": [
+"Power BI Pro (or PPU/Premium)",
+"Only the Free license",
+"Excel",
+"SharePoint"
+],
+"answer": "Power BI Pro (or PPU/Premium)",
+"why": "Collaboration and sharing require Pro or higher."
+},
+{
+"tier": "medium",
+"topic": "Fundamentals",
+"title": "Dataset vs report",
+"q": "In the Power BI Service, a semantic model (dataset) is\u2026",
+"options": [
+"The data model and measures that one or more reports connect to",
+"A single visual",
+"A printed report",
+"A slicer"
+],
+"answer": "The data model and measures that one or more reports connect to",
+"why": "Reports are thin; the semantic model holds data + measures."
+},
+{
+"tier": "medium",
+"topic": "Fundamentals",
+"title": "Workspace role",
+"q": "Which workspace role can edit content but not manage access?",
+"options": [
+"Contributor",
+"Viewer",
+"Admin",
+"Guest"
+],
+"answer": "Contributor",
+"why": "Contributor edits content; Admin/Member manage access."
+},
+{
+"tier": "medium",
+"topic": "Fundamentals",
+"title": "App vs workspace",
+"q": "A Power BI App is best described as\u2026",
+"options": [
+"A packaged, read-optimised distribution of workspace content to consumers",
+"The same as a workspace",
+"A mobile-only feature",
+"A DAX function"
+],
+"answer": "A packaged, read-optimised distribution of workspace content to consumers",
+"why": "Apps distribute curated content to a wide audience."
+},
+{
+"tier": "medium",
+"topic": "Fundamentals",
+"title": "Fabric relationship",
+"q": "Power BI is now part of which broader Microsoft platform?",
+"options": [
+"Microsoft Fabric",
+"Microsoft Viva",
+"Microsoft Dynamics",
+"Microsoft Defender"
+],
+"answer": "Microsoft Fabric",
+"why": "Power BI is the BI experience within Microsoft Fabric."
+},
+{
+"tier": "hard",
+"topic": "Fundamentals",
+"title": "Deployment pipelines",
+"q": "Deployment pipelines in Premium/PPU are used to\u2026",
+"options": [
+"Promote content across Dev, Test and Production stages",
+"Refresh data faster",
+"Write DAX in bulk",
+"Design visuals"
+],
+"answer": "Promote content across Dev, Test and Production stages",
+"why": "Pipelines manage Dev\u2192Test\u2192Prod release of BI content."
+},
+{
+"tier": "hard",
+"topic": "Fundamentals",
+"title": "Endorsement",
+"q": "Marking a semantic model as 'Certified' is a form of\u2026",
+"options": [
+"Endorsement to signal trusted, governed content",
+"Row-level security",
+"Incremental refresh",
+"Query folding"
+],
+"answer": "Endorsement to signal trusted, governed content",
+"why": "Promoted/Certified are endorsement levels for governance."
+},
+{
+"tier": "medium",
+"topic": "Power BI Service",
+"title": "Service feature",
+"q": "Row-level security is enforced for users with the\u2026",
+"options": [
+"gateway",
+"no role",
+"Viewer role who are members of a role",
+"Admin role always ignoring RLS"
+],
+"answer": "Viewer role who are members of a role",
+"why": "Viewer role who are members of a role."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "ALLEXCEPT()",
+"q": "What does the DAX function ALLEXCEPT() do?",
+"options": [
+"keeps filters coming from outside the current visual",
+"removes filters from a table except on the given columns",
+"removes filters from a table or columns",
+"evaluates an expression in a modified filter context"
+],
+"answer": "removes filters from a table except on the given columns",
+"why": "ALLEXCEPT removes filters from a table except on the given columns."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "DISTINCTCOUNT()",
+"q": "What does the DAX function DISTINCTCOUNT() do?",
+"options": [
+"counts the distinct values in a column",
+"returns the smallest value in a column",
+"adds up all the numbers in a column",
+"returns the arithmetic mean of a column"
+],
+"answer": "counts the distinct values in a column",
+"why": "DISTINCTCOUNT counts the distinct values in a column."
+},
+{
+"tier": "medium",
+"topic": "Read DAX",
+"title": "What does this compute?",
+"q": "What does this measure compute?  =  CALCULATE([Total Sales], Product[Category]=\"Bikes\")",
+"options": [
+"sales ignoring any filter on the Product table",
+"the rank of each product by sales among all products",
+"sales for red items without discarding other Product[Color] filters",
+"total sales filtered to the Bikes category"
+],
+"answer": "total sales filtered to the Bikes category",
+"why": "It returns total sales filtered to the Bikes category."
+},
+{
+"tier": "easy",
+"topic": "Concepts",
+"title": "DIVIDE vs /",
+"q": "DIVIDE is preferred over the / operator because it \u2026.",
+"options": [
+"returns text",
+"rounds automatically",
+"is faster always",
+"handles divide-by-zero gracefully"
+],
+"answer": "handles divide-by-zero gracefully",
+"why": "handles divide-by-zero gracefully."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "MAXX()",
+"q": "What does the DAX function MAXX() do?",
+"options": [
+"iterates a table and averages an expression per row",
+"iterates a table and returns the largest expression value",
+"iterates a table and returns the smallest expression value",
+"iterates a table and sums an expression evaluated per row"
+],
+"answer": "iterates a table and returns the largest expression value",
+"why": "MAXX iterates a table and returns the largest expression value."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Which function table",
+"q": "Which DAX function returns a subset of a table that meets a condition?",
+"options": [
+"VALUES",
+"DISTINCT",
+"FILTER",
+"SAMEPERIODLASTYEAR"
+],
+"answer": "FILTER",
+"why": "FILTER returns a subset of a table that meets a condition."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Which function text",
+"q": "Which DAX function iterates a table and joins an expression into a delimited string?",
+"options": [
+"CONCATENATE",
+"FORMAT",
+"LEFT",
+"CONCATENATEX"
+],
+"answer": "CONCATENATEX",
+"why": "CONCATENATEX iterates a table and joins an expression into a delimited string."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Which function iter",
+"q": "Which DAX function iterates a table and counts non-blank expression results?",
+"options": [
+"COUNTX",
+"MINX",
+"AVERAGEX",
+"SUMX"
+],
+"answer": "COUNTX",
+"why": "COUNTX iterates a table and counts non-blank expression results."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Pick math",
+"q": "Which DAX function returns the remainder of a division?",
+"options": [
+"CEILING",
+"CONVERT",
+"MOD",
+"FLOOR"
+],
+"answer": "MOD",
+"why": "MOD returns the remainder of a division."
+},
+{
+"tier": "easy",
+"topic": "Power Query",
+"title": "Split Column",
+"q": "In Power Query, 'Split Column' is used to\u2026",
+"options": [
+"lets you type a small static table by hand",
+"stacks the rows of two queries, like a SQL UNION",
+"pushes transformation steps back to the source as a native query",
+"divides one column into several by a delimiter or width"
+],
+"answer": "divides one column into several by a delimiter or width",
+"why": "Split Column divides one column into several by a delimiter or width."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Pick time",
+"q": "Which DAX function returns a measure's value at the start of the month?",
+"options": [
+"CALENDARAUTO",
+"OPENINGBALANCEMONTH",
+"CALENDAR",
+"PREVIOUSYEAR"
+],
+"answer": "OPENINGBALANCEMONTH",
+"why": "OPENINGBALANCEMONTH returns a measure's value at the start of the month."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "SUMX()",
+"q": "What does the DAX function SUMX() do?",
+"options": [
+"iterates a table and averages an expression per row",
+"iterates a table and returns the smallest expression value",
+"iterates a table and sums an expression evaluated per row",
+"iterates a table and returns the largest expression value"
+],
+"answer": "iterates a table and sums an expression evaluated per row",
+"why": "SUMX iterates a table and sums an expression evaluated per row."
+},
+{
+"tier": "easy",
+"topic": "Power Query",
+"title": "Power Query Editor",
+"q": "In Power Query, 'Power Query Editor' is used to\u2026",
+"options": [
+"combines two queries by matching keys, like a SQL JOIN",
+"infers a transformation from sample outputs you type",
+"transforms and cleans source data before it loads (the ETL layer)",
+"let you make queries dynamic (e.g. a file path or a date range)"
+],
+"answer": "transforms and cleans source data before it loads (the ETL layer)",
+"why": "Power Query Editor transforms and cleans source data before it loads (the ETL layer)."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "MIN()",
+"q": "What does the DAX function MIN() do?",
+"options": [
+"returns the smallest value in a column",
+"returns the arithmetic mean of a column",
+"returns the largest value in a column",
+"adds up all the numbers in a column"
+],
+"answer": "returns the smallest value in a column",
+"why": "MIN returns the smallest value in a column."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "RIGHT()",
+"q": "What does the DAX function RIGHT() do?",
+"options": [
+"converts text to lower case",
+"returns the rightmost characters of text",
+"converts text to upper case",
+"removes extra spaces from text"
+],
+"answer": "returns the rightmost characters of text",
+"why": "RIGHT returns the rightmost characters of text."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Pick table",
+"q": "Which DAX function returns the Cartesian product of two tables?",
+"options": [
+"SUMMARIZE",
+"ADDCOLUMNS",
+"CROSSJOIN",
+"SELECTCOLUMNS"
+],
+"answer": "CROSSJOIN",
+"why": "CROSSJOIN returns the Cartesian product of two tables."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "DISTINCT()",
+"q": "What does the DAX function DISTINCT() do?",
+"options": [
+"returns a subset of a table that meets a condition",
+"returns a one-column table of distinct values",
+"returns the distinct values of a column in the current context",
+"matches an expression against several values and returns the corresponding result"
+],
+"answer": "returns a one-column table of distinct values",
+"why": "DISTINCT returns a one-column table of distinct values."
+},
+{
+"tier": "easy",
+"topic": "Formatting & UX",
+"title": "Report formatting",
+"q": "A visual header tooltip explaining a KPI can be added via\u2026",
+"options": [
+"Power Query",
+"the visual's tooltip / header icon text",
+"a measure name only",
+"RLS"
+],
+"answer": "the visual's tooltip / header icon text",
+"why": "the visual's tooltip / header icon text."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "ISBLANK()",
+"q": "What does the DAX function ISBLANK() do?",
+"options": [
+"tests whether an expression returns an error",
+"returns an alternative value when an expression errors",
+"returns the first non-blank argument",
+"tests whether a value is blank"
+],
+"answer": "tests whether a value is blank",
+"why": "ISBLANK tests whether a value is blank."
+},
+{
+"tier": "medium",
+"topic": "Choosing visuals",
+"title": "Best visual",
+"q": "Which visual best helps you show how starting revenue changes with additions and subtractions?",
+"options": [
+"Scatter chart",
+"KPI visual",
+"Waterfall chart",
+"Ribbon chart"
+],
+"answer": "Waterfall chart",
+"why": "A Waterfall chart is the standard choice to show how starting revenue changes with additions and subtractions."
+},
+{
+"tier": "medium",
+"topic": "Choosing visuals",
+"title": "Best visual",
+"q": "Which visual best helps you compare revenue across 5 product categories?",
+"options": [
+"Table",
+"Clustered column chart",
+"Waterfall chart",
+"Card"
+],
+"answer": "Clustered column chart",
+"why": "A Clustered column chart is the standard choice to compare revenue across 5 product categories."
+},
+{
+"tier": "medium",
+"topic": "Visuals",
+"title": "Scatter chart",
+"q": "Which visual is best for showing the relationship between two numeric measures?",
+"options": [
+"Scatter chart",
+"Matrix",
+"Line chart",
+"Waterfall chart"
+],
+"answer": "Scatter chart",
+"why": "A Scatter chart is designed for showing the relationship between two numeric measures."
+},
+{
+"tier": "medium",
+"topic": "Power Query",
+"title": "Group By",
+"q": "In Power Query, 'Group By' is used to\u2026",
+"options": [
+"aggregates rows into summary rows in Power Query",
+"stacks the rows of two queries, like a SQL UNION",
+"creates a new query that starts from another query's output",
+"record each transformation so it replays on every refresh"
+],
+"answer": "aggregates rows into summary rows in Power Query",
+"why": "Group By aggregates rows into summary rows in Power Query."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "CROSSFILTER()",
+"q": "What does the DAX function CROSSFILTER() do?",
+"options": [
+"returns the number of characters in text",
+"returns a value by matching one or more search columns",
+"returns the leftmost characters of a text value",
+"changes the cross-filter direction inside a calculation"
+],
+"answer": "changes the cross-filter direction inside a calculation",
+"why": "CROSSFILTER changes the cross-filter direction inside a calculation."
+},
+{
+"tier": "hard",
+"topic": "Service & performance",
+"title": "Reduce model size",
+"q": "A common way to shrink an Import model is to \u2026.",
+"options": [
+"use more slicers",
+"remove unused columns and high-cardinality columns",
+"disable relationships",
+"add more visuals"
+],
+"answer": "remove unused columns and high-cardinality columns",
+"why": "remove unused columns and high-cardinality columns."
+},
+{
+"tier": "medium",
+"topic": "Choosing visuals",
+"title": "Best visual",
+"q": "Which visual best helps you show the geographic distribution of customers?",
+"options": [
+"Scatter chart",
+"Treemap",
+"Map",
+"Waterfall chart"
+],
+"answer": "Map",
+"why": "A Map is the standard choice to show the geographic distribution of customers."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "NATURALINNERJOIN()",
+"q": "What does the DAX function NATURALINNERJOIN() do?",
+"options": [
+"returns a table keeping only chosen (renamed) columns",
+"groups a table by columns and adds summary columns",
+"returns a table with new calculated columns added",
+"joins two tables on their common columns"
+],
+"answer": "joins two tables on their common columns",
+"why": "NATURALINNERJOIN joins two tables on their common columns."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Which function text",
+"q": "Which DAX function returns the position of one text string inside another (case-insensitive)?",
+"options": [
+"CONCATENATE",
+"SEARCH",
+"CONCATENATEX",
+"FORMAT"
+],
+"answer": "SEARCH",
+"why": "SEARCH returns the position of one text string inside another (case-insensitive)."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Pick table",
+"q": "Which DAX function returns a table with new calculated columns added?",
+"options": [
+"GROUPBY",
+"SELECTCOLUMNS",
+"ADDCOLUMNS",
+"SUMMARIZE"
+],
+"answer": "ADDCOLUMNS",
+"why": "ADDCOLUMNS returns a table with new calculated columns added."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "AVERAGEX()",
+"q": "What does the DAX function AVERAGEX() do?",
+"options": [
+"iterates a table and sums an expression evaluated per row",
+"iterates a table and averages an expression per row",
+"iterates a table and returns the smallest expression value",
+"iterates a table and returns the largest expression value"
+],
+"answer": "iterates a table and averages an expression per row",
+"why": "AVERAGEX iterates a table and averages an expression per row."
+},
+{
+"tier": "medium",
+"topic": "DAX syntax",
+"title": "DAX syntax",
+"q": "A DAX table expression (e.g. in a calculated table) returns\u2026",
+"options": [
+"a table",
+"a visual",
+"a scalar",
+"text only"
+],
+"answer": "a table",
+"why": "a table."
+},
+{
+"tier": "medium",
+"topic": "Troubleshooting",
+"title": "Spot the cause",
+"q": "Two visuals show different totals for 'Sales' unexpectedly. Check whether \u2026.",
+"options": [
+"refresh failed",
+"they use different filters, measures or interactions",
+"the theme changed",
+"the file is corrupt"
+],
+"answer": "they use different filters, measures or interactions",
+"why": "they use different filters, measures or interactions."
+},
+{
+"tier": "hard",
+"topic": "Data modelling",
+"title": "Bidirectional risk",
+"q": "Bidirectional cross-filtering should be used sparingly because it can \u2026.",
+"options": [
+"create ambiguous filter paths and performance issues",
+"disable slicers",
+"prevent publishing",
+"delete data"
+],
+"answer": "create ambiguous filter paths and performance issues",
+"why": "create ambiguous filter paths and performance issues."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "FLOOR()",
+"q": "What does the DAX function FLOOR() do?",
+"options": [
+"returns the remainder of a division",
+"rounds a number up to a multiple",
+"converts a value to a specified data type",
+"rounds a number down to a multiple"
+],
+"answer": "rounds a number down to a multiple",
+"why": "FLOOR rounds a number down to a multiple."
+},
+{
+"tier": "hard",
+"topic": "Service & performance",
+"title": "Dynamic RLS",
+"q": "Dynamic RLS commonly filters using \u2026 to match the logged-in user.",
+"options": [
+"USERPRINCIPALNAME()",
+"TODAY()",
+"RAND()",
+"BLANK()"
+],
+"answer": "USERPRINCIPALNAME()",
+"why": "USERPRINCIPALNAME()."
+},
+{
+"tier": "medium",
+"topic": "Concepts",
+"title": "Star vs flat",
+"q": "Compared with one flat table, a star schema usually gives \u2026.",
+"options": [
+"larger files always",
+"simpler DAX and better performance",
+"no relationships",
+"slower visuals"
+],
+"answer": "simpler DAX and better performance",
+"why": "simpler DAX and better performance."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Pick time",
+"q": "Which DAX function returns a one-column date table between two dates?",
+"options": [
+"CALENDAR",
+"CALENDARAUTO",
+"PREVIOUSYEAR",
+"NEXTMONTH"
+],
+"answer": "CALENDAR",
+"why": "CALENDAR returns a one-column date table between two dates."
+},
+{
+"tier": "medium",
+"topic": "DAX syntax",
+"title": "DAX syntax",
+"q": "The DAX operator for logical AND inside a boolean expression is\u2026",
+"options": [
+"||",
+"AND only",
+"+",
+"&&"
+],
+"answer": "&&",
+"why": "&&."
+},
+{
+"tier": "easy",
+"topic": "Power Query",
+"title": "Replace Values",
+"q": "In Power Query, 'Replace Values' is used to\u2026",
+"options": [
+"aggregates rows into summary rows in Power Query",
+"substitutes one value for another in a column",
+"lets you type a small static table by hand",
+"divides one column into several by a delimiter or width"
+],
+"answer": "substitutes one value for another in a column",
+"why": "Replace Values substitutes one value for another in a column."
+},
+{
+"tier": "easy",
+"topic": "Concepts",
+"title": "Relationship key",
+"q": "A relationship should be built on \u2026.",
+"options": [
+"a measure",
+"a visual",
+"any two columns",
+"a matching key column on both tables"
+],
+"answer": "a matching key column on both tables",
+"why": "a matching key column on both tables."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Which function context",
+"q": "Which DAX function refers to an earlier row context (legacy pattern before variables)?",
+"options": [
+"EARLIER",
+"CALCULATE",
+"ALL",
+"ALLEXCEPT"
+],
+"answer": "EARLIER",
+"why": "EARLIER refers to an earlier row context (legacy pattern before variables)."
+},
+{
+"tier": "medium",
+"topic": "Report design",
+"title": "Conditional formatting",
+"q": "Conditional formatting on a value can be driven by \u2026.",
+"options": [
+"only icons",
+"nothing",
+"only rules",
+"rules, field values, a colour scale or icons"
+],
+"answer": "rules, field values, a colour scale or icons",
+"why": "rules, field values, a colour scale or icons."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "SAMEPERIODLASTYEAR()",
+"q": "What does the DAX function SAMEPERIODLASTYEAR() do?",
+"options": [
+"shifts the date context back one year",
+"returns a year-to-date total of an expression",
+"returns a quarter-to-date total of an expression",
+"returns a month-to-date total of an expression"
+],
+"answer": "shifts the date context back one year",
+"why": "SAMEPERIODLASTYEAR shifts the date context back one year."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "DATEADD()",
+"q": "What does the DAX function DATEADD() do?",
+"options": [
+"shifts the date context by a number of intervals",
+"returns a quarter-to-date total of an expression",
+"returns a month-to-date total of an expression",
+"returns a year-to-date total of an expression"
+],
+"answer": "shifts the date context by a number of intervals",
+"why": "DATEADD shifts the date context by a number of intervals."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Which function time",
+"q": "Which DAX function returns a quarter-to-date total of an expression?",
+"options": [
+"TOTALQTD",
+"SAMEPERIODLASTYEAR",
+"TOTALYTD",
+"TOTALMTD"
+],
+"answer": "TOTALQTD",
+"why": "TOTALQTD returns a quarter-to-date total of an expression."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "REMOVEFILTERS()",
+"q": "What does the DAX function REMOVEFILTERS() do?",
+"options": [
+"evaluates an expression in a modified filter context",
+"removes filters from a table or columns",
+"removes filters from a table except on the given columns",
+"clears filters from the specified tables or columns"
+],
+"answer": "clears filters from the specified tables or columns",
+"why": "REMOVEFILTERS clears filters from the specified tables or columns."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Pick context",
+"q": "Which DAX function applies the values of a table as a filter on columns?",
+"options": [
+"FIRSTNONBLANK",
+"TRIM",
+"CROSSJOIN",
+"TREATAS"
+],
+"answer": "TREATAS",
+"why": "TREATAS applies the values of a table as a filter on columns."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "MINX()",
+"q": "What does the DAX function MINX() do?",
+"options": [
+"iterates a table and returns the largest expression value",
+"iterates a table and returns the smallest expression value",
+"iterates a table and sums an expression evaluated per row",
+"iterates a table and averages an expression per row"
+],
+"answer": "iterates a table and returns the smallest expression value",
+"why": "MINX iterates a table and returns the smallest expression value."
+},
+{
+"tier": "medium",
+"topic": "Power BI Service",
+"title": "Service feature",
+"q": "Usage metrics reports show\u2026",
+"options": [
+"refresh logs only",
+"DAX performance only",
+"how often reports and pages are viewed",
+"RLS roles"
+],
+"answer": "how often reports and pages are viewed",
+"why": "how often reports and pages are viewed."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Pick rank",
+"q": "Which DAX function returns the rank of a number in a list (ties share a rank)?",
+"options": [
+"SUMMARIZE",
+"SELECTCOLUMNS",
+"RANK.EQ",
+"ADDCOLUMNS"
+],
+"answer": "RANK.EQ",
+"why": "RANK.EQ returns the rank of a number in a list (ties share a rank)."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Which function context",
+"q": "Which DAX function tests whether exactly one value is in the filter context for a column?",
+"options": [
+"CALCULATE",
+"ALL",
+"ALLEXCEPT",
+"HASONEVALUE"
+],
+"answer": "HASONEVALUE",
+"why": "HASONEVALUE tests whether exactly one value is in the filter context for a column."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "UNION()",
+"q": "What does the DAX function UNION() do?",
+"options": [
+"groups a table by columns and adds summary columns",
+"returns a table with new calculated columns added",
+"returns a table keeping only chosen (renamed) columns",
+"stacks two tables with matching columns"
+],
+"answer": "stacks two tables with matching columns",
+"why": "UNION stacks two tables with matching columns."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "LOWER()",
+"q": "What does the DAX function LOWER() do?",
+"options": [
+"converts text to lower case",
+"converts text to upper case",
+"returns the number of characters in text",
+"removes extra spaces from text"
+],
+"answer": "converts text to lower case",
+"why": "LOWER converts text to lower case."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "MOD()",
+"q": "What does the DAX function MOD() do?",
+"options": [
+"converts a value to a specified data type",
+"rounds a number down to a multiple",
+"returns the remainder of a division",
+"rounds a number up to a multiple"
+],
+"answer": "returns the remainder of a division",
+"why": "MOD returns the remainder of a division."
+},
+{
+"tier": "easy",
+"topic": "Report design",
+"title": "Drill down",
+"q": "Drill-down on a hierarchy visual lets you \u2026.",
+"options": [
+"change the theme",
+"export data",
+"move from a summary level to a more detailed level",
+"set RLS"
+],
+"answer": "move from a summary level to a more detailed level",
+"why": "move from a summary level to a more detailed level."
+},
+{
+"tier": "medium",
+"topic": "Concepts",
+"title": "Implicit measure",
+"q": "Dragging a numeric column into a visual creates an \u2026.",
+"options": [
+"implicit measure (default aggregation)",
+"explicit measure",
+"calculated column",
+"relationship"
+],
+"answer": "implicit measure (default aggregation)",
+"why": "implicit measure (default aggregation)."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "NOT()",
+"q": "What does the DAX function NOT() do?",
+"options": [
+"tests whether an expression returns an error",
+"returns an alternative value when an expression errors",
+"tests whether a value is blank",
+"reverses a boolean value"
+],
+"answer": "reverses a boolean value",
+"why": "NOT reverses a boolean value."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "PREVIOUSMONTH()",
+"q": "What does the DAX function PREVIOUSMONTH() do?",
+"options": [
+"returns a month-to-date total of an expression",
+"returns a year-to-date total of an expression",
+"returns a quarter-to-date total of an expression",
+"returns the dates of the previous month"
+],
+"answer": "returns the dates of the previous month",
+"why": "PREVIOUSMONTH returns the dates of the previous month."
+},
+{
+"tier": "hard",
+"topic": "Troubleshooting",
+"title": "Spot the cause",
+"q": "A revenue total is inflated after joining a fact table to a details table. The likely cause is \u2026.",
+"options": [
+"RLS",
+"a one-to-many join causing row duplication (fan-out)",
+"the wrong theme",
+"a slicer"
+],
+"answer": "a one-to-many join causing row duplication (fan-out)",
+"why": "a one-to-many join causing row duplication (fan-out)."
+},
+{
+"tier": "medium",
+"topic": "Concepts",
+"title": "Measure organisation",
+"q": "Storing measures in a dedicated empty 'Measures' table helps by \u2026.",
+"options": [
+"folding queries",
+"making them faster",
+"enabling RLS",
+"keeping the field list tidy"
+],
+"answer": "keeping the field list tidy",
+"why": "keeping the field list tidy."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "TODAY()",
+"q": "What does the DAX function TODAY() do?",
+"options": [
+"returns the day of the month of a date",
+"returns the year of a date",
+"returns the month number of a date",
+"returns the current date"
+],
+"answer": "returns the current date",
+"why": "TODAY returns the current date."
+},
+{
+"tier": "hard",
+"topic": "Visuals",
+"title": "Decomposition tree use",
+"q": "A Decomposition tree is most appropriate for\u2026",
+"options": [
+"showing part-to-whole with nested rectangles",
+"displaying a single KPI number",
+"showing progress toward a single target on a dial",
+"interactively breaking a measure down by dimensions"
+],
+"answer": "interactively breaking a measure down by dimensions",
+"why": "A Decomposition tree is designed for interactively breaking a measure down by dimensions."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Which function syntax",
+"q": "Which DAX function stores an intermediate result for reuse within a measure?",
+"options": [
+"VAR",
+"MIN",
+"SUM",
+"AVERAGE"
+],
+"answer": "VAR",
+"why": "VAR stores an intermediate result for reuse within a measure."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "TOPN()",
+"q": "What does the DAX function TOPN() do?",
+"options": [
+"returns the arithmetic mean of a column",
+"keeps filters coming from outside the current visual",
+"ranks the rows of a table by an expression",
+"returns the top N rows of a table by an expression"
+],
+"answer": "returns the top N rows of a table by an expression",
+"why": "TOPN returns the top N rows of a table by an expression."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Which function table",
+"q": "Which DAX function returns the distinct values of a column in the current context?",
+"options": [
+"FILTER",
+"VALUES",
+"DISTINCT",
+"ALLSELECTED"
+],
+"answer": "VALUES",
+"why": "VALUES returns the distinct values of a column in the current context."
+},
+{
+"tier": "hard",
+"topic": "Data modelling",
+"title": "Mark as date table",
+"q": "'Mark as date table' is needed so that \u2026.",
+"options": [
+"visuals render faster",
+"RLS applies",
+"time-intelligence functions work correctly against it",
+"the table sorts alphabetically"
+],
+"answer": "time-intelligence functions work correctly against it",
+"why": "time-intelligence functions work correctly against it."
+},
+{
+"tier": "medium",
+"topic": "Report design",
+"title": "Sync slicers",
+"q": "Sync slicers let you \u2026.",
+"options": [
+"refresh data",
+"merge queries",
+"share a slicer's selection across multiple pages",
+"publish"
+],
+"answer": "share a slicer's selection across multiple pages",
+"why": "share a slicer's selection across multiple pages."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "FIRSTNONBLANK()",
+"q": "What does the DAX function FIRSTNONBLANK() do?",
+"options": [
+"applies the values of a table as a filter on columns",
+"returns TRUE if either condition is true",
+"returns the first value where an expression is non-blank",
+"iterates a table and returns the smallest expression value"
+],
+"answer": "returns the first value where an expression is non-blank",
+"why": "FIRSTNONBLANK returns the first value where an expression is non-blank."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Pick table",
+"q": "Which DAX function groups a table by columns and adds summary columns?",
+"options": [
+"GROUPBY",
+"SELECTCOLUMNS",
+"ADDCOLUMNS",
+"SUMMARIZE"
+],
+"answer": "SUMMARIZE",
+"why": "SUMMARIZE groups a table by columns and adds summary columns."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "CEILING()",
+"q": "What does the DAX function CEILING() do?",
+"options": [
+"rounds a number up to a multiple",
+"converts a value to a specified data type",
+"rounds a number down to a multiple",
+"returns the remainder of a division"
+],
+"answer": "rounds a number up to a multiple",
+"why": "CEILING rounds a number up to a multiple."
+},
+{
+"tier": "medium",
+"topic": "Report design",
+"title": "Filter scopes",
+"q": "The Filters pane can apply filters at the \u2026 levels.",
+"options": [
+"model only",
+"visual, page and report",
+"page only",
+"visual only"
+],
+"answer": "visual, page and report",
+"why": "visual, page and report."
+},
+{
+"tier": "medium",
+"topic": "Choosing visuals",
+"title": "Best visual",
+"q": "Which visual best helps you show the correlation between ad spend and sales?",
+"options": [
+"Scatter chart",
+"Map",
+"Key influencers",
+"Slicer"
+],
+"answer": "Scatter chart",
+"why": "A Scatter chart is the standard choice to show the correlation between ad spend and sales."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "ALL()",
+"q": "What does the DAX function ALL() do?",
+"options": [
+"keeps filters coming from outside the current visual",
+"evaluates an expression in a modified filter context",
+"removes filters from a table except on the given columns",
+"removes filters from a table or columns"
+],
+"answer": "removes filters from a table or columns",
+"why": "ALL removes filters from a table or columns."
+},
+{
+"tier": "medium",
+"topic": "Report design",
+"title": "Buttons and actions",
+"q": "A button's action can navigate to \u2026.",
+"options": [
+"a relationship",
+"a measure",
+"a query step",
+"a bookmark, page or URL"
+],
+"answer": "a bookmark, page or URL",
+"why": "a bookmark, page or URL."
+},
+{
+"tier": "medium",
+"topic": "Power BI Service",
+"title": "Service feature",
+"q": "To share outside your org securely you might use\u2026",
+"options": [
+"a slicer",
+"a gateway only",
+"publish to web (public) or B2B sharing (careful with each)",
+"email the .pbix"
+],
+"answer": "publish to web (public) or B2B sharing (careful with each)",
+"why": "publish to web (public) or B2B sharing (careful with each)."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "CALENDAR()",
+"q": "What does the DAX function CALENDAR() do?",
+"options": [
+"returns a one-column date table between two dates",
+"returns the dates of the previous year",
+"returns a date table spanning all dates in the model",
+"returns the dates of the next month"
+],
+"answer": "returns a one-column date table between two dates",
+"why": "CALENDAR returns a one-column date table between two dates."
+},
+{
+"tier": "medium",
+"topic": "Power BI Service",
+"title": "Service feature",
+"q": "A certified semantic model signals that it is\u2026",
+"options": [
+"trusted and governed for reuse",
+"faster",
+"larger",
+"public"
+],
+"answer": "trusted and governed for reuse",
+"why": "trusted and governed for reuse."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Pick agg",
+"q": "Which DAX function returns the k-th percentile of values (inclusive)?",
+"options": [
+"MEDIAN",
+"STDEV.P",
+"VAR.P",
+"PERCENTILE.INC"
+],
+"answer": "PERCENTILE.INC",
+"why": "PERCENTILE.INC returns the k-th percentile of values (inclusive)."
+},
+{
+"tier": "medium",
+"topic": "Read DAX",
+"title": "What does this compute?",
+"q": "What does this measure compute?  =  CALCULATE([Sales], SAMEPERIODLASTYEAR(Date[Date]))",
+"options": [
+"sales for the same period one year earlier",
+"each product's share of total sales",
+"the number of products priced above 100",
+"the sum of quantity times price over every sales row"
+],
+"answer": "sales for the same period one year earlier",
+"why": "It returns sales for the same period one year earlier."
+},
+{
+"tier": "medium",
+"topic": "Visuals",
+"title": "Treemap use",
+"q": "A Treemap is most appropriate for\u2026",
+"options": [
+"showing a trend over continuous time",
+"showing progress toward a single target on a dial",
+"showing part-to-whole with nested rectangles",
+"showing a value against a target with a trend"
+],
+"answer": "showing part-to-whole with nested rectangles",
+"why": "A Treemap is designed for showing part-to-whole with nested rectangles."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Pick rel",
+"q": "Which DAX function changes the cross-filter direction inside a calculation?",
+"options": [
+"CROSSFILTER",
+"LOOKUPVALUE",
+"WEEKDAY",
+"DAY"
+],
+"answer": "CROSSFILTER",
+"why": "CROSSFILTER changes the cross-filter direction inside a calculation."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "PREVIOUSYEAR()",
+"q": "What does the DAX function PREVIOUSYEAR() do?",
+"options": [
+"returns a date table spanning all dates in the model",
+"returns the dates of the next month",
+"returns the dates of the previous year",
+"returns a one-column date table between two dates"
+],
+"answer": "returns the dates of the previous year",
+"why": "PREVIOUSYEAR returns the dates of the previous year."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "INTERSECT()",
+"q": "What does the DAX function INTERSECT() do?",
+"options": [
+"returns rows common to two tables",
+"returns a table with new calculated columns added",
+"returns a table keeping only chosen (renamed) columns",
+"groups a table by columns and adds summary columns"
+],
+"answer": "returns rows common to two tables",
+"why": "INTERSECT returns rows common to two tables."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Pick time",
+"q": "Which DAX function returns a date table spanning all dates in the model?",
+"options": [
+"CALENDAR",
+"CALENDARAUTO",
+"NEXTMONTH",
+"PREVIOUSYEAR"
+],
+"answer": "CALENDARAUTO",
+"why": "CALENDARAUTO returns a date table spanning all dates in the model."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Which function time",
+"q": "Which DAX function shifts the date context back one year?",
+"options": [
+"TOTALYTD",
+"SAMEPERIODLASTYEAR",
+"TOTALQTD",
+"TOTALMTD"
+],
+"answer": "SAMEPERIODLASTYEAR",
+"why": "SAMEPERIODLASTYEAR shifts the date context back one year."
+},
+{
+"tier": "hard",
+"topic": "Service & performance",
+"title": "DirectQuery",
+"q": "DirectQuery mode \u2026.",
+"options": [
+"sends live queries to the source for each visual",
+"ignores relationships",
+"imports all data into the model",
+"only works with Excel"
+],
+"answer": "sends live queries to the source for each visual",
+"why": "sends live queries to the source for each visual."
+},
+{
+"tier": "medium",
+"topic": "Visuals",
+"title": "Matrix",
+"q": "Which visual is best for a cross-tab with row and column groups and drill-down?",
+"options": [
+"Card",
+"Scatter chart",
+"Treemap",
+"Matrix"
+],
+"answer": "Matrix",
+"why": "A Matrix is designed for a cross-tab with row and column groups and drill-down."
+},
+{
+"tier": "medium",
+"topic": "Data modelling",
+"title": "Measure timing",
+"q": "A measure is computed \u2026.",
+"options": [
+"only in Data view",
+"in Power Query",
+"once at import",
+"at query time based on the current filter context"
+],
+"answer": "at query time based on the current filter context",
+"why": "at query time based on the current filter context."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "CROSSJOIN()",
+"q": "What does the DAX function CROSSJOIN() do?",
+"options": [
+"returns the Cartesian product of two tables",
+"returns a table keeping only chosen (renamed) columns",
+"returns a table with new calculated columns added",
+"groups a table by columns and adds summary columns"
+],
+"answer": "returns the Cartesian product of two tables",
+"why": "CROSSJOIN returns the Cartesian product of two tables."
+},
+{
+"tier": "medium",
+"topic": "Data modelling",
+"title": "When to use a measure",
+"q": "Prefer a measure over a calculated column when you need a value that \u2026.",
+"options": [
+"never aggregates",
+"responds to the filter/slicer context of a visual",
+"is a fixed per-row attribute",
+"is only text"
+],
+"answer": "responds to the filter/slicer context of a visual",
+"why": "responds to the filter/slicer context of a visual."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Pick time",
+"q": "Which DAX function returns a measure's value at the end of the year?",
+"options": [
+"CALENDAR",
+"CALENDARAUTO",
+"PREVIOUSYEAR",
+"CLOSINGBALANCEYEAR"
+],
+"answer": "CLOSINGBALANCEYEAR",
+"why": "CLOSINGBALANCEYEAR returns a measure's value at the end of the year."
+},
+{
+"tier": "hard",
+"topic": "Data modelling",
+"title": "Bridge table",
+"q": "A bridge (junction) table is used to model a \u2026 relationship.",
+"options": [
+"many-to-many",
+"one-to-many",
+"one-to-one",
+"self"
+],
+"answer": "many-to-many",
+"why": "many-to-many."
+},
+{
+"tier": "medium",
+"topic": "Power Query",
+"title": "Column from Examples",
+"q": "In Power Query, 'Column from Examples' is used to\u2026",
+"options": [
+"infers a transformation from sample outputs you type",
+"keeps only distinct rows for the selected columns",
+"combines two queries by matching keys, like a SQL JOIN",
+"lets you type a small static table by hand"
+],
+"answer": "infers a transformation from sample outputs you type",
+"why": "Column from Examples infers a transformation from sample outputs you type."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "EXCEPT()",
+"q": "What does the DAX function EXCEPT() do?",
+"options": [
+"returns a table with new calculated columns added",
+"groups a table by columns and adds summary columns",
+"returns a table keeping only chosen (renamed) columns",
+"returns rows in the first table not in the second"
+],
+"answer": "returns rows in the first table not in the second",
+"why": "EXCEPT returns rows in the first table not in the second."
+},
+{
+"tier": "easy",
+"topic": "Visuals",
+"title": "Table",
+"q": "Which visual is best for a simple list of rows and columns?",
+"options": [
+"Table",
+"Clustered column chart",
+"Key influencers",
+"Treemap"
+],
+"answer": "Table",
+"why": "A Table is designed for a simple list of rows and columns."
+},
+{
+"tier": "medium",
+"topic": "DAX syntax",
+"title": "DAX syntax",
+"q": "The result of dividing by zero with the / operator in DAX is\u2026",
+"options": [
+"the numerator",
+"an error or infinity (use DIVIDE instead)",
+"always 0",
+"always blank"
+],
+"answer": "an error or infinity (use DIVIDE instead)",
+"why": "an error or infinity (use DIVIDE instead)."
+},
+{
+"tier": "hard",
+"topic": "Read DAX",
+"title": "What does this compute?",
+"q": "What does this measure compute?  =  RANKX(ALL(Product), [Sales])",
+"options": [
+"the rank of each product by sales among all products",
+"the number of products priced above 100",
+"sales ignoring any filter on the Product table",
+"the profit margin as a ratio"
+],
+"answer": "the rank of each product by sales among all products",
+"why": "It returns the rank of each product by sales among all products."
+},
+{
+"tier": "hard",
+"topic": "Troubleshooting",
+"title": "Spot the cause",
+"q": "Refresh is very slow on a DirectQuery report. A typical remedy is \u2026.",
+"options": [
+"add more visuals",
+"remove the date table",
+"disable slicers",
+"add aggregation tables or switch heavy tables to Import"
+],
+"answer": "add aggregation tables or switch heavy tables to Import",
+"why": "add aggregation tables or switch heavy tables to Import."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "MEDIAN()",
+"q": "What does the DAX function MEDIAN() do?",
+"options": [
+"returns the median of a column",
+"returns the k-th percentile of values (inclusive)",
+"returns the population standard deviation of a column",
+"returns the population variance of a column"
+],
+"answer": "returns the median of a column",
+"why": "MEDIAN returns the median of a column."
+},
+{
+"tier": "hard",
+"topic": "Concepts",
+"title": "Live connection",
+"q": "A Live connection to a published dataset means the report \u2026.",
+"options": [
+"imports a copy",
+"uses the shared semantic model without importing data",
+"is offline",
+"cannot use measures"
+],
+"answer": "uses the shared semantic model without importing data",
+"why": "uses the shared semantic model without importing data."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Pick math",
+"q": "Which DAX function rounds a number down to a multiple?",
+"options": [
+"CEILING",
+"CONVERT",
+"FLOOR",
+"MOD"
+],
+"answer": "FLOOR",
+"why": "FLOOR rounds a number down to a multiple."
+},
+{
+"tier": "easy",
+"topic": "Concepts",
+"title": "Explicit measure",
+"q": "Writing a measure with DAX creates an \u2026 measure.",
+"options": [
+"hidden",
+"calculated",
+"implicit",
+"explicit"
+],
+"answer": "explicit",
+"why": "explicit."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "MAX()",
+"q": "What does the DAX function MAX() do?",
+"options": [
+"returns the largest value in a column",
+"returns the smallest value in a column",
+"returns the arithmetic mean of a column",
+"adds up all the numbers in a column"
+],
+"answer": "returns the largest value in a column",
+"why": "MAX returns the largest value in a column."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Which function time",
+"q": "Which DAX function returns a year-to-date total of an expression?",
+"options": [
+"TOTALMTD",
+"TOTALQTD",
+"SAMEPERIODLASTYEAR",
+"TOTALYTD"
+],
+"answer": "TOTALYTD",
+"why": "TOTALYTD returns a year-to-date total of an expression."
+},
+{
+"tier": "medium",
+"topic": "Power Query",
+"title": "Merge Queries",
+"q": "In Power Query, 'Merge Queries' is used to\u2026",
+"options": [
+"transforms and cleans source data before it loads (the ETL layer)",
+"lets you type a small static table by hand",
+"combines two queries by matching keys, like a SQL JOIN",
+"creates an independent copy of a query"
+],
+"answer": "combines two queries by matching keys, like a SQL JOIN",
+"why": "Merge Queries combines two queries by matching keys, like a SQL JOIN."
+},
+{
+"tier": "medium",
+"topic": "Troubleshooting",
+"title": "Spot the cause",
+"q": "Model file size is huge. The quickest win is usually to \u2026.",
+"options": [
+"enable Q&A",
+"add measures",
+"use more pages",
+"remove unused and high-cardinality columns"
+],
+"answer": "remove unused and high-cardinality columns",
+"why": "remove unused and high-cardinality columns."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "LEFT()",
+"q": "What does the DAX function LEFT() do?",
+"options": [
+"iterates a table and joins an expression into a delimited string",
+"converts a value to text in a specified format",
+"returns the leftmost characters of a text value",
+"joins two text strings into one"
+],
+"answer": "returns the leftmost characters of a text value",
+"why": "LEFT returns the leftmost characters of a text value."
+},
+{
+"tier": "medium",
+"topic": "DAX syntax",
+"title": "DAX syntax",
+"q": "In DAX, a fully qualified column reference looks like\u2026",
+"options": [
+"[Table].Column",
+"Table[Column]",
+"Column.Table",
+"{Table:Column}"
+],
+"answer": "Table[Column]",
+"why": "Table[Column]."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Pick table",
+"q": "Which DAX function stacks two tables with matching columns?",
+"options": [
+"SUMMARIZE",
+"SELECTCOLUMNS",
+"ADDCOLUMNS",
+"UNION"
+],
+"answer": "UNION",
+"why": "UNION stacks two tables with matching columns."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Pick table",
+"q": "Which DAX function returns rows in the first table not in the second?",
+"options": [
+"SELECTCOLUMNS",
+"ADDCOLUMNS",
+"SUMMARIZE",
+"EXCEPT"
+],
+"answer": "EXCEPT",
+"why": "EXCEPT returns rows in the first table not in the second."
+},
+{
+"tier": "easy",
+"topic": "Report design",
+"title": "Line vs column",
+"q": "Use a line chart rather than columns when emphasising \u2026.",
+"options": [
+"a part-to-whole split",
+"a map",
+"a single KPI",
+"a trend over continuous time"
+],
+"answer": "a trend over continuous time",
+"why": "a trend over continuous time."
+},
+{
+"tier": "medium",
+"topic": "Power BI Service",
+"title": "Service feature",
+"q": "Data alerts can be set on\u2026",
+"options": [
+"dashboard tiles (cards/gauges/KPIs)",
+"any DAX measure directly",
+"themes",
+"slicers"
+],
+"answer": "dashboard tiles (cards/gauges/KPIs)",
+"why": "dashboard tiles (cards/gauges/KPIs)."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "SUM()",
+"q": "What does the DAX function SUM() do?",
+"options": [
+"returns the largest value in a column",
+"returns the arithmetic mean of a column",
+"adds up all the numbers in a column",
+"returns the smallest value in a column"
+],
+"answer": "adds up all the numbers in a column",
+"why": "SUM adds up all the numbers in a column."
+},
+{
+"tier": "medium",
+"topic": "Data modelling",
+"title": "Dimension contents",
+"q": "A dimension table typically stores \u2026.",
+"options": [
+"measures",
+"M code",
+"transaction amounts",
+"descriptive attributes used to slice data"
+],
+"answer": "descriptive attributes used to slice data",
+"why": "descriptive attributes used to slice data."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "REPT()",
+"q": "What does the DAX function REPT() do?",
+"options": [
+"converts text to lower case",
+"repeats text a number of times",
+"converts text to upper case",
+"removes extra spaces from text"
+],
+"answer": "repeats text a number of times",
+"why": "REPT repeats text a number of times."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Which function table",
+"q": "Which DAX function returns a one-column table of distinct values?",
+"options": [
+"FILTER",
+"VALUES",
+"DISTINCT",
+"CALCULATE"
+],
+"answer": "DISTINCT",
+"why": "DISTINCT returns a one-column table of distinct values."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "DATEDIFF()",
+"q": "What does the DAX function DATEDIFF() do?",
+"options": [
+"returns the month number of a date",
+"returns the year of a date",
+"returns the day of the month of a date",
+"returns the difference between two dates in a chosen unit"
+],
+"answer": "returns the difference between two dates in a chosen unit",
+"why": "DATEDIFF returns the difference between two dates in a chosen unit."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Pick table",
+"q": "Which DAX function joins two tables on their common columns?",
+"options": [
+"NATURALINNERJOIN",
+"SELECTCOLUMNS",
+"SUMMARIZE",
+"ADDCOLUMNS"
+],
+"answer": "NATURALINNERJOIN",
+"why": "NATURALINNERJOIN joins two tables on their common columns."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Pick agg",
+"q": "Which DAX function returns the population standard deviation of a column?",
+"options": [
+"VAR.P",
+"PERCENTILE.INC",
+"STDEV.P",
+"MEDIAN"
+],
+"answer": "STDEV.P",
+"why": "STDEV.P returns the population standard deviation of a column."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "VAR()",
+"q": "What does the DAX function VAR() do?",
+"options": [
+"stores an intermediate result for reuse within a measure",
+"returns the smallest value in a column",
+"adds up all the numbers in a column",
+"returns the arithmetic mean of a column"
+],
+"answer": "stores an intermediate result for reuse within a measure",
+"why": "VAR stores an intermediate result for reuse within a measure."
+},
+{
+"tier": "medium",
+"topic": "Read DAX",
+"title": "What does this compute?",
+"q": "What does this measure compute?  =  VAR c=[Sales] RETURN IF(c>1000,\"High\",\"Low\")",
+"options": [
+"total sales filtered to the Bikes category",
+"the profit margin as a ratio",
+"a High/Low label based on whether sales exceed 1000",
+"the rank of each product by sales among all products"
+],
+"answer": "a High/Low label based on whether sales exceed 1000",
+"why": "It returns a High/Low label based on whether sales exceed 1000."
+},
+{
+"tier": "easy",
+"topic": "Power Query",
+"title": "Applied Steps",
+"q": "In Power Query, 'Applied Steps' is used to\u2026",
+"options": [
+"combines two queries by matching keys, like a SQL JOIN",
+"aggregates rows into summary rows in Power Query",
+"turns wide columns into attribute-value rows",
+"record each transformation so it replays on every refresh"
+],
+"answer": "record each transformation so it replays on every refresh",
+"why": "Applied Steps record each transformation so it replays on every refresh."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Which function text",
+"q": "Which DAX function converts a value to text in a specified format?",
+"options": [
+"FORMAT",
+"LEFT",
+"CONCATENATE",
+"CONCATENATEX"
+],
+"answer": "FORMAT",
+"why": "FORMAT converts a value to text in a specified format."
+},
+{
+"tier": "medium",
+"topic": "Choosing visuals",
+"title": "Best visual",
+"q": "Which visual best helps you show conversion through the stages of a sales pipeline?",
+"options": [
+"Funnel chart",
+"Decomposition tree",
+"Line chart",
+"Matrix"
+],
+"answer": "Funnel chart",
+"why": "A Funnel chart is the standard choice to show conversion through the stages of a sales pipeline."
+},
+{
+"tier": "medium",
+"topic": "Power Query",
+"title": "Unpivot Columns",
+"q": "In Power Query, 'Unpivot Columns' is used to\u2026",
+"options": [
+"keeps only distinct rows for the selected columns",
+"record each transformation so it replays on every refresh",
+"lets you type a small static table by hand",
+"turns wide columns into attribute-value rows"
+],
+"answer": "turns wide columns into attribute-value rows",
+"why": "Unpivot Columns turns wide columns into attribute-value rows."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "TREATAS()",
+"q": "What does the DAX function TREATAS() do?",
+"options": [
+"applies the values of a table as a filter on columns",
+"converts text to lower case",
+"returns the set of dates from the start of the year to the current date",
+"returns the first value where an expression is non-blank"
+],
+"answer": "applies the values of a table as a filter on columns",
+"why": "TREATAS applies the values of a table as a filter on columns."
+},
+{
+"tier": "medium",
+"topic": "Concepts",
+"title": "Calculated table",
+"q": "A calculated table is created with \u2026.",
+"options": [
+"a DAX table expression",
+"a visual",
+"Power Query M",
+"a slicer"
+],
+"answer": "a DAX table expression",
+"why": "a DAX table expression."
+},
+{
+"tier": "medium",
+"topic": "DAX syntax",
+"title": "DAX syntax",
+"q": "To write a multi-line variable-based measure you use\u2026",
+"options": [
+"VAR ... RETURN",
+"DEFINE ... EVAL",
+"WITH ... AS",
+"LET ... IN"
+],
+"answer": "VAR ... RETURN",
+"why": "VAR ... RETURN."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Which function context",
+"q": "Which DAX function evaluates an expression in a modified filter context?",
+"options": [
+"ALLSELECTED",
+"CALCULATE",
+"ALL",
+"ALLEXCEPT"
+],
+"answer": "CALCULATE",
+"why": "CALCULATE evaluates an expression in a modified filter context."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "TOTALYTD()",
+"q": "What does the DAX function TOTALYTD() do?",
+"options": [
+"shifts the date context back one year",
+"returns a year-to-date total of an expression",
+"returns a quarter-to-date total of an expression",
+"returns a month-to-date total of an expression"
+],
+"answer": "returns a year-to-date total of an expression",
+"why": "TOTALYTD returns a year-to-date total of an expression."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Pick math",
+"q": "Which DAX function raises a number to a power?",
+"options": [
+"POWER",
+"CONVERT",
+"CEILING",
+"FLOOR"
+],
+"answer": "POWER",
+"why": "POWER raises a number to a power."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "HASONEVALUE()",
+"q": "What does the DAX function HASONEVALUE() do?",
+"options": [
+"evaluates an expression in a modified filter context",
+"removes filters from a table except on the given columns",
+"tests whether exactly one value is in the filter context for a column",
+"removes filters from a table or columns"
+],
+"answer": "tests whether exactly one value is in the filter context for a column",
+"why": "HASONEVALUE tests whether exactly one value is in the filter context for a column."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "SELECTCOLUMNS()",
+"q": "What does the DAX function SELECTCOLUMNS() do?",
+"options": [
+"groups a table and aggregates with CURRENTGROUP",
+"returns a table keeping only chosen (renamed) columns",
+"groups a table by columns and adds summary columns",
+"returns a table with new calculated columns added"
+],
+"answer": "returns a table keeping only chosen (renamed) columns",
+"why": "SELECTCOLUMNS returns a table keeping only chosen (renamed) columns."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "EOMONTH()",
+"q": "What does the DAX function EOMONTH() do?",
+"options": [
+"returns the year of a date",
+"returns the last day of the month, offset by months",
+"returns the day of the month of a date",
+"returns the month number of a date"
+],
+"answer": "returns the last day of the month, offset by months",
+"why": "EOMONTH returns the last day of the month, offset by months."
+},
+{
+"tier": "hard",
+"topic": "Visuals",
+"title": "Ribbon chart use",
+"q": "A Ribbon chart is most appropriate for\u2026",
+"options": [
+"showing a trend over continuous time",
+"showing values through the stages of a process",
+"a cross-tab with row and column groups and drill-down",
+"showing rank changes across a category over time"
+],
+"answer": "showing rank changes across a category over time",
+"why": "A Ribbon chart is designed for showing rank changes across a category over time."
+},
+{
+"tier": "medium",
+"topic": "Visuals",
+"title": "KPI visual use",
+"q": "A KPI visual is most appropriate for\u2026",
+"options": [
+"showing part-to-whole with nested rectangles",
+"finding which factors most affect a metric",
+"showing rank changes across a category over time",
+"showing a value against a target with a trend"
+],
+"answer": "showing a value against a target with a trend",
+"why": "A KPI visual is designed for showing a value against a target with a trend."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Pick logic",
+"q": "Which DAX function returns an alternative value when an expression errors?",
+"options": [
+"IFERROR",
+"ISERROR",
+"COALESCE",
+"ISBLANK"
+],
+"answer": "IFERROR",
+"why": "IFERROR returns an alternative value when an expression errors."
+},
+{
+"tier": "medium",
+"topic": "Report design",
+"title": "Q&A visual",
+"q": "The Q&A visual lets users \u2026.",
+"options": [
+"write M code",
+"set RLS",
+"schedule refresh",
+"ask natural-language questions to generate a visual"
+],
+"answer": "ask natural-language questions to generate a visual",
+"why": "ask natural-language questions to generate a visual."
+},
+{
+"tier": "easy",
+"topic": "Report design",
+"title": "Themes",
+"q": "A report theme controls \u2026.",
+"options": [
+"the data model",
+"RLS",
+"the refresh",
+"the default colours and formatting of visuals"
+],
+"answer": "the default colours and formatting of visuals",
+"why": "the default colours and formatting of visuals."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "LOOKUPVALUE()",
+"q": "What does the DAX function LOOKUPVALUE() do?",
+"options": [
+"changes the cross-filter direction inside a calculation",
+"returns a value by matching one or more search columns",
+"returns a single-column table of numbers in a range",
+"tests whether an expression returns an error"
+],
+"answer": "returns a value by matching one or more search columns",
+"why": "LOOKUPVALUE returns a value by matching one or more search columns."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Which function context",
+"q": "Which DAX function keeps filters coming from outside the current visual?",
+"options": [
+"ALLSELECTED",
+"ALLEXCEPT",
+"ALL",
+"CALCULATE"
+],
+"answer": "ALLSELECTED",
+"why": "ALLSELECTED keeps filters coming from outside the current visual."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Pick time",
+"q": "Which DAX function returns the dates of the previous year?",
+"options": [
+"CALENDAR",
+"CALENDARAUTO",
+"NEXTMONTH",
+"PREVIOUSYEAR"
+],
+"answer": "PREVIOUSYEAR",
+"why": "PREVIOUSYEAR returns the dates of the previous year."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Which function time",
+"q": "Which DAX function returns the dates of the previous month?",
+"options": [
+"TOTALYTD",
+"PREVIOUSMONTH",
+"TOTALMTD",
+"TOTALQTD"
+],
+"answer": "PREVIOUSMONTH",
+"why": "PREVIOUSMONTH returns the dates of the previous month."
+},
+{
+"tier": "medium",
+"topic": "Service & performance",
+"title": "Gateway",
+"q": "The on-premises data gateway is used to \u2026.",
+"options": [
+"write DAX",
+"store .pbix files",
+"design visuals",
+"securely connect the Service to on-prem data sources"
+],
+"answer": "securely connect the Service to on-prem data sources",
+"why": "securely connect the Service to on-prem data sources."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "CALCULATE()",
+"q": "What does the DAX function CALCULATE() do?",
+"options": [
+"evaluates an expression in a modified filter context",
+"removes filters from a table or columns",
+"removes filters from a table except on the given columns",
+"keeps filters coming from outside the current visual"
+],
+"answer": "evaluates an expression in a modified filter context",
+"why": "CALCULATE evaluates an expression in a modified filter context."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "ROUND()",
+"q": "What does the DAX function ROUND() do?",
+"options": [
+"rounds a number to a specified number of digits",
+"returns a blank value",
+"returns the absolute value of a number",
+"divides two numbers and safely returns blank (or a fallback) on divide-by-zero"
+],
+"answer": "rounds a number to a specified number of digits",
+"why": "ROUND rounds a number to a specified number of digits."
+},
+{
+"tier": "hard",
+"topic": "Visuals",
+"title": "Key influencers use",
+"q": "A Key influencers is most appropriate for\u2026",
+"options": [
+"finding which factors most affect a metric",
+"showing how an initial value is affected by sequential increases and decreases",
+"showing a trend over continuous time",
+"showing progress toward a single target on a dial"
+],
+"answer": "finding which factors most affect a metric",
+"why": "A Key influencers is designed for finding which factors most affect a metric."
+},
+{
+"tier": "medium",
+"topic": "Choosing visuals",
+"title": "Best visual",
+"q": "Which visual best helps you show part-to-whole contribution with nested rectangles?",
+"options": [
+"KPI visual",
+"Ribbon chart",
+"Treemap",
+"Funnel chart"
+],
+"answer": "Treemap",
+"why": "A Treemap is the standard choice to show part-to-whole contribution with nested rectangles."
+},
+{
+"tier": "hard",
+"topic": "Concepts",
+"title": "What-if parameter",
+"q": "A what-if parameter creates a \u2026 users can change with a slicer.",
+"options": [
+"single-column table and a measure",
+"relationship",
+"report theme",
+"gateway"
+],
+"answer": "single-column table and a measure",
+"why": "single-column table and a measure."
+},
+{
+"tier": "medium",
+"topic": "Choosing visuals",
+"title": "Best visual",
+"q": "Which visual best helps you let users filter the whole page by year?",
+"options": [
+"KPI visual",
+"Scatter chart",
+"Slicer",
+"Table"
+],
+"answer": "Slicer",
+"why": "A Slicer is the standard choice to let users filter the whole page by year."
+},
+{
+"tier": "easy",
+"topic": "Concepts",
+"title": "Number formatting",
+"q": "You set a measure's display format (e.g. currency) in \u2026.",
+"options": [
+"RLS",
+"the theme JSON only",
+"the Measure tools / Format options",
+"Power Query only"
+],
+"answer": "the Measure tools / Format options",
+"why": "the Measure tools / Format options."
+},
+{
+"tier": "hard",
+"topic": "Visuals",
+"title": "Key influencers",
+"q": "Which visual is best for finding which factors most affect a metric?",
+"options": [
+"Funnel chart",
+"Clustered column chart",
+"Key influencers",
+"Slicer"
+],
+"answer": "Key influencers",
+"why": "A Key influencers is designed for finding which factors most affect a metric."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "SEARCH()",
+"q": "What does the DAX function SEARCH() do?",
+"options": [
+"converts a value to text in a specified format",
+"joins two text strings into one",
+"returns the position of one text string inside another (case-insensitive)",
+"iterates a table and joins an expression into a delimited string"
+],
+"answer": "returns the position of one text string inside another (case-insensitive)",
+"why": "SEARCH returns the position of one text string inside another (case-insensitive)."
+},
+{
+"tier": "easy",
+"topic": "Formatting & UX",
+"title": "Report formatting",
+"q": "You change a measure's number format (e.g. to currency) using\u2026",
+"options": [
+"the theme JSON only",
+"the Measure tools ribbon",
+"Power Query",
+"RLS"
+],
+"answer": "the Measure tools ribbon",
+"why": "the Measure tools ribbon."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "SELECTEDVALUE()",
+"q": "What does the DAX function SELECTEDVALUE() do?",
+"options": [
+"removes filters from a table except on the given columns",
+"evaluates an expression in a modified filter context",
+"returns the single value of a column when only one is in context, else a default",
+"removes filters from a table or columns"
+],
+"answer": "returns the single value of a column when only one is in context, else a default",
+"why": "SELECTEDVALUE returns the single value of a column when only one is in context, else a default."
+},
+{
+"tier": "hard",
+"topic": "Concepts",
+"title": "Field parameters",
+"q": "Field parameters let users \u2026.",
+"options": [
+"publish",
+"change RLS",
+"fold queries",
+"switch which fields a visual shows"
+],
+"answer": "switch which fields a visual shows",
+"why": "switch which fields a visual shows."
+},
+{
+"tier": "medium",
+"topic": "Service & performance",
+"title": "Performance analyzer",
+"q": "Performance Analyzer in Desktop helps you \u2026.",
+"options": [
+"design a theme",
+"set RLS",
+"measure how long each visual and its DAX take",
+"publish reports"
+],
+"answer": "measure how long each visual and its DAX take",
+"why": "measure how long each visual and its DAX take."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "STARTOFMONTH()",
+"q": "What does the DAX function STARTOFMONTH() do?",
+"options": [
+"returns a one-column date table between two dates",
+"returns the dates of the previous year",
+"returns a date table spanning all dates in the model",
+"returns the first date of the month in context"
+],
+"answer": "returns the first date of the month in context",
+"why": "STARTOFMONTH returns the first date of the month in context."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Which function context",
+"q": "Which DAX function removes filters from a table or columns?",
+"options": [
+"CALCULATE",
+"ALLEXCEPT",
+"ALLSELECTED",
+"ALL"
+],
+"answer": "ALL",
+"why": "ALL removes filters from a table or columns."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "SQRT()",
+"q": "What does the DAX function SQRT() do?",
+"options": [
+"rounds a number down to a multiple",
+"converts a value to a specified data type",
+"returns the square root of a number",
+"rounds a number up to a multiple"
+],
+"answer": "returns the square root of a number",
+"why": "SQRT returns the square root of a number."
+},
+{
+"tier": "medium",
+"topic": "Power Query",
+"title": "Pivot Column",
+"q": "In Power Query, 'Pivot Column' is used to\u2026",
+"options": [
+"sets the data type of a column",
+"stacks the rows of two queries, like a SQL UNION",
+"divides one column into several by a delimiter or width",
+"turns unique row values into columns"
+],
+"answer": "turns unique row values into columns",
+"why": "Pivot Column turns unique row values into columns."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Which function context",
+"q": "Which DAX function removes filters from a table except on the given columns?",
+"options": [
+"CALCULATE",
+"ALLEXCEPT",
+"ALL",
+"ALLSELECTED"
+],
+"answer": "ALLEXCEPT",
+"why": "ALLEXCEPT removes filters from a table except on the given columns."
+},
+{
+"tier": "hard",
+"topic": "Troubleshooting",
+"title": "Spot the cause",
+"q": "A time-intelligence measure returns blank. A common cause is \u2026.",
+"options": [
+"no proper marked Date table with a continuous date range",
+"too many visuals",
+"a missing slicer",
+"import mode"
+],
+"answer": "no proper marked Date table with a continuous date range",
+"why": "no proper marked Date table with a continuous date range."
+},
+{
+"tier": "medium",
+"topic": "Visuals",
+"title": "KPI visual",
+"q": "Which visual is best for showing a value against a target with a trend?",
+"options": [
+"KPI visual",
+"Slicer",
+"Ribbon chart",
+"Decomposition tree"
+],
+"answer": "KPI visual",
+"why": "A KPI visual is designed for showing a value against a target with a trend."
+},
+{
+"tier": "medium",
+"topic": "Service & performance",
+"title": "Import mode",
+"q": "Import mode \u2026.",
+"options": [
+"queries the source live",
+"cannot use DAX",
+"requires Premium",
+"loads a compressed copy of the data into the model"
+],
+"answer": "loads a compressed copy of the data into the model",
+"why": "loads a compressed copy of the data into the model."
+},
+{
+"tier": "medium",
+"topic": "Visuals",
+"title": "Funnel chart use",
+"q": "A Funnel chart is most appropriate for\u2026",
+"options": [
+"showing values through the stages of a process",
+"plotting values by geography",
+"displaying a single KPI number",
+"showing progress toward a single target on a dial"
+],
+"answer": "showing values through the stages of a process",
+"why": "A Funnel chart is designed for showing values through the stages of a process."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "COALESCE()",
+"q": "What does the DAX function COALESCE() do?",
+"options": [
+"tests whether a value is blank",
+"returns an alternative value when an expression errors",
+"tests whether an expression returns an error",
+"returns the first non-blank argument"
+],
+"answer": "returns the first non-blank argument",
+"why": "COALESCE returns the first non-blank argument."
+},
+{
+"tier": "hard",
+"topic": "Troubleshooting",
+"title": "Spot the cause",
+"q": "Users see all rows despite an RLS role. Likely the role \u2026.",
+"options": [
+"needs Import mode",
+"needs a theme",
+"was created but users were not assigned to it in the Service",
+"needs a slicer"
+],
+"answer": "was created but users were not assigned to it in the Service",
+"why": "was created but users were not assigned to it in the Service."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "UPPER()",
+"q": "What does the DAX function UPPER() do?",
+"options": [
+"returns the number of characters in text",
+"converts text to lower case",
+"converts text to upper case",
+"removes extra spaces from text"
+],
+"answer": "converts text to upper case",
+"why": "UPPER converts text to upper case."
+},
+{
+"tier": "medium",
+"topic": "Data modelling",
+"title": "Cardinality",
+"q": "The usual relationship between a dimension and a fact table is \u2026.",
+"options": [
+"zero-to-one",
+"one-to-many (dimension to fact)",
+"one-to-one",
+"many-to-many"
+],
+"answer": "one-to-many (dimension to fact)",
+"why": "one-to-many (dimension to fact)."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "TRUE()",
+"q": "What does the DAX function TRUE() do?",
+"options": [
+"returns the logical value true",
+"returns an alternative value when an expression errors",
+"tests whether a value is blank",
+"tests whether an expression returns an error"
+],
+"answer": "returns the logical value true",
+"why": "TRUE returns the logical value true."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "YEAR()",
+"q": "What does the DAX function YEAR() do?",
+"options": [
+"returns the day-of-week number of a date",
+"returns the month number of a date",
+"returns the day of the month of a date",
+"returns the year of a date"
+],
+"answer": "returns the year of a date",
+"why": "YEAR returns the year of a date."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "DATESYTD()",
+"q": "What does the DAX function DATESYTD() do?",
+"options": [
+"returns the set of dates from the start of the year to the current date",
+"returns a quarter-to-date total of an expression",
+"returns a month-to-date total of an expression",
+"returns a year-to-date total of an expression"
+],
+"answer": "returns the set of dates from the start of the year to the current date",
+"why": "DATESYTD returns the set of dates from the start of the year to the current date."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Pick table",
+"q": "Which DAX function groups a table and aggregates with CURRENTGROUP?",
+"options": [
+"SUMMARIZE",
+"ADDCOLUMNS",
+"GROUPBY",
+"SELECTCOLUMNS"
+],
+"answer": "GROUPBY",
+"why": "GROUPBY groups a table and aggregates with CURRENTGROUP."
+},
+{
+"tier": "medium",
+"topic": "Visuals",
+"title": "Matrix use",
+"q": "A Matrix is most appropriate for\u2026",
+"options": [
+"plotting values by geography",
+"a simple list of rows and columns",
+"a cross-tab with row and column groups and drill-down",
+"displaying a single KPI number"
+],
+"answer": "a cross-tab with row and column groups and drill-down",
+"why": "A Matrix is designed for a cross-tab with row and column groups and drill-down."
+},
+{
+"tier": "medium",
+"topic": "Power Query",
+"title": "Append Queries",
+"q": "In Power Query, 'Append Queries' is used to\u2026",
+"options": [
+"stacks the rows of two queries, like a SQL UNION",
+"creates a new query that starts from another query's output",
+"lets you type a small static table by hand",
+"substitutes one value for another in a column"
+],
+"answer": "stacks the rows of two queries, like a SQL UNION",
+"why": "Append Queries stacks the rows of two queries, like a SQL UNION."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Which function iter",
+"q": "Which DAX function iterates a table and returns the largest expression value?",
+"options": [
+"SUMX",
+"AVERAGEX",
+"MINX",
+"MAXX"
+],
+"answer": "MAXX",
+"why": "MAXX iterates a table and returns the largest expression value."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "CALENDARAUTO()",
+"q": "What does the DAX function CALENDARAUTO() do?",
+"options": [
+"returns a one-column date table between two dates",
+"returns the dates of the previous year",
+"returns the dates of the next month",
+"returns a date table spanning all dates in the model"
+],
+"answer": "returns a date table spanning all dates in the model",
+"why": "CALENDARAUTO returns a date table spanning all dates in the model."
+},
+{
+"tier": "easy",
+"topic": "Power Query",
+"title": "Change Type",
+"q": "In Power Query, 'Change Type' is used to\u2026",
+"options": [
+"turns unique row values into columns",
+"infers a transformation from sample outputs you type",
+"sets the data type of a column",
+"divides one column into several by a delimiter or width"
+],
+"answer": "sets the data type of a column",
+"why": "Change Type sets the data type of a column."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Which function context",
+"q": "Which DAX function adds a filter without overwriting existing filters on the same column?",
+"options": [
+"ALLEXCEPT",
+"KEEPFILTERS",
+"ALL",
+"CALCULATE"
+],
+"answer": "KEEPFILTERS",
+"why": "KEEPFILTERS adds a filter without overwriting existing filters on the same column."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Which function context",
+"q": "Which DAX function returns the single value of a column when only one is in context, else a default?",
+"options": [
+"SELECTEDVALUE",
+"CALCULATE",
+"ALLEXCEPT",
+"ALL"
+],
+"answer": "SELECTEDVALUE",
+"why": "SELECTEDVALUE returns the single value of a column when only one is in context, else a default."
+},
+{
+"tier": "medium",
+"topic": "Concepts",
+"title": "Sort by column",
+"q": "'Sort by Column' lets you sort e.g. MonthName by \u2026.",
+"options": [
+"alphabetical text only",
+"a measure",
+"a slicer",
+"MonthNumber"
+],
+"answer": "MonthNumber",
+"why": "MonthNumber."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "ENDOFYEAR()",
+"q": "What does the DAX function ENDOFYEAR() do?",
+"options": [
+"returns a one-column date table between two dates",
+"returns the last date of the year in context",
+"returns the dates of the previous year",
+"returns a date table spanning all dates in the model"
+],
+"answer": "returns the last date of the year in context",
+"why": "ENDOFYEAR returns the last date of the year in context."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "COUNTROWS()",
+"q": "What does the DAX function COUNTROWS() do?",
+"options": [
+"counts the rows of a table",
+"returns the smallest value in a column",
+"adds up all the numbers in a column",
+"returns the arithmetic mean of a column"
+],
+"answer": "counts the rows of a table",
+"why": "COUNTROWS counts the rows of a table."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Pick time",
+"q": "Which DAX function returns the first date of the month in context?",
+"options": [
+"PREVIOUSYEAR",
+"CALENDAR",
+"STARTOFMONTH",
+"CALENDARAUTO"
+],
+"answer": "STARTOFMONTH",
+"why": "STARTOFMONTH returns the first date of the month in context."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "VALUES()",
+"q": "What does the DAX function VALUES() do?",
+"options": [
+"returns the distinct values of a column in the current context",
+"returns a one-column table of distinct values",
+"returns a related value across a one-to-many relationship",
+"returns a subset of a table that meets a condition"
+],
+"answer": "returns the distinct values of a column in the current context",
+"why": "VALUES returns the distinct values of a column in the current context."
+},
+{
+"tier": "medium",
+"topic": "Data modelling",
+"title": "Calculated column timing",
+"q": "A calculated column is computed \u2026.",
+"options": [
+"at query time per visual",
+"only in Power Query",
+"at data refresh and stored in the model",
+"never"
+],
+"answer": "at data refresh and stored in the model",
+"why": "at data refresh and stored in the model."
+},
+{
+"tier": "medium",
+"topic": "Troubleshooting",
+"title": "Spot the cause",
+"q": "A slicer on one page doesn't affect a visual on another page. To link them you would \u2026.",
+"options": [
+"use sync slicers or a shared filter",
+"change data type",
+"add RLS",
+"republish"
+],
+"answer": "use sync slicers or a shared filter",
+"why": "use sync slicers or a shared filter."
+},
+{
+"tier": "hard",
+"topic": "Concepts",
+"title": "Filter vs row context",
+"q": "In a measure, CALCULATE can turn a filter argument into a modified \u2026.",
+"options": [
+"row context",
+"visual",
+"filter context",
+"query plan"
+],
+"answer": "filter context",
+"why": "filter context."
+},
+{
+"tier": "easy",
+"topic": "Formatting & UX",
+"title": "Report formatting",
+"q": "Showing or hiding visuals for a guided story is done with\u2026",
+"options": [
+"query folding",
+"RLS",
+"bookmarks and the selection pane",
+"a gateway"
+],
+"answer": "bookmarks and the selection pane",
+"why": "bookmarks and the selection pane."
+},
+{
+"tier": "easy",
+"topic": "Concepts",
+"title": "Blank in DAX",
+"q": "In DAX, an empty result is represented by \u2026.",
+"options": [
+"BLANK()",
+"NULL",
+"0 always",
+"an error"
+],
+"answer": "BLANK()",
+"why": "BLANK()."
+},
+{
+"tier": "easy",
+"topic": "Visuals",
+"title": "Card",
+"q": "Which visual is best for displaying a single KPI number?",
+"options": [
+"Key influencers",
+"Card",
+"Line chart",
+"Waterfall chart"
+],
+"answer": "Card",
+"why": "A Card is designed for displaying a single KPI number."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Pick agg",
+"q": "Which DAX function returns the population variance of a column?",
+"options": [
+"PERCENTILE.INC",
+"STDEV.P",
+"MEDIAN",
+"VAR.P"
+],
+"answer": "VAR.P",
+"why": "VAR.P returns the population variance of a column."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Pick agg",
+"q": "Which DAX function returns the median of a column?",
+"options": [
+"PERCENTILE.INC",
+"STDEV.P",
+"VAR.P",
+"MEDIAN"
+],
+"answer": "MEDIAN",
+"why": "MEDIAN returns the median of a column."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "NOW()",
+"q": "What does the DAX function NOW() do?",
+"options": [
+"returns the month number of a date",
+"returns the day of the month of a date",
+"returns the year of a date",
+"returns the current date and time"
+],
+"answer": "returns the current date and time",
+"why": "NOW returns the current date and time."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "COUNTX()",
+"q": "What does the DAX function COUNTX() do?",
+"options": [
+"iterates a table and averages an expression per row",
+"iterates a table and counts non-blank expression results",
+"iterates a table and returns the smallest expression value",
+"iterates a table and sums an expression evaluated per row"
+],
+"answer": "iterates a table and counts non-blank expression results",
+"why": "COUNTX iterates a table and counts non-blank expression results."
+},
+{
+"tier": "medium",
+"topic": "Visuals",
+"title": "Waterfall chart",
+"q": "Which visual is best for showing how an initial value is affected by sequential increases and decreases?",
+"options": [
+"Scatter chart",
+"Slicer",
+"Clustered column chart",
+"Waterfall chart"
+],
+"answer": "Waterfall chart",
+"why": "A Waterfall chart is designed for showing how an initial value is affected by sequential increases and decreases."
+},
+{
+"tier": "medium",
+"topic": "Power BI Service",
+"title": "Service feature",
+"q": "Scorecards / metrics in the Service are used to\u2026",
+"options": [
+"track KPIs against targets over time",
+"design visuals",
+"set themes",
+"fold queries"
+],
+"answer": "track KPIs against targets over time",
+"why": "track KPIs against targets over time."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Pick table",
+"q": "Which DAX function returns a table keeping only chosen (renamed) columns?",
+"options": [
+"GROUPBY",
+"SUMMARIZE",
+"ADDCOLUMNS",
+"SELECTCOLUMNS"
+],
+"answer": "SELECTCOLUMNS",
+"why": "SELECTCOLUMNS returns a table keeping only chosen (renamed) columns."
+},
+{
+"tier": "hard",
+"topic": "Report design",
+"title": "Small multiples",
+"q": "Small multiples split a visual into \u2026.",
+"options": [
+"one big chart",
+"a table",
+"a grid of smaller charts by a category",
+"a slicer"
+],
+"answer": "a grid of smaller charts by a category",
+"why": "a grid of smaller charts by a category."
+},
+{
+"tier": "hard",
+"topic": "Service & performance",
+"title": "Incremental refresh",
+"q": "Incremental refresh requires \u2026.",
+"options": [
+"Premium only",
+"RangeStart and RangeEnd date parameters",
+"a slicer",
+"a star schema"
+],
+"answer": "RangeStart and RangeEnd date parameters",
+"why": "RangeStart and RangeEnd date parameters."
+},
+{
+"tier": "medium",
+"topic": "Visuals",
+"title": "Gauge use",
+"q": "A Gauge is most appropriate for\u2026",
+"options": [
+"showing part-to-whole with nested rectangles",
+"showing the relationship between two numeric measures",
+"showing progress toward a single target on a dial",
+"a cross-tab with row and column groups and drill-down"
+],
+"answer": "showing progress toward a single target on a dial",
+"why": "A Gauge is designed for showing progress toward a single target on a dial."
+},
+{
+"tier": "medium",
+"topic": "Data modelling",
+"title": "Date table",
+"q": "A dedicated Date table is recommended because it \u2026.",
+"options": [
+"reduces file size only",
+"makes refresh faster",
+"enables reliable time-intelligence calculations",
+"is required to publish"
+],
+"answer": "enables reliable time-intelligence calculations",
+"why": "enables reliable time-intelligence calculations."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Pick table",
+"q": "Which DAX function returns rows common to two tables?",
+"options": [
+"ADDCOLUMNS",
+"INTERSECT",
+"SUMMARIZE",
+"SELECTCOLUMNS"
+],
+"answer": "INTERSECT",
+"why": "INTERSECT returns rows common to two tables."
+},
+{
+"tier": "medium",
+"topic": "DAX syntax",
+"title": "DAX syntax",
+"q": "The DAX operator to concatenate two text values is\u2026",
+"options": [
+"|",
+"&&",
+"+",
+"&"
+],
+"answer": "&",
+"why": "&."
+},
+{
+"tier": "hard",
+"topic": "Data modelling",
+"title": "Snowflake",
+"q": "A snowflake schema differs from a star schema because \u2026.",
+"options": [
+"there is no fact table",
+"it has no relationships",
+"it cannot use DAX",
+"dimensions are normalised into multiple related tables"
+],
+"answer": "dimensions are normalised into multiple related tables",
+"why": "dimensions are normalised into multiple related tables."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Which function rank",
+"q": "Which DAX function ranks the rows of a table by an expression?",
+"options": [
+"KEEPFILTERS",
+"TOPN",
+"DATEADD",
+"RANKX"
+],
+"answer": "RANKX",
+"why": "RANKX ranks the rows of a table by an expression."
+},
+{
+"tier": "hard",
+"topic": "Report design",
+"title": "Tooltip page",
+"q": "A report page can be used as a \u2026.",
+"options": [
+"custom tooltip that appears on hover",
+"gateway",
+"slicer",
+"measure"
+],
+"answer": "custom tooltip that appears on hover",
+"why": "custom tooltip that appears on hover."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "FORMAT()",
+"q": "What does the DAX function FORMAT() do?",
+"options": [
+"converts a value to text in a specified format",
+"returns the leftmost characters of a text value",
+"iterates a table and joins an expression into a delimited string",
+"joins two text strings into one"
+],
+"answer": "converts a value to text in a specified format",
+"why": "FORMAT converts a value to text in a specified format."
+},
+{
+"tier": "easy",
+"topic": "Formatting & UX",
+"title": "Report formatting",
+"q": "To keep a slicer visible while scrolling you can\u2026",
+"options": [
+"use a fixed/synced slicer or a slicer on every page",
+"use a gateway",
+"use DAX",
+"use a theme"
+],
+"answer": "use a fixed/synced slicer or a slicer on every page",
+"why": "use a fixed/synced slicer or a slicer on every page."
+},
+{
+"tier": "hard",
+"topic": "Service & performance",
+"title": "RLS DAX",
+"q": "An RLS role filters a table using a \u2026.",
+"options": [
+"Power Query step",
+"slicer",
+"visual filter",
+"DAX filter expression that returns TRUE/FALSE per row"
+],
+"answer": "DAX filter expression that returns TRUE/FALSE per row",
+"why": "DAX filter expression that returns TRUE/FALSE per row."
+},
+{
+"tier": "medium",
+"topic": "Concepts",
+"title": "SUM vs SUMX",
+"q": "SUMX differs from SUM because it \u2026.",
+"options": [
+"ignores filters",
+"evaluates an expression row by row before summing",
+"is always slower",
+"only works on measures"
+],
+"answer": "evaluates an expression row by row before summing",
+"why": "evaluates an expression row by row before summing."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Pick text",
+"q": "Which DAX function repeats text a number of times?",
+"options": [
+"TRIM",
+"UPPER",
+"LOWER",
+"REPT"
+],
+"answer": "REPT",
+"why": "REPT repeats text a number of times."
+},
+{
+"tier": "medium",
+"topic": "Power Query",
+"title": "Reference",
+"q": "In Power Query, 'Reference' is used to\u2026",
+"options": [
+"keeps only distinct rows for the selected columns",
+"divides one column into several by a delimiter or width",
+"sets the data type of a column",
+"creates a new query that starts from another query's output"
+],
+"answer": "creates a new query that starts from another query's output",
+"why": "Reference creates a new query that starts from another query's output."
+},
+{
+"tier": "hard",
+"topic": "Service & performance",
+"title": "Composite model",
+"q": "A composite model lets you \u2026.",
+"options": [
+"mix Import and DirectQuery tables in one model",
+"only use Import",
+"avoid relationships",
+"only use DirectQuery"
+],
+"answer": "mix Import and DirectQuery tables in one model",
+"why": "mix Import and DirectQuery tables in one model."
+},
+{
+"tier": "easy",
+"topic": "Power Query",
+"title": "Enter Data",
+"q": "In Power Query, 'Enter Data' is used to\u2026",
+"options": [
+"lets you type a small static table by hand",
+"transforms and cleans source data before it loads (the ETL layer)",
+"record each transformation so it replays on every refresh",
+"substitutes one value for another in a column"
+],
+"answer": "lets you type a small static table by hand",
+"why": "Enter Data lets you type a small static table by hand."
+},
+{
+"tier": "hard",
+"topic": "Visuals",
+"title": "Decomposition tree",
+"q": "Which visual is best for interactively breaking a measure down by dimensions?",
+"options": [
+"Scatter chart",
+"Card",
+"Waterfall chart",
+"Decomposition tree"
+],
+"answer": "Decomposition tree",
+"why": "A Decomposition tree is designed for interactively breaking a measure down by dimensions."
+},
+{
+"tier": "medium",
+"topic": "Service & performance",
+"title": "Scheduled refresh",
+"q": "Scheduled refresh of an Import dataset requires \u2026 for on-prem sources.",
+"options": [
+"Power Query only",
+"an on-premises data gateway",
+"a slicer",
+"a bookmark"
+],
+"answer": "an on-premises data gateway",
+"why": "an on-premises data gateway."
+},
+{
+"tier": "medium",
+"topic": "Visuals",
+"title": "Gauge",
+"q": "Which visual is best for showing progress toward a single target on a dial?",
+"options": [
+"Gauge",
+"Slicer",
+"Scatter chart",
+"Key influencers"
+],
+"answer": "Gauge",
+"why": "A Gauge is designed for showing progress toward a single target on a dial."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "VAR.P()",
+"q": "What does the DAX function VAR.P() do?",
+"options": [
+"returns the population standard deviation of a column",
+"returns the population variance of a column",
+"returns the median of a column",
+"returns the k-th percentile of values (inclusive)"
+],
+"answer": "returns the population variance of a column",
+"why": "VAR.P returns the population variance of a column."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "MID()",
+"q": "What does the DAX function MID() do?",
+"options": [
+"returns characters from the middle of text",
+"converts text to upper case",
+"converts text to lower case",
+"removes extra spaces from text"
+],
+"answer": "returns characters from the middle of text",
+"why": "MID returns characters from the middle of text."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Which function rel",
+"q": "Which DAX function returns a related value across a one-to-many relationship?",
+"options": [
+"SEARCH",
+"USERELATIONSHIP",
+"RELATEDTABLE",
+"RELATED"
+],
+"answer": "RELATED",
+"why": "RELATED returns a related value across a one-to-many relationship."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Which function rel",
+"q": "Which DAX function activates an inactive relationship for a calculation?",
+"options": [
+"USERELATIONSHIP",
+"CONCATENATEX",
+"RELATEDTABLE",
+"RELATED"
+],
+"answer": "USERELATIONSHIP",
+"why": "USERELATIONSHIP activates an inactive relationship for a calculation."
+},
+{
+"tier": "medium",
+"topic": "Visuals",
+"title": "Treemap",
+"q": "Which visual is best for showing part-to-whole with nested rectangles?",
+"options": [
+"Treemap",
+"Waterfall chart",
+"Scatter chart",
+"Ribbon chart"
+],
+"answer": "Treemap",
+"why": "A Treemap is designed for showing part-to-whole with nested rectangles."
+},
+{
+"tier": "medium",
+"topic": "Choosing visuals",
+"title": "Best visual",
+"q": "Which visual best helps you show rank changes of products across quarters?",
+"options": [
+"Table",
+"Ribbon chart",
+"Line chart",
+"Treemap"
+],
+"answer": "Ribbon chart",
+"why": "A Ribbon chart is the standard choice to show rank changes of products across quarters."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Which function rel",
+"q": "Which DAX function fetches a column value from the one-side of a relationship?",
+"options": [
+"RELATED",
+"SELECTEDVALUE",
+"USERELATIONSHIP",
+"RELATEDTABLE"
+],
+"answer": "RELATED",
+"why": "RELATED fetches a column value from the one-side of a relationship."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "SUBSTITUTE()",
+"q": "What does the DAX function SUBSTITUTE() do?",
+"options": [
+"converts text to upper case",
+"replaces occurrences of text with new text",
+"converts text to lower case",
+"removes extra spaces from text"
+],
+"answer": "replaces occurrences of text with new text",
+"why": "SUBSTITUTE replaces occurrences of text with new text."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "AVERAGE()",
+"q": "What does the DAX function AVERAGE() do?",
+"options": [
+"returns the arithmetic mean of a column",
+"returns the largest value in a column",
+"returns the smallest value in a column",
+"adds up all the numbers in a column"
+],
+"answer": "returns the arithmetic mean of a column",
+"why": "AVERAGE returns the arithmetic mean of a column."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Pick date",
+"q": "Which DAX function returns the last day of the month, offset by months?",
+"options": [
+"YEAR",
+"DAY",
+"MONTH",
+"EOMONTH"
+],
+"answer": "EOMONTH",
+"why": "EOMONTH returns the last day of the month, offset by months."
+},
+{
+"tier": "medium",
+"topic": "DAX syntax",
+"title": "DAX syntax",
+"q": "A DAX measure always returns\u2026",
+"options": [
+"a table",
+"a single scalar value in its context",
+"multiple rows",
+"a visual"
+],
+"answer": "a single scalar value in its context",
+"why": "a single scalar value in its context."
+},
+{
+"tier": "medium",
+"topic": "Service & performance",
+"title": "Sensitivity labels",
+"q": "Sensitivity labels in Power BI are used for \u2026.",
+"options": [
+"speeding up refresh",
+"classifying and protecting content (e.g. Confidential)",
+"creating measures",
+"sorting visuals"
+],
+"answer": "classifying and protecting content (e.g. Confidential)",
+"why": "classifying and protecting content (e.g. Confidential)."
+},
+{
+"tier": "medium",
+"topic": "Power BI Service",
+"title": "Service feature",
+"q": "Subscriptions in the Service let users\u2026",
+"options": [
+"edit DAX",
+"fold queries",
+"create relationships",
+"receive report snapshots by email on a schedule"
+],
+"answer": "receive report snapshots by email on a schedule",
+"why": "receive report snapshots by email on a schedule."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Pick math",
+"q": "Which DAX function rounds a number up to a multiple?",
+"options": [
+"CONVERT",
+"MOD",
+"CEILING",
+"FLOOR"
+],
+"answer": "CEILING",
+"why": "CEILING rounds a number up to a multiple."
+},
+{
+"tier": "medium",
+"topic": "Power BI Service",
+"title": "Service feature",
+"q": "Lineage view in a workspace shows\u2026",
+"options": [
+"visual formatting",
+"how datasets, dataflows and reports depend on each other",
+"the theme",
+"RLS"
+],
+"answer": "how datasets, dataflows and reports depend on each other",
+"why": "how datasets, dataflows and reports depend on each other."
+},
+{
+"tier": "medium",
+"topic": "Choosing visuals",
+"title": "Best visual",
+"q": "Which visual best helps you show sales by month across two years for comparison?",
+"options": [
+"Map",
+"Scatter chart",
+"Key influencers",
+"Line chart"
+],
+"answer": "Line chart",
+"why": "A Line chart is the standard choice to show sales by month across two years for comparison."
+},
+{
+"tier": "medium",
+"topic": "Data modelling",
+"title": "Star schema",
+"q": "A star schema places the \u2026 in the centre connected to dimension tables.",
+"options": [
+"fact table",
+"slicer",
+"dimension table",
+"measure"
+],
+"answer": "fact table",
+"why": "fact table."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Which function rel",
+"q": "Which DAX function returns the related rows from the many-side of a relationship?",
+"options": [
+"PREVIOUSMONTH",
+"RELATED",
+"RELATEDTABLE",
+"USERELATIONSHIP"
+],
+"answer": "RELATEDTABLE",
+"why": "RELATEDTABLE returns the related rows from the many-side of a relationship."
+},
+{
+"tier": "easy",
+"topic": "Visuals",
+"title": "Map",
+"q": "Which visual is best for plotting values by geography?",
+"options": [
+"KPI visual",
+"Table",
+"Map",
+"Treemap"
+],
+"answer": "Map",
+"why": "A Map is designed for plotting values by geography."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Which function time",
+"q": "Which DAX function returns a month-to-date total of an expression?",
+"options": [
+"TOTALQTD",
+"SAMEPERIODLASTYEAR",
+"TOTALMTD",
+"TOTALYTD"
+],
+"answer": "TOTALMTD",
+"why": "TOTALMTD returns a month-to-date total of an expression."
+},
+{
+"tier": "hard",
+"topic": "Service & performance",
+"title": "Aggregations",
+"q": "Aggregation tables improve performance by \u2026.",
+"options": [
+"refreshing faster only",
+"serving high-level queries from pre-summarised data",
+"deleting detail rows",
+"filtering visuals"
+],
+"answer": "serving high-level queries from pre-summarised data",
+"why": "serving high-level queries from pre-summarised data."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "ADDCOLUMNS()",
+"q": "What does the DAX function ADDCOLUMNS() do?",
+"options": [
+"returns a table keeping only chosen (renamed) columns",
+"groups a table by columns and adds summary columns",
+"returns a table with new calculated columns added",
+"groups a table and aggregates with CURRENTGROUP"
+],
+"answer": "returns a table with new calculated columns added",
+"why": "ADDCOLUMNS returns a table with new calculated columns added."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "CONVERT()",
+"q": "What does the DAX function CONVERT() do?",
+"options": [
+"converts a value to a specified data type",
+"rounds a number up to a multiple",
+"rounds a number down to a multiple",
+"returns the remainder of a division"
+],
+"answer": "converts a value to a specified data type",
+"why": "CONVERT converts a value to a specified data type."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "COUNT()",
+"q": "What does the DAX function COUNT() do?",
+"options": [
+"returns the arithmetic mean of a column",
+"counts the non-blank numeric values in a column",
+"returns the smallest value in a column",
+"adds up all the numbers in a column"
+],
+"answer": "counts the non-blank numeric values in a column",
+"why": "COUNT counts the non-blank numeric values in a column."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Pick rel",
+"q": "Which DAX function returns a value by matching one or more search columns?",
+"options": [
+"MID",
+"CROSSFILTER",
+"LOOKUPVALUE",
+"OR"
+],
+"answer": "LOOKUPVALUE",
+"why": "LOOKUPVALUE returns a value by matching one or more search columns."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Which function context",
+"q": "Which DAX function clears filters from the specified tables or columns?",
+"options": [
+"ALLEXCEPT",
+"REMOVEFILTERS",
+"ALL",
+"CALCULATE"
+],
+"answer": "REMOVEFILTERS",
+"why": "REMOVEFILTERS clears filters from the specified tables or columns."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "STDEV.P()",
+"q": "What does the DAX function STDEV.P() do?",
+"options": [
+"returns the population standard deviation of a column",
+"returns the population variance of a column",
+"returns the k-th percentile of values (inclusive)",
+"returns the median of a column"
+],
+"answer": "returns the population standard deviation of a column",
+"why": "STDEV.P returns the population standard deviation of a column."
+},
+{
+"tier": "medium",
+"topic": "Power Query",
+"title": "Parameters",
+"q": "In Power Query, 'Parameters' is used to\u2026",
+"options": [
+"sets the data type of a column",
+"pushes transformation steps back to the source as a native query",
+"creates an independent copy of a query",
+"let you make queries dynamic (e.g. a file path or a date range)"
+],
+"answer": "let you make queries dynamic (e.g. a file path or a date range)",
+"why": "Parameters let you make queries dynamic (e.g. a file path or a date range)."
+},
+{
+"tier": "hard",
+"topic": "Power Query",
+"title": "Query folding",
+"q": "In Power Query, 'Query folding' is used to\u2026",
+"options": [
+"pushes transformation steps back to the source as a native query",
+"turns wide columns into attribute-value rows",
+"aggregates rows into summary rows in Power Query",
+"sets the data type of a column"
+],
+"answer": "pushes transformation steps back to the source as a native query",
+"why": "Query folding pushes transformation steps back to the source as a native query."
+},
+{
+"tier": "hard",
+"topic": "Visuals",
+"title": "Ribbon chart",
+"q": "Which visual is best for showing rank changes across a category over time?",
+"options": [
+"Ribbon chart",
+"Slicer",
+"KPI visual",
+"Map"
+],
+"answer": "Ribbon chart",
+"why": "A Ribbon chart is designed for showing rank changes across a category over time."
+},
+{
+"tier": "easy",
+"topic": "Power Query",
+"title": "Duplicate",
+"q": "In Power Query, 'Duplicate' is used to\u2026",
+"options": [
+"sets the data type of a column",
+"creates an independent copy of a query",
+"substitutes one value for another in a column",
+"stacks the rows of two queries, like a SQL UNION"
+],
+"answer": "creates an independent copy of a query",
+"why": "Duplicate creates an independent copy of a query."
+},
+{
+"tier": "hard",
+"topic": "Read DAX",
+"title": "What does this compute?",
+"q": "What does this measure compute?  =  CALCULATE([Sales], KEEPFILTERS(Product[Color]=\"Red\"))",
+"options": [
+"sales for the same period one year earlier",
+"sales for red items without discarding other Product[Color] filters",
+"the profit margin as a ratio",
+"the number of products priced above 100"
+],
+"answer": "sales for red items without discarding other Product[Color] filters",
+"why": "It returns sales for red items without discarding other Product[Color] filters."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Which function rank",
+"q": "Which DAX function returns the top N rows of a table by an expression?",
+"options": [
+"CALCULATE",
+"CONCATENATE",
+"RANKX",
+"TOPN"
+],
+"answer": "TOPN",
+"why": "TOPN returns the top N rows of a table by an expression."
+},
+{
+"tier": "medium",
+"topic": "Choosing visuals",
+"title": "Best visual",
+"q": "Which visual best helps you show which factors most drive customer churn?",
+"options": [
+"Slicer",
+"Treemap",
+"Key influencers",
+"Line chart"
+],
+"answer": "Key influencers",
+"why": "A Key influencers is the standard choice to show which factors most drive customer churn."
+},
+{
+"tier": "medium",
+"topic": "Report design",
+"title": "Bookmarks",
+"q": "Bookmarks capture \u2026.",
+"options": [
+"a copy of the data",
+"the current state of a page (filters, visibility, selections)",
+"only slicer values",
+"a DAX measure"
+],
+"answer": "the current state of a page (filters, visibility, selections)",
+"why": "the current state of a page (filters, visibility, selections)."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "NEXTMONTH()",
+"q": "What does the DAX function NEXTMONTH() do?",
+"options": [
+"returns a date table spanning all dates in the model",
+"returns a one-column date table between two dates",
+"returns the dates of the next month",
+"returns the dates of the previous year"
+],
+"answer": "returns the dates of the next month",
+"why": "NEXTMONTH returns the dates of the next month."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "EARLIER()",
+"q": "What does the DAX function EARLIER() do?",
+"options": [
+"refers to an earlier row context (legacy pattern before variables)",
+"evaluates an expression in a modified filter context",
+"removes filters from a table except on the given columns",
+"removes filters from a table or columns"
+],
+"answer": "refers to an earlier row context (legacy pattern before variables)",
+"why": "EARLIER refers to an earlier row context (legacy pattern before variables)."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "VALUE()",
+"q": "What does the DAX function VALUE() do?",
+"options": [
+"converts a text number to a numeric value",
+"converts text to lower case",
+"removes extra spaces from text",
+"converts text to upper case"
+],
+"answer": "converts a text number to a numeric value",
+"why": "VALUE converts a text number to a numeric value."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "PARALLELPERIOD()",
+"q": "What does the DAX function PARALLELPERIOD() do?",
+"options": [
+"returns a month-to-date total of an expression",
+"returns a year-to-date total of an expression",
+"returns a quarter-to-date total of an expression",
+"returns a full parallel period shifted by an interval"
+],
+"answer": "returns a full parallel period shifted by an interval",
+"why": "PARALLELPERIOD returns a full parallel period shifted by an interval."
+},
+{
+"tier": "medium",
+"topic": "DAX syntax",
+"title": "DAX syntax",
+"q": "Comments in DAX can start with\u2026",
+"options": [
+"-- or //",
+"REM",
+"<!-- -->",
+"# only"
+],
+"answer": "-- or //",
+"why": "-- or //."
+},
+{
+"tier": "easy",
+"topic": "Report design",
+"title": "Pie chart pitfall",
+"q": "Pie charts become hard to read when they have \u2026.",
+"options": [
+"three slices",
+"one slice",
+"two slices",
+"many small slices"
+],
+"answer": "many small slices",
+"why": "many small slices."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Which function iter",
+"q": "Which DAX function iterates a table and sums an expression evaluated per row?",
+"options": [
+"MAXX",
+"MINX",
+"AVERAGEX",
+"SUMX"
+],
+"answer": "SUMX",
+"why": "SUMX iterates a table and sums an expression evaluated per row."
+},
+{
+"tier": "easy",
+"topic": "Formatting & UX",
+"title": "Report formatting",
+"q": "To make 'MonthName' sort chronologically you use\u2026",
+"options": [
+"alphabetical sort",
+"a measure",
+"a slicer",
+"Sort by Column with a MonthNumber column"
+],
+"answer": "Sort by Column with a MonthNumber column",
+"why": "Sort by Column with a MonthNumber column."
+},
+{
+"tier": "easy",
+"topic": "Formatting & UX",
+"title": "Report formatting",
+"q": "Grouping several data points into ranges (bins) is done with\u2026",
+"options": [
+"Group / binning on a column",
+"a measure",
+"a theme",
+"RLS"
+],
+"answer": "Group / binning on a column",
+"why": "Group / binning on a column."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "GENERATESERIES()",
+"q": "What does the DAX function GENERATESERIES() do?",
+"options": [
+"returns a table keeping only chosen (renamed) columns",
+"returns a table with new calculated columns added",
+"groups a table by columns and adds summary columns",
+"returns a single-column table of numbers in a range"
+],
+"answer": "returns a single-column table of numbers in a range",
+"why": "GENERATESERIES returns a single-column table of numbers in a range."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "AND()",
+"q": "What does the DAX function AND() do?",
+"options": [
+"returns an alternative value when an expression errors",
+"tests whether an expression returns an error",
+"returns TRUE only if both conditions are true",
+"tests whether a value is blank"
+],
+"answer": "returns TRUE only if both conditions are true",
+"why": "AND returns TRUE only if both conditions are true."
+},
+{
+"tier": "easy",
+"topic": "Formatting & UX",
+"title": "Report formatting",
+"q": "To display units like 1.2M instead of 1200000 you set\u2026",
+"options": [
+"RLS",
+"a slicer",
+"a relationship",
+"the display units / value formatting"
+],
+"answer": "the display units / value formatting",
+"why": "the display units / value formatting."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "CONCATENATEX()",
+"q": "What does the DAX function CONCATENATEX() do?",
+"options": [
+"returns the leftmost characters of a text value",
+"joins two text strings into one",
+"iterates a table and joins an expression into a delimited string",
+"converts a value to text in a specified format"
+],
+"answer": "iterates a table and joins an expression into a delimited string",
+"why": "CONCATENATEX iterates a table and joins an expression into a delimited string."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "GROUPBY()",
+"q": "What does the DAX function GROUPBY() do?",
+"options": [
+"returns a table keeping only chosen (renamed) columns",
+"returns a table with new calculated columns added",
+"groups a table by columns and adds summary columns",
+"groups a table and aggregates with CURRENTGROUP"
+],
+"answer": "groups a table and aggregates with CURRENTGROUP",
+"why": "GROUPBY groups a table and aggregates with CURRENTGROUP."
+},
+{
+"tier": "hard",
+"topic": "Concepts",
+"title": "Disable auto date",
+"q": "Turning off Auto date/time is recommended to \u2026.",
+"options": [
+"allow publishing",
+"reduce model size and use your own date table",
+"enable RLS",
+"speed up visuals only"
+],
+"answer": "reduce model size and use your own date table",
+"why": "reduce model size and use your own date table."
+},
+{
+"tier": "easy",
+"topic": "Formatting & UX",
+"title": "Report formatting",
+"q": "To reuse a colour palette across a report you apply\u2026",
+"options": [
+"conditional formatting only",
+"a bookmark",
+"a report theme",
+"a gateway"
+],
+"answer": "a report theme",
+"why": "a report theme."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Pick date",
+"q": "Which DAX function returns the difference between two dates in a chosen unit?",
+"options": [
+"DATEDIFF",
+"YEAR",
+"MONTH",
+"DAY"
+],
+"answer": "DATEDIFF",
+"why": "DATEDIFF returns the difference between two dates in a chosen unit."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "IF()",
+"q": "What does the DAX function IF() do?",
+"options": [
+"returns the top N rows of a table by an expression",
+"returns the absolute value of a number",
+"returns one value when a condition is true and another when false",
+"matches an expression against several values and returns the corresponding result"
+],
+"answer": "returns one value when a condition is true and another when false",
+"why": "IF returns one value when a condition is true and another when false."
+},
+{
+"tier": "medium",
+"topic": "Report design",
+"title": "Drill-through",
+"q": "A drill-through page lets a user \u2026.",
+"options": [
+"delete a page",
+"publish the report",
+"remove all filters",
+"jump to a detail page filtered by the selected item"
+],
+"answer": "jump to a detail page filtered by the selected item",
+"why": "jump to a detail page filtered by the selected item."
+},
+{
+"tier": "hard",
+"topic": "Concepts",
+"title": "Dataflow",
+"q": "A Power BI dataflow stores \u2026.",
+"options": [
+"visuals",
+"reusable Power Query transformations in the Service",
+"RLS roles",
+"a theme"
+],
+"answer": "reusable Power Query transformations in the Service",
+"why": "reusable Power Query transformations in the Service."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "ISERROR()",
+"q": "What does the DAX function ISERROR() do?",
+"options": [
+"tests whether a value is blank",
+"returns the first non-blank argument",
+"returns an alternative value when an expression errors",
+"tests whether an expression returns an error"
+],
+"answer": "tests whether an expression returns an error",
+"why": "ISERROR tests whether an expression returns an error."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "RELATED()",
+"q": "What does the DAX function RELATED() do?",
+"options": [
+"returns a related value across a one-to-many relationship",
+"returns the related rows from the many-side of a relationship",
+"activates an inactive relationship for a calculation",
+"fetches a column value from the one-side of a relationship"
+],
+"answer": "fetches a column value from the one-side of a relationship",
+"why": "RELATED fetches a column value from the one-side of a relationship."
+},
+{
+"tier": "hard",
+"topic": "Data modelling",
+"title": "Role-playing dimension",
+"q": "A single Date table used for OrderDate and ShipDate is a \u2026.",
+"options": [
+"snowflake",
+"measure table",
+"bridge table",
+"role-playing dimension"
+],
+"answer": "role-playing dimension",
+"why": "role-playing dimension."
+},
+{
+"tier": "medium",
+"topic": "Concepts",
+"title": "Auto date/time",
+"q": "Power BI's Auto date/time feature creates \u2026.",
+"options": [
+"one shared date table",
+"nothing",
+"a slicer",
+"a hidden date table for each date column"
+],
+"answer": "a hidden date table for each date column",
+"why": "a hidden date table for each date column."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "TOTALQTD()",
+"q": "What does the DAX function TOTALQTD() do?",
+"options": [
+"returns a year-to-date total of an expression",
+"returns a quarter-to-date total of an expression",
+"returns a month-to-date total of an expression",
+"shifts the date context back one year"
+],
+"answer": "returns a quarter-to-date total of an expression",
+"why": "TOTALQTD returns a quarter-to-date total of an expression."
+},
+{
+"tier": "hard",
+"topic": "Troubleshooting",
+"title": "Spot the cause",
+"q": "A measure works in a card but shows wrong subtotals in a matrix because \u2026.",
+"options": [
+"the data is wrong",
+"the matrix is broken",
+"DAX is invalid",
+"totals are evaluated in their own filter context, not summed"
+],
+"answer": "totals are evaluated in their own filter context, not summed",
+"why": "totals are evaluated in their own filter context, not summed."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "ABS()",
+"q": "What does the DAX function ABS() do?",
+"options": [
+"rounds a number to a specified number of digits",
+"returns a blank value",
+"divides two numbers and safely returns blank (or a fallback) on divide-by-zero",
+"returns the absolute value of a number"
+],
+"answer": "returns the absolute value of a number",
+"why": "ABS returns the absolute value of a number."
+},
+{
+"tier": "medium",
+"topic": "Power BI Service",
+"title": "Service feature",
+"q": "A Power BI App audience lets you\u2026",
+"options": [
+"create relationships",
+"speed up refresh",
+"write M",
+"give different groups different content/permissions"
+],
+"answer": "give different groups different content/permissions",
+"why": "give different groups different content/permissions."
+},
+{
+"tier": "medium",
+"topic": "Choosing visuals",
+"title": "Best visual",
+"q": "Which visual best helps you break a revenue number down interactively by several dimensions?",
+"options": [
+"Slicer",
+"Decomposition tree",
+"Clustered column chart",
+"Key influencers"
+],
+"answer": "Decomposition tree",
+"why": "A Decomposition tree is the standard choice to break a revenue number down interactively by several dimensions."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "CLOSINGBALANCEYEAR()",
+"q": "What does the DAX function CLOSINGBALANCEYEAR() do?",
+"options": [
+"returns a one-column date table between two dates",
+"returns a date table spanning all dates in the model",
+"returns a measure's value at the end of the year",
+"returns the dates of the previous year"
+],
+"answer": "returns a measure's value at the end of the year",
+"why": "CLOSINGBALANCEYEAR returns a measure's value at the end of the year."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Pick time",
+"q": "Which DAX function returns the last date of the year in context?",
+"options": [
+"ENDOFYEAR",
+"PREVIOUSYEAR",
+"CALENDARAUTO",
+"CALENDAR"
+],
+"answer": "ENDOFYEAR",
+"why": "ENDOFYEAR returns the last date of the year in context."
+},
+{
+"tier": "medium",
+"topic": "Read DAX",
+"title": "What does this compute?",
+"q": "What does this measure compute?  =  SUMX(Sales, Sales[Qty]*Sales[Price])",
+"options": [
+"each product's share of total sales",
+"the number of products priced above 100",
+"the sum of quantity times price over every sales row",
+"a High/Low label based on whether sales exceed 1000"
+],
+"answer": "the sum of quantity times price over every sales row",
+"why": "It returns the sum of quantity times price over every sales row."
+},
+{
+"tier": "medium",
+"topic": "Visuals",
+"title": "Scatter chart use",
+"q": "A Scatter chart is most appropriate for\u2026",
+"options": [
+"showing the relationship between two numeric measures",
+"plotting values by geography",
+"showing a value against a target with a trend",
+"showing part-to-whole with nested rectangles"
+],
+"answer": "showing the relationship between two numeric measures",
+"why": "A Scatter chart is designed for showing the relationship between two numeric measures."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "LEN()",
+"q": "What does the DAX function LEN() do?",
+"options": [
+"converts text to upper case",
+"converts text to lower case",
+"removes extra spaces from text",
+"returns the number of characters in text"
+],
+"answer": "returns the number of characters in text",
+"why": "LEN returns the number of characters in text."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "TRIM()",
+"q": "What does the DAX function TRIM() do?",
+"options": [
+"converts text to upper case",
+"returns the number of characters in text",
+"removes extra spaces from text",
+"converts text to lower case"
+],
+"answer": "removes extra spaces from text",
+"why": "TRIM removes extra spaces from text."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "OR()",
+"q": "What does the DAX function OR() do?",
+"options": [
+"returns TRUE if either condition is true",
+"returns an alternative value when an expression errors",
+"tests whether an expression returns an error",
+"tests whether a value is blank"
+],
+"answer": "returns TRUE if either condition is true",
+"why": "OR returns TRUE if either condition is true."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "ALLSELECTED()",
+"q": "What does the DAX function ALLSELECTED() do?",
+"options": [
+"evaluates an expression in a modified filter context",
+"removes filters from a table except on the given columns",
+"removes filters from a table or columns",
+"keeps filters coming from outside the current visual"
+],
+"answer": "keeps filters coming from outside the current visual",
+"why": "ALLSELECTED keeps filters coming from outside the current visual."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Pick context",
+"q": "Which DAX function returns the first value where an expression is non-blank?",
+"options": [
+"MID",
+"CONCATENATEX",
+"TREATAS",
+"FIRSTNONBLANK"
+],
+"answer": "FIRSTNONBLANK",
+"why": "FIRSTNONBLANK returns the first value where an expression is non-blank."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Which function logic",
+"q": "Which DAX function matches an expression against several values and returns the corresponding result?",
+"options": [
+"IF",
+"TOPN",
+"SWITCH",
+"TOTALQTD"
+],
+"answer": "SWITCH",
+"why": "SWITCH matches an expression against several values and returns the corresponding result."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Pick time",
+"q": "Which DAX function returns the dates of the next month?",
+"options": [
+"CALENDAR",
+"NEXTMONTH",
+"PREVIOUSYEAR",
+"CALENDARAUTO"
+],
+"answer": "NEXTMONTH",
+"why": "NEXTMONTH returns the dates of the next month."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Which function iter",
+"q": "Which DAX function iterates a table and averages an expression per row?",
+"options": [
+"MINX",
+"MAXX",
+"AVERAGEX",
+"SUMX"
+],
+"answer": "AVERAGEX",
+"why": "AVERAGEX iterates a table and averages an expression per row."
+},
+{
+"tier": "easy",
+"topic": "Visuals",
+"title": "Slicer",
+"q": "Which visual is best for letting users filter other visuals on the page?",
+"options": [
+"Key influencers",
+"Slicer",
+"Map",
+"Ribbon chart"
+],
+"answer": "Slicer",
+"why": "A Slicer is designed for letting users filter other visuals on the page."
+},
+{
+"tier": "medium",
+"topic": "Concepts",
+"title": "Report vs dashboard",
+"q": "In the Service, a dashboard differs from a report because it \u2026.",
+"options": [
+"is edited in Desktop",
+"holds the data model",
+"pins visuals (tiles) from one or more reports onto a single canvas",
+"is a slicer"
+],
+"answer": "pins visuals (tiles) from one or more reports onto a single canvas",
+"why": "pins visuals (tiles) from one or more reports onto a single canvas."
+},
+{
+"tier": "medium",
+"topic": "Visuals",
+"title": "Funnel chart",
+"q": "Which visual is best for showing values through the stages of a process?",
+"options": [
+"Funnel chart",
+"Card",
+"Scatter chart",
+"Slicer"
+],
+"answer": "Funnel chart",
+"why": "A Funnel chart is designed for showing values through the stages of a process."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "PERCENTILE.INC()",
+"q": "What does the DAX function PERCENTILE.INC() do?",
+"options": [
+"returns the population variance of a column",
+"returns the k-th percentile of values (inclusive)",
+"returns the population standard deviation of a column",
+"returns the median of a column"
+],
+"answer": "returns the k-th percentile of values (inclusive)",
+"why": "PERCENTILE.INC returns the k-th percentile of values (inclusive)."
+},
+{
+"tier": "medium",
+"topic": "Read DAX",
+"title": "What does this compute?",
+"q": "What does this measure compute?  =  CALCULATE([Sales], ALL(Product))",
+"options": [
+"a High/Low label based on whether sales exceed 1000",
+"the profit margin as a ratio",
+"sales for red items without discarding other Product[Color] filters",
+"sales ignoring any filter on the Product table"
+],
+"answer": "sales ignoring any filter on the Product table",
+"why": "It returns sales ignoring any filter on the Product table."
+},
+{
+"tier": "easy",
+"topic": "Visuals",
+"title": "Clustered column chart",
+"q": "Which visual is best for comparing a measure across categories?",
+"options": [
+"KPI visual",
+"Table",
+"Clustered column chart",
+"Matrix"
+],
+"answer": "Clustered column chart",
+"why": "A Clustered column chart is designed for comparing a measure across categories."
+},
+{
+"tier": "hard",
+"topic": "Concepts",
+"title": "High cardinality",
+"q": "A high-cardinality column (e.g. a GUID) hurts an Import model because it \u2026.",
+"options": [
+"compresses poorly and inflates model size",
+"breaks DAX",
+"is always text",
+"cannot be filtered"
+],
+"answer": "compresses poorly and inflates model size",
+"why": "compresses poorly and inflates model size."
+},
+{
+"tier": "medium",
+"topic": "Concepts",
+"title": "Certified vs promoted",
+"q": "Between endorsement levels, 'Certified' is \u2026 than 'Promoted'.",
+"options": [
+"lower",
+"a higher trust level set by authorised reviewers",
+"unrelated",
+"the same"
+],
+"answer": "a higher trust level set by authorised reviewers",
+"why": "a higher trust level set by authorised reviewers."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Pick logic",
+"q": "Which DAX function returns the first non-blank argument?",
+"options": [
+"ISBLANK",
+"ISERROR",
+"COALESCE",
+"IFERROR"
+],
+"answer": "COALESCE",
+"why": "COALESCE returns the first non-blank argument."
+},
+{
+"tier": "medium",
+"topic": "Power BI Service",
+"title": "Service feature",
+"q": "Pinning a visual to a dashboard creates a\u2026",
+"options": [
+"measure",
+"relationship",
+"slicer",
+"tile"
+],
+"answer": "tile",
+"why": "tile."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "KEEPFILTERS()",
+"q": "What does the DAX function KEEPFILTERS() do?",
+"options": [
+"evaluates an expression in a modified filter context",
+"removes filters from a table except on the given columns",
+"removes filters from a table or columns",
+"adds a filter without overwriting existing filters on the same column"
+],
+"answer": "adds a filter without overwriting existing filters on the same column",
+"why": "KEEPFILTERS adds a filter without overwriting existing filters on the same column."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "COUNTA()",
+"q": "What does the DAX function COUNTA() do?",
+"options": [
+"returns the arithmetic mean of a column",
+"counts the non-blank values in a column (any type)",
+"adds up all the numbers in a column",
+"returns the smallest value in a column"
+],
+"answer": "counts the non-blank values in a column (any type)",
+"why": "COUNTA counts the non-blank values in a column (any type)."
+},
+{
+"tier": "medium",
+"topic": "Concepts",
+"title": "Data type impact",
+"q": "Choosing the right data type matters because it affects \u2026.",
+"options": [
+"nothing",
+"storage size, sorting and available operations",
+"the theme",
+"only colours"
+],
+"answer": "storage size, sorting and available operations",
+"why": "storage size, sorting and available operations."
+},
+{
+"tier": "medium",
+"topic": "Service & performance",
+"title": "RLS location",
+"q": "Row-level security roles are created in Power BI Desktop under \u2026.",
+"options": [
+"Modeling \u25b8 Manage Roles",
+"Insert \u25b8 Visual",
+"View \u25b8 Bookmarks",
+"Home \u25b8 Refresh"
+],
+"answer": "Modeling \u25b8 Manage Roles",
+"why": "Modeling \u25b8 Manage Roles."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Pick text",
+"q": "Which DAX function replaces occurrences of text with new text?",
+"options": [
+"LOWER",
+"SUBSTITUTE",
+"TRIM",
+"UPPER"
+],
+"answer": "SUBSTITUTE",
+"why": "SUBSTITUTE replaces occurrences of text with new text."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "POWER()",
+"q": "What does the DAX function POWER() do?",
+"options": [
+"raises a number to a power",
+"rounds a number down to a multiple",
+"converts a value to a specified data type",
+"rounds a number up to a multiple"
+],
+"answer": "raises a number to a power",
+"why": "POWER raises a number to a power."
+},
+{
+"tier": "medium",
+"topic": "Read DAX",
+"title": "What does this compute?",
+"q": "What does this measure compute?  =  COUNTROWS(FILTER(Product, Product[Price]>100))",
+"options": [
+"a High/Low label based on whether sales exceed 1000",
+"each product's share of total sales",
+"the sum of quantity times price over every sales row",
+"the number of products priced above 100"
+],
+"answer": "the number of products priced above 100",
+"why": "It returns the number of products priced above 100."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "WEEKDAY()",
+"q": "What does the DAX function WEEKDAY() do?",
+"options": [
+"returns the year of a date",
+"returns the day-of-week number of a date",
+"returns the day of the month of a date",
+"returns the month number of a date"
+],
+"answer": "returns the day-of-week number of a date",
+"why": "WEEKDAY returns the day-of-week number of a date."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "SUMMARIZE()",
+"q": "What does the DAX function SUMMARIZE() do?",
+"options": [
+"returns a table with new calculated columns added",
+"groups a table by columns and adds summary columns",
+"returns a table keeping only chosen (renamed) columns",
+"groups a table and aggregates with CURRENTGROUP"
+],
+"answer": "groups a table by columns and adds summary columns",
+"why": "SUMMARIZE groups a table by columns and adds summary columns."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Pick text",
+"q": "Which DAX function returns characters from the middle of text?",
+"options": [
+"MID",
+"TRIM",
+"UPPER",
+"LOWER"
+],
+"answer": "MID",
+"why": "MID returns characters from the middle of text."
+},
+{
+"tier": "medium",
+"topic": "Choosing visuals",
+"title": "Best visual",
+"q": "Which visual best helps you show a detailed cross-tab of sales by region and category with drill-down?",
+"options": [
+"Slicer",
+"Ribbon chart",
+"Decomposition tree",
+"Matrix"
+],
+"answer": "Matrix",
+"why": "A Matrix is the standard choice to show a detailed cross-tab of sales by region and category with drill-down."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Which function time",
+"q": "Which DAX function shifts the date context by a number of intervals?",
+"options": [
+"TOTALMTD",
+"DATEADD",
+"TOTALYTD",
+"TOTALQTD"
+],
+"answer": "DATEADD",
+"why": "DATEADD shifts the date context by a number of intervals."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Pick table",
+"q": "Which DAX function returns a single-column table of numbers in a range?",
+"options": [
+"ADDCOLUMNS",
+"GENERATESERIES",
+"SUMMARIZE",
+"SELECTCOLUMNS"
+],
+"answer": "GENERATESERIES",
+"why": "GENERATESERIES returns a single-column table of numbers in a range."
+},
+{
+"tier": "hard",
+"topic": "Concepts",
+"title": "Context transition",
+"q": "Wrapping an aggregation in CALCULATE inside an iterator triggers \u2026.",
+"options": [
+"a relationship",
+"query folding",
+"context transition (row context becomes filter context)",
+"incremental refresh"
+],
+"answer": "context transition (row context becomes filter context)",
+"why": "context transition (row context becomes filter context)."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Which function iter",
+"q": "Which DAX function iterates a table and returns the smallest expression value?",
+"options": [
+"MINX",
+"MAXX",
+"SUMX",
+"AVERAGEX"
+],
+"answer": "MINX",
+"why": "MINX iterates a table and returns the smallest expression value."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Pick date",
+"q": "Which DAX function returns the day-of-week number of a date?",
+"options": [
+"WEEKDAY",
+"DAY",
+"MONTH",
+"YEAR"
+],
+"answer": "WEEKDAY",
+"why": "WEEKDAY returns the day-of-week number of a date."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "DIVIDE()",
+"q": "What does the DAX function DIVIDE() do?",
+"options": [
+"returns the absolute value of a number",
+"rounds a number to a specified number of digits",
+"divides two numbers and safely returns blank (or a fallback) on divide-by-zero",
+"returns a blank value"
+],
+"answer": "divides two numbers and safely returns blank (or a fallback) on divide-by-zero",
+"why": "DIVIDE divides two numbers and safely returns blank (or a fallback) on divide-by-zero."
+},
+{
+"tier": "easy",
+"topic": "Visuals",
+"title": "Line chart",
+"q": "Which visual is best for showing a trend over continuous time?",
+"options": [
+"Line chart",
+"Decomposition tree",
+"Funnel chart",
+"Scatter chart"
+],
+"answer": "Line chart",
+"why": "A Line chart is designed for showing a trend over continuous time."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Which function time",
+"q": "Which DAX function returns the set of dates from the start of the year to the current date?",
+"options": [
+"DATESYTD",
+"TOTALYTD",
+"TOTALQTD",
+"TOTALMTD"
+],
+"answer": "DATESYTD",
+"why": "DATESYTD returns the set of dates from the start of the year to the current date."
+},
+{
+"tier": "hard",
+"topic": "Data modelling",
+"title": "Surrogate key",
+"q": "In modelling, a surrogate key is \u2026.",
+"options": [
+"a natural business code",
+"a visual",
+"a measure",
+"a system-generated key used to join fact and dimension"
+],
+"answer": "a system-generated key used to join fact and dimension",
+"why": "a system-generated key used to join fact and dimension."
+},
+{
+"tier": "medium",
+"topic": "Choosing visuals",
+"title": "Best visual",
+"q": "Which visual best helps you show progress toward a sales target on a dial?",
+"options": [
+"Matrix",
+"Table",
+"Map",
+"Gauge"
+],
+"answer": "Gauge",
+"why": "A Gauge is the standard choice to show progress toward a sales target on a dial."
+},
+{
+"tier": "medium",
+"topic": "Data modelling",
+"title": "Cross-filter direction",
+"q": "Cross-filter direction on a relationship controls \u2026.",
+"options": [
+"the sort order",
+"how filters propagate between the related tables",
+"visual colours",
+"refresh timing"
+],
+"answer": "how filters propagate between the related tables",
+"why": "how filters propagate between the related tables."
+},
+{
+"tier": "medium",
+"topic": "Service & performance",
+"title": "Data gateway type",
+"q": "For a single user's personal scheduled refresh you can use the \u2026 gateway.",
+"options": [
+"personal mode",
+"visual",
+"enterprise-only",
+"query"
+],
+"answer": "personal mode",
+"why": "personal mode."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Pick math",
+"q": "Which DAX function converts a value to a specified data type?",
+"options": [
+"CONVERT",
+"MOD",
+"FLOOR",
+"CEILING"
+],
+"answer": "CONVERT",
+"why": "CONVERT converts a value to a specified data type."
+},
+{
+"tier": "medium",
+"topic": "Choosing visuals",
+"title": "Best visual",
+"q": "Which visual best helps you display a single total revenue figure prominently?",
+"options": [
+"Decomposition tree",
+"Clustered column chart",
+"Treemap",
+"Card"
+],
+"answer": "Card",
+"why": "A Card is the standard choice to display a single total revenue figure prominently."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "OPENINGBALANCEMONTH()",
+"q": "What does the DAX function OPENINGBALANCEMONTH() do?",
+"options": [
+"returns a measure's value at the start of the month",
+"returns a date table spanning all dates in the model",
+"returns the dates of the previous year",
+"returns a one-column date table between two dates"
+],
+"answer": "returns a measure's value at the start of the month",
+"why": "OPENINGBALANCEMONTH returns a measure's value at the start of the month."
+},
+{
+"tier": "hard",
+"topic": "Concepts",
+"title": "Measure totals",
+"q": "A measure total in a matrix can differ from the sum of rows because it is \u2026.",
+"options": [
+"cached",
+"random",
+"a bug",
+"re-evaluated in the total's filter context"
+],
+"answer": "re-evaluated in the total's filter context",
+"why": "re-evaluated in the total's filter context."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "TOTALMTD()",
+"q": "What does the DAX function TOTALMTD() do?",
+"options": [
+"returns a month-to-date total of an expression",
+"returns a quarter-to-date total of an expression",
+"returns a year-to-date total of an expression",
+"shifts the date context back one year"
+],
+"answer": "returns a month-to-date total of an expression",
+"why": "TOTALMTD returns a month-to-date total of an expression."
+},
+{
+"tier": "medium",
+"topic": "DAX syntax",
+"title": "DAX syntax",
+"q": "The DAX operator for logical OR inside a boolean expression is\u2026",
+"options": [
+"||",
+"-",
+"OR only",
+"&&"
+],
+"answer": "||",
+"why": "||."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "MONTH()",
+"q": "What does the DAX function MONTH() do?",
+"options": [
+"returns the year of a date",
+"returns the day of the month of a date",
+"returns the day-of-week number of a date",
+"returns the month number of a date"
+],
+"answer": "returns the month number of a date",
+"why": "MONTH returns the month number of a date."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "FILTER()",
+"q": "What does the DAX function FILTER() do?",
+"options": [
+"returns the distinct values of a column in the current context",
+"returns a subset of a table that meets a condition",
+"joins two text strings into one",
+"returns a one-column table of distinct values"
+],
+"answer": "returns a subset of a table that meets a condition",
+"why": "FILTER returns a subset of a table that meets a condition."
+},
+{
+"tier": "medium",
+"topic": "Visuals",
+"title": "Waterfall chart use",
+"q": "A Waterfall chart is most appropriate for\u2026",
+"options": [
+"showing values through the stages of a process",
+"interactively breaking a measure down by dimensions",
+"showing how an initial value is affected by sequential increases and decreases",
+"letting users filter other visuals on the page"
+],
+"answer": "showing how an initial value is affected by sequential increases and decreases",
+"why": "A Waterfall chart is designed for showing how an initial value is affected by sequential increases and decreases."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Pick logic",
+"q": "Which DAX function tests whether an expression returns an error?",
+"options": [
+"COALESCE",
+"ISBLANK",
+"ISERROR",
+"IFERROR"
+],
+"answer": "ISERROR",
+"why": "ISERROR tests whether an expression returns an error."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "USERELATIONSHIP()",
+"q": "What does the DAX function USERELATIONSHIP() do?",
+"options": [
+"activates an inactive relationship for a calculation",
+"returns a related value across a one-to-many relationship",
+"fetches a column value from the one-side of a relationship",
+"returns the related rows from the many-side of a relationship"
+],
+"answer": "activates an inactive relationship for a calculation",
+"why": "USERELATIONSHIP activates an inactive relationship for a calculation."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "BLANK()",
+"q": "What does the DAX function BLANK() do?",
+"options": [
+"returns the absolute value of a number",
+"divides two numbers and safely returns blank (or a fallback) on divide-by-zero",
+"rounds a number to a specified number of digits",
+"returns a blank value"
+],
+"answer": "returns a blank value",
+"why": "BLANK returns a blank value."
+},
+{
+"tier": "medium",
+"topic": "DAX syntax",
+"title": "DAX syntax",
+"q": "A measure reference in DAX is written as\u2026",
+"options": [
+"Table[Measure]",
+"{Measure}",
+"[Measure Name]",
+"(Measure)"
+],
+"answer": "[Measure Name]",
+"why": "[Measure Name]."
+},
+{
+"tier": "hard",
+"topic": "Data modelling",
+"title": "Inactive relationship",
+"q": "When two tables have multiple relationships, extra ones are \u2026.",
+"options": [
+"always bidirectional",
+"ignored by DAX",
+"deleted automatically",
+"inactive until activated with USERELATIONSHIP"
+],
+"answer": "inactive until activated with USERELATIONSHIP",
+"why": "inactive until activated with USERELATIONSHIP."
+},
+{
+"tier": "easy",
+"topic": "Concepts",
+"title": "Hierarchy",
+"q": "A hierarchy (Year \u25b8 Quarter \u25b8 Month) enables \u2026 in visuals.",
+"options": [
+"RLS",
+"folding",
+"refresh",
+"drill-down"
+],
+"answer": "drill-down",
+"why": "drill-down."
+},
+{
+"tier": "easy",
+"topic": "Read DAX",
+"title": "What does this compute?",
+"q": "What does this measure compute?  =  DIVIDE([Sales]-[Cost],[Sales])",
+"options": [
+"sales ignoring any filter on the Product table",
+"total sales filtered to the Bikes category",
+"the profit margin as a ratio",
+"the rank of each product by sales among all products"
+],
+"answer": "the profit margin as a ratio",
+"why": "It returns the profit margin as a ratio."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "RELATEDTABLE()",
+"q": "What does the DAX function RELATEDTABLE() do?",
+"options": [
+"returns the related rows from the many-side of a relationship",
+"fetches a column value from the one-side of a relationship",
+"returns a related value across a one-to-many relationship",
+"activates an inactive relationship for a calculation"
+],
+"answer": "returns the related rows from the many-side of a relationship",
+"why": "RELATEDTABLE returns the related rows from the many-side of a relationship."
+},
+{
+"tier": "hard",
+"topic": "Read DAX",
+"title": "What does this compute?",
+"q": "What does this measure compute?  =  DIVIDE([Sales], CALCULATE([Sales], ALL(Product)))",
+"options": [
+"sales ignoring any filter on the Product table",
+"the sum of quantity times price over every sales row",
+"a High/Low label based on whether sales exceed 1000",
+"each product's share of total sales"
+],
+"answer": "each product's share of total sales",
+"why": "It returns each product's share of total sales."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "IFERROR()",
+"q": "What does the DAX function IFERROR() do?",
+"options": [
+"returns an alternative value when an expression errors",
+"tests whether an expression returns an error",
+"tests whether a value is blank",
+"returns the first non-blank argument"
+],
+"answer": "returns an alternative value when an expression errors",
+"why": "IFERROR returns an alternative value when an expression errors."
+},
+{
+"tier": "hard",
+"topic": "Service & performance",
+"title": "VertiPaq",
+"q": "The in-memory engine that compresses and stores Import data is called \u2026.",
+"options": [
+"Power Query",
+"M",
+"DirectQuery",
+"VertiPaq"
+],
+"answer": "VertiPaq",
+"why": "VertiPaq."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "Which function time",
+"q": "Which DAX function returns a full parallel period shifted by an interval?",
+"options": [
+"TOTALQTD",
+"TOTALMTD",
+"PARALLELPERIOD",
+"TOTALYTD"
+],
+"answer": "PARALLELPERIOD",
+"why": "PARALLELPERIOD returns a full parallel period shifted by an interval."
+},
+{
+"tier": "easy",
+"topic": "Power Query",
+"title": "Remove Duplicates",
+"q": "In Power Query, 'Remove Duplicates' is used to\u2026",
+"options": [
+"infers a transformation from sample outputs you type",
+"let you make queries dynamic (e.g. a file path or a date range)",
+"sets the data type of a column",
+"keeps only distinct rows for the selected columns"
+],
+"answer": "keeps only distinct rows for the selected columns",
+"why": "Remove Duplicates keeps only distinct rows for the selected columns."
+},
+{
+"tier": "medium",
+"topic": "Power Query",
+"title": "Fill Down",
+"q": "In Power Query, 'Fill Down' is used to\u2026",
+"options": [
+"transforms and cleans source data before it loads (the ETL layer)",
+"combines two queries by matching keys, like a SQL JOIN",
+"replaces nulls with the last non-null value above",
+"sets the data type of a column"
+],
+"answer": "replaces nulls with the last non-null value above",
+"why": "Fill Down replaces nulls with the last non-null value above."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "RANK.EQ()",
+"q": "What does the DAX function RANK.EQ() do?",
+"options": [
+"returns a table keeping only chosen (renamed) columns",
+"groups a table by columns and adds summary columns",
+"returns the rank of a number in a list (ties share a rank)",
+"returns a table with new calculated columns added"
+],
+"answer": "returns the rank of a number in a list (ties share a rank)",
+"why": "RANK.EQ returns the rank of a number in a list (ties share a rank)."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "Pick text",
+"q": "Which DAX function converts a text number to a numeric value?",
+"options": [
+"VALUE",
+"UPPER",
+"LOWER",
+"TRIM"
+],
+"answer": "VALUE",
+"why": "VALUE converts a text number to a numeric value."
+},
+{
+"tier": "medium",
+"topic": "Report design",
+"title": "Edit interactions",
+"q": "Edit interactions controls \u2026.",
+"options": [
+"the refresh schedule",
+"the data types",
+"RLS",
+"how selecting one visual filters or highlights others"
+],
+"answer": "how selecting one visual filters or highlights others",
+"why": "how selecting one visual filters or highlights others."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "DAY()",
+"q": "What does the DAX function DAY() do?",
+"options": [
+"returns the month number of a date",
+"returns the day of the month of a date",
+"returns the day-of-week number of a date",
+"returns the year of a date"
+],
+"answer": "returns the day of the month of a date",
+"why": "DAY returns the day of the month of a date."
+},
+{
+"tier": "hard",
+"topic": "DAX functions",
+"title": "RANKX()",
+"q": "What does the DAX function RANKX() do?",
+"options": [
+"returns the top N rows of a table by an expression",
+"ranks the rows of a table by an expression",
+"rounds a number to a specified number of digits",
+"counts the distinct values in a column"
+],
+"answer": "ranks the rows of a table by an expression",
+"why": "RANKX ranks the rows of a table by an expression."
+},
+{
+"tier": "medium",
+"topic": "Data modelling",
+"title": "Fact contents",
+"q": "A fact table typically stores \u2026.",
+"options": [
+"only dates",
+"foreign keys and numeric measures",
+"report visuals",
+"only descriptive text"
+],
+"answer": "foreign keys and numeric measures",
+"why": "foreign keys and numeric measures."
+},
+{
+"tier": "medium",
+"topic": "DAX functions",
+"title": "SWITCH()",
+"q": "What does the DAX function SWITCH() do?",
+"options": [
+"fetches a column value from the one-side of a relationship",
+"returns one value when a condition is true and another when false",
+"matches an expression against several values and returns the corresponding result",
+"returns the distinct values of a column in the current context"
+],
+"answer": "matches an expression against several values and returns the corresponding result",
+"why": "SWITCH matches an expression against several values and returns the corresponding result."
+},
+{
+"tier": "easy",
+"topic": "DAX functions",
+"title": "CONCATENATE()",
+"q": "What does the DAX function CONCATENATE() do?",
+"options": [
+"converts a value to text in a specified format",
+"joins two text strings into one",
+"iterates a table and joins an expression into a delimited string",
+"returns the leftmost characters of a text value"
+],
+"answer": "joins two text strings into one",
+"why": "CONCATENATE joins two text strings into one."
+}
+]

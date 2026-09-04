@@ -1,3 +1,4 @@
+import { POWERBI_CONCEPTS } from "@/lib/powerbiConcepts";
 // Seed question bank — ~25 free questions per module (mix of difficulties).
 // Each additional locked question is represented as a placeholder for the lock UI.
 
@@ -310,5 +311,5 @@ export const QUESTIONS = {
   sql: sqlQuestions,
   python: pythonQuestions,
   stats: statsQuestions,
-  powerbi: powerbiQuestions,
+  powerbi: [...powerbiQuestions, ...POWERBI_CONCEPTS],
 };
