@@ -1,4 +1,4 @@
-# Excel question bank — source of truth
+# Excel question bank — source of truth (500 / 500 ✅)
 
 - <key>/workbook.json    one folder per workbook (sales, hr, …), each with gen_workbook.py + questions_*.json
 - questions_*.json       100 questions (34 easy / 33 medium / 33 hard). Fields: id, tier, topic, title, context, task, hint, answer
@@ -19,4 +19,4 @@ so any correct approach passes.
 | hr | HR & Payroll | Employees, Leave, Grades, Holidays | 100 — tenure, bands/compa-ratio, leave balances, attrition, NETWORKDAYS/WORKDAY with holidays |
 | inventory | Inventory & Supply | Stock, Movements, Suppliers, Rules | 100 — reorder points from lead time, days of cover, turnover, ABC, supplier exposure, dead stock, audits |
 | marketing | Marketing Campaigns | Weekly, Channels, Campaigns | 100 — CTR/CPC/CPA/ROAS, targets, WoW trends, spilled per-channel metrics, budget utilisation, mix analysis |
-| finance | Budget vs Actuals | | next |
+| finance | Budget vs Actuals | Ledger, Depts, FX, Assumptions | 100 — variance analysis, YTD running sums, quarterly pivots, FX conversion, run-rate and regression forecasts, inflation, scenarios |

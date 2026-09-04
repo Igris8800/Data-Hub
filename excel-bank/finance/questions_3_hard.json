@@ -1,0 +1,332 @@
+[
+{
+"id": "fin-h-01",
+"tier": "hard",
+"topic": "Dynamic arrays",
+"title": "Budget per department, spilled",
+"context": "One total per dept in H2:H9 order.",
+"task": "Return SUMIF(B2:B97,H2:H9,D2:D97).",
+"hint": "Array-criteria SUMIF.",
+"answer": "=SUMIF(B2:B97,H2:H9,D2:D97)"
+},
+{
+"id": "fin-h-02",
+"tier": "hard",
+"topic": "Dynamic arrays",
+"title": "Variance % per department, spilled",
+"context": "(actual − budget) ÷ budget, 3 dp.",
+"task": "Return ROUND(SUMIF(B2:B97,H2:H9,E2:E97)/SUMIF(B2:B97,H2:H9,D2:D97)−1,3).",
+"hint": "Ratio of spilled SUMIFs.",
+"answer": "=ROUND(SUMIF(B2:B97,H2:H9,E2:E97)/SUMIF(B2:B97,H2:H9,D2:D97)-1,3)"
+},
+{
+"id": "fin-h-03",
+"tier": "hard",
+"topic": "Dynamic arrays",
+"title": "Monthly totals, spilled",
+"context": "Actual per distinct month.",
+"task": "Return SUMIF(A2:A97,UNIQUE(A2:A97),E2:E97).",
+"hint": "UNIQUE months as criteria.",
+"answer": "=SUMIF(A2:A97,UNIQUE(A2:A97),E2:E97)"
+},
+{
+"id": "fin-h-04",
+"tier": "hard",
+"topic": "Dynamic arrays",
+"title": "YTD actual by month, spilled",
+"context": "Running total across the year.",
+"task": "Return SUMIFS(E2:E97,A2:A97,\"<=\"&UNIQUE(A2:A97)).",
+"hint": "<= array criteria = running sum.",
+"answer": "=SUMIFS(E2:E97,A2:A97,\"<=\"&UNIQUE(A2:A97))"
+},
+{
+"id": "fin-h-05",
+"tier": "hard",
+"topic": "Dynamic arrays",
+"title": "YTD budget by month, spilled",
+"context": "Same for budget.",
+"task": "Return SUMIFS(D2:D97,A2:A97,\"<=\"&UNIQUE(A2:A97)).",
+"hint": "As above.",
+"answer": "=SUMIFS(D2:D97,A2:A97,\"<=\"&UNIQUE(A2:A97))"
+},
+{
+"id": "fin-h-06",
+"tier": "hard",
+"topic": "Dynamic arrays",
+"title": "Cumulative variance by month, spilled",
+"context": "YTD actual − YTD budget.",
+"task": "Return SUMIFS(E2:E97,A2:A97,\"<=\"&UNIQUE(A2:A97)) − SUMIFS(D2:D97,A2:A97,\"<=\"&UNIQUE(A2:A97)).",
+"hint": "Difference of the two running sums.",
+"answer": "=SUMIFS(E2:E97,A2:A97,\"<=\"&UNIQUE(A2:A97))-SUMIFS(D2:D97,A2:A97,\"<=\"&UNIQUE(A2:A97))"
+},
+{
+"id": "fin-h-07",
+"tier": "hard",
+"topic": "FILTER",
+"title": "Departments over budget",
+"context": "Names where total actual > total budget.",
+"task": "Return FILTER(H2:H9, SUMIF(B2:B97,H2:H9,E2:E97)>SUMIF(B2:B97,H2:H9,D2:D97), \"None\").",
+"hint": "FILTER on spilled comparison.",
+"answer": "=FILTER(H2:H9,SUMIF(B2:B97,H2:H9,E2:E97)>SUMIF(B2:B97,H2:H9,D2:D97),\"None\")"
+},
+{
+"id": "fin-h-08",
+"tier": "hard",
+"topic": "FILTER",
+"title": "Material variance lines",
+"context": "Month labels + dept for rows beyond the threshold.",
+"task": "Return FILTER(B2:B97, ABS(E2:E97−D2:D97)/D2:D97 > VLOOKUP(\"Variance threshold\",O2:P5,2,FALSE), \"None\").",
+"hint": "FILTER with ABS mask.",
+"answer": "=FILTER(B2:B97,ABS(E2:E97-D2:D97)/D2:D97>VLOOKUP(\"Variance threshold\",O2:P5,2,FALSE),\"None\")"
+},
+{
+"id": "fin-h-09",
+"tier": "hard",
+"topic": "SORT",
+"title": "Departments ranked by overspend",
+"context": "Worst first.",
+"task": "Return SORTBY(H2:H9, SUMIF(B2:B97,H2:H9,E2:E97)−SUMIF(B2:B97,H2:H9,D2:D97), -1).",
+"hint": "SORTBY on spilled variance.",
+"answer": "=SORTBY(H2:H9,SUMIF(B2:B97,H2:H9,E2:E97)-SUMIF(B2:B97,H2:H9,D2:D97),-1)"
+},
+{
+"id": "fin-h-10",
+"tier": "hard",
+"topic": "Pivot",
+"title": "Dept × quarter actual (Engineering, Q2)",
+"context": "Two-way slice.",
+"task": "Return SUMIFS(E2:E97,B2:B97,\"Engineering\",A2:A97,\">=\"&DATE(2025,4,1),A2:A97,\"<=\"&DATE(2025,6,30)).",
+"hint": "SUMIFS with dept + date window.",
+"answer": "=SUMIFS(E2:E97,B2:B97,\"Engineering\",A2:A97,\">=\"&DATE(2025,4,1),A2:A97,\"<=\"&DATE(2025,6,30))"
+},
+{
+"id": "fin-h-11",
+"tier": "hard",
+"topic": "Pivot",
+"title": "Quarterly actuals, spilled",
+"context": "Four quarter totals as a row.",
+"task": "Return SUMIFS(E2:E97,A2:A97,\">=\"&DATE(2025,{1,4,7,10},1),A2:A97,\"<=\"&EOMONTH(DATE(2025,{3,6,9,12},1),0)).",
+"hint": "Array DATE in both bounds.",
+"answer": "=SUMIFS(E2:E97,A2:A97,\">=\"&DATE(2025,{1,4,7,10},1),A2:A97,\"<=\"&EOMONTH(DATE(2025,{3,6,9,12},1),0))"
+},
+{
+"id": "fin-h-12",
+"tier": "hard",
+"topic": "Pivot",
+"title": "Best quarter",
+"context": "Quarter number with the highest actual.",
+"task": "Return MATCH(MAX(SUMIFS(E2:E97,A2:A97,\">=\"&DATE(2025,{1,4,7,10},1),A2:A97,\"<=\"&EOMONTH(DATE(2025,{3,6,9,12},1),0))), SUMIFS(E2:E97,A2:A97,\">=\"&DATE(2025,{1,4,7,10},1),A2:A97,\"<=\"&EOMONTH(DATE(2025,{3,6,9,12},1),0)), 0).",
+"hint": "MATCH the max within the spilled quarters.",
+"answer": "=MATCH(MAX(SUMIFS(E2:E97,A2:A97,\">=\"&DATE(2025,{1,4,7,10},1),A2:A97,\"<=\"&EOMONTH(DATE(2025,{3,6,9,12},1),0))),SUMIFS(E2:E97,A2:A97,\">=\"&DATE(2025,{1,4,7,10},1),A2:A97,\"<=\"&EOMONTH(DATE(2025,{3,6,9,12},1),0)),0)"
+},
+{
+"id": "fin-h-13",
+"tier": "hard",
+"topic": "Forecast",
+"title": "Linear forecast for December (Sales)",
+"context": "Fit a straight line of Sales actual against month number and extend it to month 12. Slope = CORREL × STDEV(y)/STDEV(x); intercept via the means.",
+"task": "Return ROUND((12 − AVERAGE(x)) × CORREL(x, y) × STDEV.S(y) / STDEV.S(x) + AVERAGE(y), 0), where x = MONTH(FILTER(A2:A97, B2:B97=\"Sales\")) and y = FILTER(E2:E97, B2:B97=\"Sales\").",
+"hint": "Regression slope = r × sy/sx.",
+"answer": "=ROUND((12-AVERAGE(MONTH(FILTER(A2:A97,B2:B97=\"Sales\"))))*CORREL(MONTH(FILTER(A2:A97,B2:B97=\"Sales\")),FILTER(E2:E97,B2:B97=\"Sales\"))*STDEV.S(FILTER(E2:E97,B2:B97=\"Sales\"))/STDEV.S(MONTH(FILTER(A2:A97,B2:B97=\"Sales\")))+AVERAGE(FILTER(E2:E97,B2:B97=\"Sales\")),0)"
+},
+{
+"id": "fin-h-14",
+"tier": "hard",
+"topic": "Forecast",
+"title": "Trend direction for Sales",
+"context": "Positive correlation between month and actual?",
+"task": "Return IF(CORREL(MONTH(FILTER(A2:A97,B2:B97=\"Sales\")),FILTER(E2:E97,B2:B97=\"Sales\"))>0,\"Rising\",\"Falling\").",
+"hint": "Sign of CORREL.",
+"answer": "=IF(CORREL(MONTH(FILTER(A2:A97,B2:B97=\"Sales\")),FILTER(E2:E97,B2:B97=\"Sales\"))>0,\"Rising\",\"Falling\")"
+},
+{
+"id": "fin-h-15",
+"tier": "hard",
+"topic": "Forecast",
+"title": "Full-year forecast = YTD actual + remaining budget",
+"context": "Actual to June plus budget Jul–Dec.",
+"task": "Return SUMIFS(E2:E97,A2:A97,\"<=\"&DATE(2025,6,30)) + SUMIFS(D2:D97,A2:A97,\">=\"&DATE(2025,7,1)).",
+"hint": "Two SUMIFS.",
+"answer": "=SUMIFS(E2:E97,A2:A97,\"<=\"&DATE(2025,6,30))+SUMIFS(D2:D97,A2:A97,\">=\"&DATE(2025,7,1))"
+},
+{
+"id": "fin-h-16",
+"tier": "hard",
+"topic": "Forecast",
+"title": "Forecast variance vs budget, percent",
+"context": "(forecast − budget)/budget as percent text.",
+"task": "Return TEXT((SUMIFS(E2:E97,A2:A97,\"<=\"&DATE(2025,6,30))+SUMIFS(D2:D97,A2:A97,\">=\"&DATE(2025,7,1)))/SUM(D2:D97)−1,\"0.0%\").",
+"hint": "Wrap in TEXT.",
+"answer": "=TEXT((SUMIFS(E2:E97,A2:A97,\"<=\"&DATE(2025,6,30))+SUMIFS(D2:D97,A2:A97,\">=\"&DATE(2025,7,1)))/SUM(D2:D97)-1,\"0.0%\")"
+},
+{
+"id": "fin-h-17",
+"tier": "hard",
+"topic": "FX",
+"title": "Budget in USD at the assumption rate",
+"context": "Is the USD budget total assumption consistent with INR budget ÷ average rate?",
+"task": "Return ROUND(SUM(D2:D97)/AVERAGE(M2:M13),0).",
+"hint": "SUM ÷ average rate.",
+"answer": "=ROUND(SUM(D2:D97)/AVERAGE(M2:M13),0)"
+},
+{
+"id": "fin-h-18",
+"tier": "hard",
+"topic": "FX",
+"title": "FX impact",
+"context": "Actual USD at monthly rates minus actual USD at January rate, 2 dp.",
+"task": "Return ROUND(SUMPRODUCT(E2:E97/XLOOKUP(A2:A97,L2:L13,M2:M13)) − SUM(E2:E97)/M2, 2).",
+"hint": "Difference of two conversions.",
+"answer": "=ROUND(SUMPRODUCT(E2:E97/XLOOKUP(A2:A97,L2:L13,M2:M13))-SUM(E2:E97)/M2,2)"
+},
+{
+"id": "fin-h-19",
+"tier": "hard",
+"topic": "FX",
+"title": "Month-over-month rate change, spilled",
+"context": "% change of INRperUSD for months 2–12.",
+"task": "Return (M3:M13−M2:M12)/M2:M12.",
+"hint": "Offset ranges.",
+"answer": "=(M3:M13-M2:M12)/M2:M12"
+},
+{
+"id": "fin-h-20",
+"tier": "hard",
+"topic": "Percentiles",
+"title": "90th percentile variance %",
+"context": "Threshold of the worst decile.",
+"task": "Return ROUND(PERCENTILE.INC((E2:E97−D2:D97)/D2:D97,0.9),3).",
+"hint": "PERCENTILE over a computed array.",
+"answer": "=ROUND(PERCENTILE.INC((E2:E97-D2:D97)/D2:D97,0.9),3)"
+},
+{
+"id": "fin-h-21",
+"tier": "hard",
+"topic": "Percentiles",
+"title": "Quartile of row 2's variance %",
+"context": "1–4.",
+"task": "Return IFS((E2−D2)/D2<=QUARTILE.INC((E2:E97−D2:D97)/D2:D97,1),1,(E2−D2)/D2<=QUARTILE.INC((E2:E97−D2:D97)/D2:D97,2),2,(E2−D2)/D2<=QUARTILE.INC((E2:E97−D2:D97)/D2:D97,3),3,TRUE,4).",
+"hint": "Three QUARTILE cut-offs.",
+"answer": "=IFS((E2-D2)/D2<=QUARTILE.INC((E2:E97-D2:D97)/D2:D97,1),1,(E2-D2)/D2<=QUARTILE.INC((E2:E97-D2:D97)/D2:D97,2),2,(E2-D2)/D2<=QUARTILE.INC((E2:E97-D2:D97)/D2:D97,3),3,TRUE,4)"
+},
+{
+"id": "fin-h-22",
+"tier": "hard",
+"topic": "Statistics",
+"title": "Dept with the most volatile variance %",
+"context": "Compare Sales and Marketing stdev of variance %.",
+"task": "Return IF(STDEV.S(FILTER((E2:E97−D2:D97)/D2:D97,B2:B97=\"Sales\"))>STDEV.S(FILTER((E2:E97−D2:D97)/D2:D97,B2:B97=\"Marketing\")),\"Sales\",\"Marketing\").",
+"hint": "STDEV over FILTERed arrays.",
+"answer": "=IF(STDEV.S(FILTER((E2:E97-D2:D97)/D2:D97,B2:B97=\"Sales\"))>STDEV.S(FILTER((E2:E97-D2:D97)/D2:D97,B2:B97=\"Marketing\")),\"Sales\",\"Marketing\")"
+},
+{
+"id": "fin-h-23",
+"tier": "hard",
+"topic": "Statistics",
+"title": "Median actual for Opex",
+"context": "MEDIAN with FILTER.",
+"task": "Return MEDIAN(FILTER(E2:E97,F2:F97=\"Opex\")).",
+"hint": "MEDIAN(FILTER()).",
+"answer": "=MEDIAN(FILTER(E2:E97,F2:F97=\"Opex\"))"
+},
+{
+"id": "fin-h-24",
+"tier": "hard",
+"topic": "Capex",
+"title": "Capex actual per dept, spilled",
+"context": "One value per dept.",
+"task": "Return SUMIFS(E2:E97,B2:B97,H2:H9,F2:F97,\"Capex\").",
+"hint": "Array criteria + fixed criterion.",
+"answer": "=SUMIFS(E2:E97,B2:B97,H2:H9,F2:F97,\"Capex\")"
+},
+{
+"id": "fin-h-25",
+"tier": "hard",
+"topic": "Capex",
+"title": "Headroom under the Capex cap",
+"context": "Cap − Capex actual (negative if over).",
+"task": "Return VLOOKUP(\"Capex cap\",O2:P5,2,FALSE) − SUMIF(F2:F97,\"Capex\",E2:E97).",
+"hint": "Assumption minus SUMIF.",
+"answer": "=VLOOKUP(\"Capex cap\",O2:P5,2,FALSE)-SUMIF(F2:F97,\"Capex\",E2:E97)"
+},
+{
+"id": "fin-h-26",
+"tier": "hard",
+"topic": "Inflation",
+"title": "FY26 budget per dept, spilled",
+"context": "Inflate each dept's FY25 budget.",
+"task": "Return ROUND(SUMIF(B2:B97,H2:H9,D2:D97)*(1+VLOOKUP(\"Inflation\",O2:P5,2,FALSE)),0).",
+"hint": "Spilled SUMIF × (1+rate).",
+"answer": "=ROUND(SUMIF(B2:B97,H2:H9,D2:D97)*(1+VLOOKUP(\"Inflation\",O2:P5,2,FALSE)),0)"
+},
+{
+"id": "fin-h-27",
+"tier": "hard",
+"topic": "Inflation",
+"title": "Real (deflated) actual total",
+"context": "Actual ÷ (1 + inflation), rounded.",
+"task": "Return ROUND(SUM(E2:E97)/(1+VLOOKUP(\"Inflation\",O2:P5,2,FALSE)),0).",
+"hint": "Divide by (1+rate).",
+"answer": "=ROUND(SUM(E2:E97)/(1+VLOOKUP(\"Inflation\",O2:P5,2,FALSE)),0)"
+},
+{
+"id": "fin-h-28",
+"tier": "hard",
+"topic": "Audit",
+"title": "Rows where actual is blank or negative",
+"context": "Count data issues.",
+"task": "Return SUMPRODUCT((ISBLANK(E2:E97))+(E2:E97<0)).",
+"hint": "Two masks added.",
+"answer": "=SUMPRODUCT((ISBLANK(E2:E97))+(E2:E97<0))"
+},
+{
+"id": "fin-h-29",
+"tier": "hard",
+"topic": "Audit",
+"title": "Departments with 12 rows each?",
+"context": "Count depts whose row count isn't 12.",
+"task": "Return SUMPRODUCT(--(COUNTIF(B2:B97,H2:H9)<>12)).",
+"hint": "COUNTIF array vs 12.",
+"answer": "=SUMPRODUCT(--(COUNTIF(B2:B97,H2:H9)<>12))"
+},
+{
+"id": "fin-h-30",
+"tier": "hard",
+"topic": "Audit",
+"title": "Ledger depts not in the Depts table",
+"context": "Orphan department names.",
+"task": "Return SUMPRODUCT(--ISNA(MATCH(B2:B97,H2:H9,0))).",
+"hint": "ISNA(MATCH()).",
+"answer": "=SUMPRODUCT(--ISNA(MATCH(B2:B97,H2:H9,0)))"
+},
+{
+"id": "fin-h-31",
+"tier": "hard",
+"topic": "TEXTJOIN",
+"title": "Owners of over-budget departments",
+"context": "Comma-separated owner names.",
+"task": "Return TEXTJOIN(\", \",TRUE,FILTER(I2:I9, SUMIF(B2:B97,H2:H9,E2:E97)>SUMIF(B2:B97,H2:H9,D2:D97), \"None\")).",
+"hint": "FILTER the owner column with the spilled comparison.",
+"answer": "=TEXTJOIN(\", \",TRUE,FILTER(I2:I9,SUMIF(B2:B97,H2:H9,E2:E97)>SUMIF(B2:B97,H2:H9,D2:D97),\"None\"))"
+},
+{
+"id": "fin-h-32",
+"tier": "hard",
+"topic": "Scenario",
+"title": "Savings needed to hit budget",
+"context": "If forecast (YTD actual + remaining budget) exceeds budget, how much must H2 cut? Else 0.",
+"task": "Return MAX(0, SUMIFS(E2:E97,A2:A97,\"<=\"&DATE(2025,6,30)) + SUMIFS(D2:D97,A2:A97,\">=\"&DATE(2025,7,1)) − SUM(D2:D97)).",
+"hint": "MAX(0, forecast − budget).",
+"answer": "=MAX(0,SUMIFS(E2:E97,A2:A97,\"<=\"&DATE(2025,6,30))+SUMIFS(D2:D97,A2:A97,\">=\"&DATE(2025,7,1))-SUM(D2:D97))"
+},
+{
+"id": "fin-h-33",
+"tier": "hard",
+"topic": "Scenario",
+"title": "Uniform H2 cut needed, percent",
+"context": "Cut needed as a share of H2 budget, percent text.",
+"task": "Return TEXT(MAX(0, SUMIFS(E2:E97,A2:A97,\"<=\"&DATE(2025,6,30)) + SUMIFS(D2:D97,A2:A97,\">=\"&DATE(2025,7,1)) − SUM(D2:D97)) / SUMIFS(D2:D97,A2:A97,\">=\"&DATE(2025,7,1)), \"0.0%\").",
+"hint": "Cut ÷ H2 budget.",
+"answer": "=TEXT(MAX(0,SUMIFS(E2:E97,A2:A97,\"<=\"&DATE(2025,6,30))+SUMIFS(D2:D97,A2:A97,\">=\"&DATE(2025,7,1))-SUM(D2:D97))/SUMIFS(D2:D97,A2:A97,\">=\"&DATE(2025,7,1)),\"0.0%\")"
+}
+]
