@@ -285,7 +285,7 @@
 "topic": "Statistics",
 "title": "Median salary",
 "context": "Robust middle.",
-"task": "Return MEDIAN(F2:F51).",
+"task": "Find the median of F2:F51.",
 "hint": "MEDIAN.",
 "answer": "=MEDIAN(F2:F51)"
 },
@@ -295,7 +295,7 @@
 "topic": "Statistics",
 "title": "Salary standard deviation",
 "context": "Pay dispersion (sample), rounded.",
-"task": "Return ROUND(STDEV.S(F2:F51),0).",
+"task": "Find the sample standard deviation of F2:F51, rounded to 0 decimal places.",
 "hint": "STDEV.S.",
 "answer": "=ROUND(STDEV.S(F2:F51),0)"
 },

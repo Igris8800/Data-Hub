@@ -225,7 +225,7 @@
 "topic": "Trend",
 "title": "Cumulative spend to row 5 (Google Search)",
 "context": "Running total for the first 4 weeks.",
-"task": "Return SUM(C2:C5).",
+"task": "Find the total of C2:C5.",
 "hint": "Fixed-start SUM.",
 "answer": "=SUM(C2:C5)"
 },
@@ -235,7 +235,7 @@
 "topic": "Trend",
 "title": "4-week moving average revenue (rows 2–5)",
 "context": "Smoothing.",
-"task": "Return ROUND(AVERAGE(G2:G5),2).",
+"task": "Find the average of G2:G5, rounded to 2 decimal places.",
 "hint": "AVERAGE of a window.",
 "answer": "=ROUND(AVERAGE(G2:G5),2)"
 },
@@ -265,7 +265,7 @@
 "topic": "Statistics",
 "title": "Median weekly conversions",
 "context": "Typical week.",
-"task": "Return MEDIAN(F2:F79).",
+"task": "Find the median of F2:F79.",
 "hint": "MEDIAN.",
 "answer": "=MEDIAN(F2:F79)"
 },
@@ -275,7 +275,7 @@
 "topic": "Statistics",
 "title": "Spend volatility",
 "context": "Sample stdev of spend, 2 dp.",
-"task": "Return ROUND(STDEV.S(C2:C79),2).",
+"task": "Find the sample standard deviation of C2:C79, rounded to 2 decimal places.",
 "hint": "STDEV.S.",
 "answer": "=ROUND(STDEV.S(C2:C79),2)"
 },

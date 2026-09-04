@@ -5,7 +5,7 @@
 "topic": "SUM",
 "title": "Total units",
 "context": "Ops wants the total number of units across all orders.",
-"task": "Write a formula that returns the total of the Units column (F2:F41).",
+"task": "Find the total of F2:F41.",
 "hint": "SUM over the range.",
 "answer": "=SUM(F2:F41)"
 },
@@ -15,7 +15,7 @@
 "topic": "AVERAGE",
 "title": "Average unit price",
 "context": "Pricing wants the mean list price on orders.",
-"task": "Return the average of UnitPrice (G2:G41).",
+"task": "Find the average of G2:G41.",
 "hint": "AVERAGE(range).",
 "answer": "=AVERAGE(G2:G41)"
 },
@@ -25,7 +25,7 @@
 "topic": "COUNT",
 "title": "How many orders?",
 "context": "A KPI tile needs the order count.",
-"task": "Count the numeric OrderIDs in A2:A41.",
+"task": "Find the count of numeric values in A2:A41.",
 "hint": "COUNT only counts numbers.",
 "answer": "=COUNT(A2:A41)"
 },
@@ -35,7 +35,7 @@
 "topic": "COUNTA",
 "title": "How many reps listed?",
 "context": "HR wants a headcount from the Reps table.",
-"task": "Count the non-empty cells in N2:N7.",
+"task": "Find the number of non-empty cells in N2:N7.",
 "hint": "COUNTA counts text too.",
 "answer": "=COUNTA(N2:N7)"
 },
@@ -45,7 +45,7 @@
 "topic": "MAX",
 "title": "Largest single order (units)",
 "context": "Which order had the most units?",
-"task": "Return the maximum value in F2:F41.",
+"task": "Find the largest value in F2:F41.",
 "hint": "MAX.",
 "answer": "=MAX(F2:F41)"
 },
@@ -55,7 +55,7 @@
 "topic": "MIN",
 "title": "Cheapest product cost",
 "context": "Procurement wants the lowest unit cost in the Products table.",
-"task": "Return the minimum of Cost (L2:L9).",
+"task": "Find the smallest value in L2:L9.",
 "hint": "MIN.",
 "answer": "=MIN(L2:L9)"
 },
@@ -95,7 +95,7 @@
 "topic": "ROUND",
 "title": "Rounded average price",
 "context": "The dashboard shows two decimals.",
-"task": "Return the average of G2:G41 rounded to 2 decimal places.",
+"task": "Find the average of G2:G41, rounded to 2 decimal places.",
 "hint": "ROUND(AVERAGE(...), 2).",
 "answer": "=ROUND(AVERAGE(G2:G41),2)"
 },
@@ -315,7 +315,7 @@
 "topic": "COUNTBLANK",
 "title": "Any missing statuses?",
 "context": "Data-quality check on the Status column.",
-"task": "Count blank cells in H2:H41.",
+"task": "Find the number of blank cells in H2:H41.",
 "hint": "COUNTBLANK.",
 "answer": "=COUNTBLANK(H2:H41)"
 },
