@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
-  ChevronRight, ChevronLeft, Play, Lightbulb, Eye, BookOpen, Circle, CircleCheck,
+  ChevronRight, ChevronLeft, ChevronDown, Play, Lightbulb, Eye, BookOpen, Circle, CircleCheck,
   Lock, Crown, HelpCircle, RotateCcw, FunctionSquare, Briefcase, Timer,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -134,6 +134,14 @@ export default function PythonPage() {
     if (i >= 0) { setPending(false); if (isQuestionLocked(i, difficulty, user)) setUpgradeOpen(true); else setIdx(i); }
   }, [questions, pending, jumpTarget, difficulty, user]);
   const [modeGuideOpen, setModeGuideOpen] = useFirstVisitGuide();
+  const [dsMenuOpen, setDsMenuOpen] = useState(false);
+  const dsMenuRef = useRef(null);
+  useEffect(() => {
+    if (!dsMenuOpen) return;
+    const onClick = (e) => { if (dsMenuRef.current && !dsMenuRef.current.contains(e.target)) setDsMenuOpen(false); };
+    window.addEventListener("mousedown", onClick);
+    return () => window.removeEventListener("mousedown", onClick);
+  }, [dsMenuOpen]);
   const [tally, setTally] = useState({ beginner: 0, intermediate: 0, advanced: 0 });
   const [interviewSeconds, setInterviewSeconds] = useState(5 * 60);
   const wsKey = cur ? `${wbKey}-${cur.id}` : null;
@@ -220,14 +228,30 @@ export default function PythonPage() {
           </div>
           <div className="ml-auto flex items-center gap-2" data-testid="workbook-selector">
             <ModeGuideButton onClick={() => setModeGuideOpen(true)} />
-            {PYTHON_DATASETS.map((w) => (
-              <button key={w.key} onClick={() => setWbKey(w.key)} data-testid={`dataset-${w.key}`}
-                className={`inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium border ${w.key === wbKey ? "text-white" : "text-slate-400 border-white/5 hover:bg-white/5"}`}
-                style={w.key === wbKey ? { borderColor: w.color, background: `${w.color}15` } : undefined}>
-                <Code2 className="w-3.5 h-3.5" style={{ color: w.color }} /> {w.name}
-                <span className="text-[9px] font-mono-editor px-1.5 py-0.5 rounded bg-white/5">{w.questions.length}Q</span>
+            <div className="relative" ref={dsMenuRef}>
+              <button onClick={() => setDsMenuOpen((o) => !o)} data-testid="dataset-dropdown" aria-haspopup="listbox" aria-expanded={dsMenuOpen}
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium border text-white min-w-[210px]"
+                style={{ borderColor: `${workbook.color}66`, background: `${workbook.color}12` }}>
+                <Code2 className="w-3.5 h-3.5 shrink-0" style={{ color: workbook.color }} />
+                <span className="truncate">{workbook.name}</span>
+                <span className="text-[9px] font-mono-editor px-1.5 py-0.5 rounded bg-white/5 ml-auto">{workbook.questions.length}Q</span>
+                <ChevronDown className={`w-3.5 h-3.5 shrink-0 transition-transform ${dsMenuOpen ? "rotate-180" : ""}`} />
               </button>
-            ))}
+              {dsMenuOpen && (
+                <div className="absolute right-0 mt-1 w-[280px] max-h-[60vh] overflow-auto rounded-lg border border-white/10 bg-[#151B23] shadow-xl z-50 p-1" role="listbox" data-testid="dataset-menu">
+                  {PYTHON_DATASETS.map((w) => (
+                    <button key={w.key} role="option" aria-selected={w.key === wbKey}
+                      onClick={() => { setWbKey(w.key); setDsMenuOpen(false); }} data-testid={`dataset-${w.key}`}
+                      className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-xs text-left transition-colors ${w.key === wbKey ? "bg-white/10 text-white" : "text-slate-300 hover:bg-white/5"}`}>
+                      <Code2 className="w-3.5 h-3.5 shrink-0" style={{ color: w.color }} />
+                      <span className="flex-1 min-w-0"><span className="block truncate font-medium">{w.name}</span><span className="block text-[10px] text-slate-500 truncate">{w.tagline}</span></span>
+                      <span className="text-[9px] font-mono-editor px-1.5 py-0.5 rounded bg-white/5 shrink-0">{w.questions.length}Q</span>
+                      {w.key === wbKey && <CircleCheck className="w-3.5 h-3.5 shrink-0" style={{ color: w.color }} />}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
         {/* Sub-bar */}
