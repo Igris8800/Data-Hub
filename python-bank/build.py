@@ -11,7 +11,7 @@ def load_frames(ds):
     for name,csv_text in ds['frames'].items():
         df=pd.read_csv(io.StringIO(csv_text))
         for c in df.columns:
-            if c.endswith('_date') or c in ('order_date','signup_date','review_date','month','watch_date','start_date','hire_date','exit_date'): df[c]=pd.to_datetime(df[c], errors='coerce')
+            if c.endswith('_date') or c in ('order_date','signup_date','review_date','month','watch_date','start_date','hire_date','exit_date','date'): df[c]=pd.to_datetime(df[c], errors='coerce')
         g[name]=df
     return g
 def run(code, frames):

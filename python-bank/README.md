@@ -22,3 +22,4 @@ Series by (index, value) pairs (index ignored when it is positional), scalars/li
 | retail | Retail (pandas) | customers, products, orders, order_items, reviews | 100 |
 | hr | People Analytics (pandas) | employees, departments, reviews, leave | 100 — tenure, attrition, comp/compa-ratio, gender gap, reviews, org, leave |
 | streaming | Streaming Analytics (pandas) | users, titles, streams, subscriptions | 100 — DAU/retention, rolling windows, resampling, cohorts, MRR, co-viewing, churn |
+| finance | Personal Finance (pandas) | accounts, transactions, budgets, merchants | 100 — running balances, budget variance, anomaly/z-score, recurring detection, resampling, net worth |
