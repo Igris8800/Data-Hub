@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   ChevronRight, ChevronLeft, Play, Lightbulb, Eye, BookOpen, Circle, CircleCheck,
-  Lock, Crown, HelpCircle, RotateCcw, FunctionSquare,
+  Lock, Crown, HelpCircle, RotateCcw, FunctionSquare, Briefcase, Timer,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -24,6 +24,7 @@ import { tallyAttempts } from "@/lib/belts";
 const MODE_META = {
   learning: { color: "#00FF88", label: "Learning", desc: "Sequential · solve to unlock next" },
   practice: { color: "#00D4FF", label: "Practice", desc: "Jump around · hints and solutions" },
+  interview: { color: "#FFD166", label: "Interview", desc: "Random order · 5-min timer · no hints or solutions" },
 };
 const LEVELS = ["beginner", "intermediate", "advanced"];
 const LEVEL_LABEL = { beginner: "Easy", intermediate: "Medium", advanced: "Hard" };
@@ -106,7 +107,15 @@ export default function PythonPage() {
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [outputTab, setOutputTab] = useState("output");
 
-  const questions = useMemo(() => workbook.questions.filter((q) => q.difficulty === difficulty), [workbook, difficulty]);
+  const questions = useMemo(() => {
+    const base = workbook.questions.filter((q) => q.difficulty === difficulty);
+    if (mode === "interview") {
+      const seed = (wbKey + difficulty).split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+      const rand = (i) => ((seed * 9301 + i * 49297) % 233280) / 233280;
+      return base.map((q, i) => ({ q, k: rand(i) })).sort((a, b) => a.k - b.k).map((x) => x.q);
+    }
+    return base;
+  }, [workbook, difficulty, mode]);
   const cur = questions[idx] || questions[0];
   const isLocked = useCallback((i) => isQuestionLocked(i, difficulty, user), [difficulty, user]);
   const curLocked = isLocked(idx);
@@ -121,6 +130,7 @@ export default function PythonPage() {
   }, [questions, pending, jumpTarget, difficulty, user]);
   const [modeGuideOpen, setModeGuideOpen] = useFirstVisitGuide();
   const [tally, setTally] = useState({ beginner: 0, intermediate: 0, advanced: 0 });
+  const [interviewSeconds, setInterviewSeconds] = useState(5 * 60);
   const wsKey = cur ? `${wbKey}-${cur.id}` : null;
 
   // Restore saved formula / result for this question, or start blank.
@@ -130,6 +140,15 @@ export default function PythonPage() {
     setStatus(ws?.solved ? { text: "Solved", tone: "good" } : ws?.formula ? { text: "In progress", tone: "muted" } : { text: "Not Started", tone: "muted" });
     setOutputTab("output");
   }, [cur?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Interview timer — 5 min per question, resets on question change
+  useEffect(() => {
+    if (mode !== "interview") return;
+    setInterviewSeconds(5 * 60);
+    const t = setInterval(() => {
+      setInterviewSeconds((sec) => { if (sec <= 1) { clearInterval(t); toast.error("⏱ Time's up! Move to the next question."); return 0; } return sec - 1; });
+    }, 1000);
+    return () => clearInterval(t);
+  }, [cur?.id, mode]);
   useEffect(() => { setSolvedIds(localSolvedSet("python")); }, []);
   useEffect(() => {
     if (!user) return;
@@ -170,6 +189,8 @@ export default function PythonPage() {
   useEffect(() => { const onKey = (e) => { if ((e.metaKey || e.ctrlKey) && e.key === "Enter") { e.preventDefault(); run(); } }; window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey); }); // eslint-disable-line react-hooks/exhaustive-deps
 
     const dColor = LEVEL_COLOR[difficulty];
+  const mm = String(Math.floor(interviewSeconds / 60)).padStart(2, "0");
+  const ss = String(interviewSeconds % 60).padStart(2, "0");
 
   return (
     <div className="min-h-[calc(100vh-140px)] flex flex-col bg-[#0D1117]">
@@ -181,13 +202,16 @@ export default function PythonPage() {
             <div><div className="font-heading text-sm tracking-tight">Python Practice</div><div className="text-[10px] text-slate-500">by Data Hub</div></div>
           </div>
           <div className="flex items-center gap-1 p-1 rounded-lg bg-[#0D1117] border border-white/10" role="tablist" data-testid="python-mode-selector">
-            {Object.entries(MODE_META).map(([k, m]) => (
-              <button key={k} onClick={() => setMode(k)} data-testid={`python-mode-${k}`} title={m.desc}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-all ${mode === k ? "text-[#0D1117]" : "text-slate-300 hover:text-white hover:bg-white/5"}`}
-                style={mode === k ? { background: m.color } : undefined}>
-                {k === "learning" ? <BookOpen className="w-4 h-4" /> : <Play className="w-4 h-4" />} {m.label}
-              </button>
-            ))}
+            {Object.entries(MODE_META).map(([k, m]) => {
+              const Icon = k === "learning" ? BookOpen : k === "practice" ? Play : Briefcase;
+              return (
+                <button key={k} onClick={() => setMode(k)} data-testid={`python-mode-${k}`} title={m.desc}
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-all ${mode === k ? "text-[#0D1117]" : "text-slate-300 hover:text-white hover:bg-white/5"}`}
+                  style={mode === k ? { background: m.color } : undefined}>
+                  <Icon className="w-4 h-4" /> {m.label}
+                </button>
+              );
+            })}
           </div>
           <div className="ml-auto flex items-center gap-2" data-testid="workbook-selector">
             <ModeGuideButton onClick={() => setModeGuideOpen(true)} />
@@ -219,6 +243,11 @@ export default function PythonPage() {
             </div>
           </div>
           <div className="ml-auto flex items-center gap-2">
+            {mode === "interview" && (
+              <div className={`inline-flex items-center gap-1.5 text-xs px-2 py-1 rounded-full border font-mono-editor font-medium ${interviewSeconds <= 30 ? "border-red-400/50 bg-red-400/10 text-red-300 animate-pulse" : "border-yellow-400/40 bg-yellow-400/10 text-yellow-300"}`} data-testid="interview-timer">
+                <Timer className="w-3.5 h-3.5" /> {mm}:{ss}
+              </div>
+            )}
             <BeltBadge tally={tally} compact />
             {mode === "learning" && cur && !solvedIds.has(cur.id) && (
               <div className="inline-flex items-center gap-1.5 text-xs px-2 py-1 rounded-full border border-[#00FF88]/40 bg-[#00FF88]/10 text-[#00FF88] font-medium"><BookOpen className="w-3.5 h-3.5" /> Solve to unlock next</div>
@@ -301,8 +330,8 @@ export default function PythonPage() {
               <p className="text-sm text-white font-medium leading-relaxed">{cur.task}</p>
             </div>
             <div className="flex gap-2">
-              <Button onClick={() => setShowHint((v) => !v)} variant="outline" size="sm" data-testid="python-hint" className="h-8 border-[#00D4FF]/40 bg-[#00D4FF]/5 text-[#00D4FF] hover:bg-[#00D4FF]/10"><Lightbulb className="w-3.5 h-3.5 mr-1" /> Hint</Button>
-              <Button onClick={() => setShowSolution((v) => !v)} variant="outline" size="sm" data-testid="python-solution" className="h-8 border-yellow-400/40 bg-yellow-400/5 text-yellow-300 hover:bg-yellow-400/10"><Eye className="w-3.5 h-3.5 mr-1" /> Solution</Button>
+              <Button onClick={() => setShowHint((v) => !v)} disabled={mode === "interview"} title={mode === "interview" ? "Hints disabled in Interview Mode" : "Show hint"} variant="outline" size="sm" data-testid="python-hint" className="h-8 border-[#00D4FF]/40 bg-[#00D4FF]/5 text-[#00D4FF] hover:bg-[#00D4FF]/10"><Lightbulb className="w-3.5 h-3.5 mr-1" /> Hint</Button>
+              <Button onClick={() => setShowSolution((v) => !v)} disabled={mode === "interview"} title={mode === "interview" ? "Solutions disabled in Interview Mode" : "Show solution"} variant="outline" size="sm" data-testid="python-solution" className="h-8 border-yellow-400/40 bg-yellow-400/5 text-yellow-300 hover:bg-yellow-400/10"><Eye className="w-3.5 h-3.5 mr-1" /> Solution</Button>
             </div>
             {showHint && <div className="p-3 rounded-md border border-[#00D4FF]/30 bg-[#00D4FF]/5 text-sm text-slate-200" data-testid="python-hint-panel"><div className="text-[10px] uppercase tracking-widest text-[#00D4FF] mb-1">Hint</div>{cur.hint}</div>}
             {showSolution && <div className="p-3 rounded-md border border-yellow-400/30 bg-yellow-400/5" data-testid="python-solution-panel"><div className="text-[10px] uppercase tracking-widest text-yellow-300 mb-1">Solution</div><pre className="text-[11px] font-mono-editor text-slate-200 whitespace-pre-wrap">{cur.solution}</pre></div>}
@@ -327,7 +356,7 @@ export default function PythonPage() {
         </div>
       </div>
       <UpgradeModal open={upgradeOpen} onOpenChange={setUpgradeOpen} />
-      <ModeGuide open={modeGuideOpen} onOpenChange={setModeGuideOpen} modes={["learning", "practice"]} onPick={setMode} />
+      <ModeGuide open={modeGuideOpen} onOpenChange={setModeGuideOpen} onPick={setMode} />
     </div>
   );
 }
