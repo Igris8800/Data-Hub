@@ -89,6 +89,7 @@ export default function PowerBIPage() {
   const [idx, setIdx] = useState(0);
   
   const [result, setResult] = useState(null);
+  const [picked, setPicked] = useState(null);
   const [status, setStatus] = useState({ text: "Not Started", tone: "muted" });
   const [showHint, setShowHint] = useState(false);
   const [showSolution, setShowSolution] = useState(false);
