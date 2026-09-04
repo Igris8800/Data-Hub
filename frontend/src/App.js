@@ -43,7 +43,7 @@ function AppShell() {
           <Route path="/leaderboard" element={<Leaderboard />} />
         </Routes>
       </main>
-      <Footer />
+      {location.pathname === "/" && <Footer />}
       <Toaster theme="dark" position="top-right" />
     </div>
   );
