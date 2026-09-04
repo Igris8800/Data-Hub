@@ -23,3 +23,7 @@ Series by (index, value) pairs (index ignored when it is positional), scalars/li
 | hr | People Analytics (pandas) | employees, departments, reviews, leave | 100 — tenure, attrition, comp/compa-ratio, gender gap, reviews, org, leave |
 | streaming | Streaming Analytics (pandas) | users, titles, streams, subscriptions | 100 — DAU/retention, rolling windows, resampling, cohorts, MRR, co-viewing, churn |
 | finance | Personal Finance (pandas) | accounts, transactions, budgets, merchants | 100 — running balances, budget variance, anomaly/z-score, recurring detection, resampling, net worth |
+| stats | Statistics Lab (scipy) | measurements, experiment, sample, paired, regression | 100 — descriptive stats, distributions, t-tests, CIs, correlation, regression, ANOVA, chi-square, bootstrap, permutation, power, Bayes (scipy.stats + numpy) |
+
+The `stats` dataset sets `needs_scipy: true`; the browser runner lazily `loadPackage(["scipy"])` and exposes `scipy.stats as stats`.
+It powers the standalone **Statistics Lab** page (/stats), a separate module from Python Practice (which excludes the stats dataset).

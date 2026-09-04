@@ -5,7 +5,7 @@ here=os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, here); from grader import canon
 import pandas as pd, numpy as np
 DIFF={'easy':'beginner','medium':'intermediate','hard':'advanced'}
-PRELUDE = "import pandas as pd, numpy as np, math, re, json, datetime, collections, itertools, statistics\nfrom collections import Counter, defaultdict\n"
+PRELUDE = "import pandas as pd, numpy as np, math, re, json, datetime, collections, itertools, statistics\nfrom collections import Counter, defaultdict\ntry:\n    import scipy.stats as stats\nexcept Exception:\n    stats = None\n"
 def load_frames(ds):
     g={}
     for name,csv_text in ds['frames'].items():

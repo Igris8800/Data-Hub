@@ -66,8 +66,14 @@ def _run(key, code):
 }
 
 const loadedDatasets = new Set();
-export async function ensureDataset(py, dataset) {
+export async function ensureDataset(py, dataset, onStatus) {
   if (loadedDatasets.has(dataset.key)) return;
+  if (dataset.needs_scipy && !loadedDatasets.has("__scipy__")) {
+    onStatus?.("Loading scipy…");
+    await py.loadPackage(["scipy"]);
+    py.runPython("import scipy.stats as stats");
+    loadedDatasets.add("__scipy__");
+  }
   py.globals.get("_load_dataset")(dataset.key, JSON.stringify(dataset.frames));
   loadedDatasets.add(dataset.key);
 }

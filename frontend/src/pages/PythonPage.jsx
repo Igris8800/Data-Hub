@@ -90,11 +90,12 @@ export default function PythonPage() {
   const nav = useNavigate();
   const [searchParams] = useSearchParams();
   const jumpQ = searchParams.get("q");
-  const jumpWb = PYTHON_DATASETS.find((w) => w.key === searchParams.get("company")) || PYTHON_DATASETS[0];
+  const DATASETS = PYTHON_DATASETS.filter((w) => w.key !== "stats");
+  const jumpWb = DATASETS.find((w) => w.key === searchParams.get("company")) || DATASETS[0];
   const jumpTarget = jumpQ ? jumpWb.questions.find((q) => q.id === jumpQ) : null;
   const [pending, setPending] = useState(!!jumpTarget);
   const [wbKey, setWbKey] = useState(jumpWb.key);
-  const workbook = PYTHON_DATASETS.find((w) => w.key === wbKey) || PYTHON_DATASETS[0];
+  const workbook = DATASETS.find((w) => w.key === wbKey) || DATASETS[0];
   const [py, setPy] = useState(null);
   const [bootStatus, setBootStatus] = useState("Starting Python…");
   const [bootErr, setBootErr] = useState(null);
@@ -239,7 +240,7 @@ export default function PythonPage() {
               </button>
               {dsMenuOpen && (
                 <div className="absolute right-0 mt-1 w-[280px] max-h-[60vh] overflow-auto rounded-lg border border-white/10 bg-[#151B23] shadow-xl z-50 p-1" role="listbox" data-testid="dataset-menu">
-                  {PYTHON_DATASETS.map((w) => (
+                  {DATASETS.map((w) => (
                     <button key={w.key} role="option" aria-selected={w.key === wbKey}
                       onClick={() => { setWbKey(w.key); setDsMenuOpen(false); }} data-testid={`dataset-${w.key}`}
                       className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-xs text-left transition-colors ${w.key === wbKey ? "bg-white/10 text-white" : "text-slate-300 hover:bg-white/5"}`}>
