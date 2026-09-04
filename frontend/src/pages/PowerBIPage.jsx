@@ -205,7 +205,7 @@ export default function PowerBIPage() {
           <div className="flex items-center gap-2">
             <span className="text-slate-500 text-xs uppercase tracking-widest">Dataset</span>
             <span className="px-2 py-1 rounded-md bg-[#0D1117] border font-mono-editor text-xs" style={{ borderColor: `${workbook.color}55`, color: workbook.color }}>{workbook.name}</span>
-            <span className="text-[10px] text-slate-500 font-mono-editor">{Object.keys(workbook.frames).join(" · ")}</span>
+            <span className="text-[10px] text-slate-500 font-mono-editor">{workbook.tagline}</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-slate-500 text-xs uppercase tracking-widest">Level</span>
