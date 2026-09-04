@@ -32,18 +32,23 @@ const LEVEL_COLOR = { beginner: "#00FF88", intermediate: "#00D4FF", advanced: "#
 
 // ---------- helpers ----------
 function parseCsv(text, limit = 8) {
+  if (!text) return { headers: [], rows: [], total: 0 };
   const lines = text.trim().split("\n"); const headers = lines[0].split(",");
   const rows = lines.slice(1, 1 + limit).map((l) => l.split(","));
   return { headers, rows, total: lines.length - 1 };
 }
 function DatasetPreview({ dataset }) {
-  const [active, setActive] = useState(Object.keys(dataset.frames)[0]);
-  const t = useMemo(() => parseCsv(dataset.frames[active]), [dataset, active]);
+  const names = Object.keys(dataset.frames);
+  const [active, setActive] = useState(names[0]);
+  // Reset the selected frame whenever the dataset changes (avoids a stale name from the previous dataset).
+  useEffect(() => { setActive(Object.keys(dataset.frames)[0]); }, [dataset]);
+  const activeKey = names.includes(active) ? active : names[0];
+  const t = useMemo(() => parseCsv(dataset.frames[activeKey]), [dataset, activeKey]);
   return (
     <div className="h-full flex flex-col" data-testid="python-dataset">
       <div className="flex items-center gap-1 px-3 py-1.5 border-b border-white/5 overflow-x-auto">
         {Object.keys(dataset.frames).map((k) => (
-          <button key={k} onClick={() => setActive(k)} className={`shrink-0 px-2 py-1 rounded text-[11px] font-mono-editor border ${active === k ? "border-[#FFD166] text-[#FFD166] bg-[#FFD166]/10" : "border-white/10 text-slate-400 hover:bg-white/5"}`}>{k}</button>
+          <button key={k} onClick={() => setActive(k)} className={`shrink-0 px-2 py-1 rounded text-[11px] font-mono-editor border ${activeKey === k ? "border-[#FFD166] text-[#FFD166] bg-[#FFD166]/10" : "border-white/10 text-slate-400 hover:bg-white/5"}`}>{k}</button>
         ))}
         <span className="ml-auto text-[10px] text-slate-500 font-mono-editor">{t.total} rows · showing {t.rows.length}</span>
       </div>
@@ -89,7 +94,7 @@ export default function PythonPage() {
   const jumpTarget = jumpQ ? jumpWb.questions.find((q) => q.id === jumpQ) : null;
   const [pending, setPending] = useState(!!jumpTarget);
   const [wbKey, setWbKey] = useState(jumpWb.key);
-  const workbook = PYTHON_DATASETS.find((w) => w.key === wbKey);
+  const workbook = PYTHON_DATASETS.find((w) => w.key === wbKey) || PYTHON_DATASETS[0];
   const [py, setPy] = useState(null);
   const [bootStatus, setBootStatus] = useState("Starting Python…");
   const [bootErr, setBootErr] = useState(null);
