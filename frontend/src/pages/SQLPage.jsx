@@ -267,6 +267,13 @@ function ExpectedOutput({ company, question }) {
 }
 
 // --- Main page ---
+// Renders a company logo, falling back to the emoji if the image fails to load (some CDN icons get delisted).
+function CompanyLogo({ company, className = "w-4 h-4" }) {
+  const [failed, setFailed] = useState(false);
+  if (failed || !company.logoUrl) return <span className={`${className} inline-flex items-center justify-center text-[13px] leading-none`}>{company.logo || "📊"}</span>;
+  return <img src={company.logoUrl} alt="" className={`${className} object-contain`} onError={() => setFailed(true)} />;
+}
+
 export default function SQLPage() {
   const { user, setUser } = useAuth();
   const { theme } = useTheme();
@@ -521,7 +528,7 @@ export default function SQLPage() {
               <DropdownMenuTrigger asChild>
                 <button data-testid="company-selector" className="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium border text-white hover:bg-white/5"
                   style={{ borderColor: `${company.color}66`, background: `${company.color}12` }}>
-                  <img src={company.logoUrl} alt="" className="w-4 h-4 object-contain" onError={(e) => { e.currentTarget.style.display = "none"; }} />
+                  <CompanyLogo company={company} />
                   <span className="font-semibold">{company.name}</span>
                   <span className="text-[9px] font-mono-editor px-1.5 py-0.5 rounded bg-white/10">{company.questions.length}Q</span>
                   <ChevronDown className="w-3.5 h-3.5 opacity-70" />
@@ -531,7 +538,7 @@ export default function SQLPage() {
                 <DropdownMenuLabel className="text-[10px] uppercase tracking-widest text-slate-500">Dataset</DropdownMenuLabel>
                 {COMPANIES.map(c => (
                   <DropdownMenuItem key={c.key} onClick={() => setCompanyKey(c.key)} data-testid={`company-${c.key}`} className="gap-2 cursor-pointer focus:bg-white/10">
-                    <img src={c.logoUrl} alt="" className="w-4 h-4 object-contain" onError={(e) => { e.currentTarget.style.display = "none"; }} />
+                    <CompanyLogo company={c} />
                     <span className="flex-1">{c.name}</span>
                     <span className="text-[9px] font-mono-editor text-slate-500">{c.questions.length}Q</span>
                     {c.key === companyKey && <Check className="w-3.5 h-3.5" style={{ color: c.color }} />}

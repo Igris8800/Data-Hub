@@ -49,7 +49,7 @@ tables=[
  {'name':'warehouses','color':'#FF9900','columns':[col('warehouse_id','INTEGER','PK'),col('warehouse_name','TEXT'),col('location','TEXT'),col('capacity','INTEGER')],'rows':warehouses},
  {'name':'employees','color':'#FF9900','columns':[col('employee_id','INTEGER','PK'),col('first_name','TEXT'),col('last_name','TEXT'),col('department','TEXT'),col('salary','INTEGER'),col('warehouse_id','INTEGER','FK')],'rows':employees},
 ]
-company={'key':'amazon','name':'Amazon','tagline':'E-commerce · Fulfillment · Reviews','color':'#FF9900','logo':'🛒','logoUrl':'https://cdn.simpleicons.org/amazon/FF9900'}
+company={'key':'amazon','name':'Amazon','tagline':'E-commerce · Fulfillment · Reviews','color':'#FF9900','logo':'🛒','logoUrl':'https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg'}
 qs=[]
 for f in sorted(os.listdir(os.path.dirname(os.path.abspath(__file__)))):
     if f.startswith('questions_') and f.endswith('.json'): qs+=json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),f)))
