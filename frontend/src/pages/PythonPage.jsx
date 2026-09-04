@@ -191,7 +191,7 @@ export default function PythonPage() {
           </div>
           <div className="ml-auto flex items-center gap-2" data-testid="workbook-selector">
             <ModeGuideButton onClick={() => setModeGuideOpen(true)} />
-            {EXCEL_WORKBOOKS.map((w) => (
+            {PYTHON_DATASETS.map((w) => (
               <button key={w.key} onClick={() => setWbKey(w.key)} data-testid={`dataset-${w.key}`}
                 className={`inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium border ${w.key === wbKey ? "text-white" : "text-slate-400 border-white/5 hover:bg-white/5"}`}
                 style={w.key === wbKey ? { borderColor: w.color, background: `${w.color}15` } : undefined}>
