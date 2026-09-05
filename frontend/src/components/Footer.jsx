@@ -25,7 +25,7 @@ export default function Footer() {
   };
   return (
     <footer className="mt-24 border-t border-white/10 bg-[#0D1117]">
-      <div className="max-w-7xl mx-auto px-6 py-14 grid md:grid-cols-3 gap-10">
+      <div className="max-w-7xl mx-auto px-6 py-14 grid md:grid-cols-4 gap-10">
         <div>
           <div className="flex items-center gap-2 font-heading mb-3">
             <span className="w-8 h-8 rounded-md bg-gradient-to-br from-[#00D4FF] to-[#00FF88] flex items-center justify-center text-[#0D1117] font-bold text-lg">D</span>
@@ -43,6 +43,15 @@ export default function Footer() {
             <li><a href="/python" className="hover:text-[#00D4FF]">Python</a></li>
             <li><a href="/powerbi" className="hover:text-[#00D4FF]">Power BI</a></li>
             <li><a href="/stats" className="hover:text-[#00D4FF]">Statistics</a></li>
+          </ul>
+        </div>
+        <div>
+          <div className="uppercase text-xs tracking-[0.2em] text-slate-400 mb-3">Legal</div>
+          <ul className="space-y-2 text-sm">
+            <li><a href="/legal/terms" className="hover:text-[#00D4FF]">Terms of Service</a></li>
+            <li><a href="/legal/privacy" className="hover:text-[#00D4FF]">Privacy Policy</a></li>
+            <li><a href="/legal/refund" className="hover:text-[#00D4FF]">Refund Policy</a></li>
+            <li><a href="/legal/contact" className="hover:text-[#00D4FF]">Contact Us</a></li>
           </ul>
         </div>
         <div>
@@ -72,8 +81,15 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="border-t border-white/5 py-4 text-center text-xs text-slate-500">
-        © {new Date().getFullYear()} Data Hub. Built for aspiring data analysts.
+      <div className="border-t border-white/5 py-4 px-6 flex flex-col sm:flex-row items-center justify-center gap-x-4 gap-y-2 text-xs text-slate-500">
+        <span>© {new Date().getFullYear()} Data Hub. Built for aspiring data analysts.</span>
+        <span className="hidden sm:inline">·</span>
+        <span className="flex items-center gap-3">
+          <a href="/legal/terms" className="hover:text-[#00D4FF]">Terms</a>
+          <a href="/legal/privacy" className="hover:text-[#00D4FF]">Privacy</a>
+          <a href="/legal/refund" className="hover:text-[#00D4FF]">Refunds</a>
+          <a href="/legal/contact" className="hover:text-[#00D4FF]">Contact</a>
+        </span>
       </div>
     </footer>
   );

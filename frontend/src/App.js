@@ -18,6 +18,7 @@ import Roadmap from "@/pages/Roadmap";
 import Profile from "@/pages/Profile";
 import Leaderboard from "@/pages/Leaderboard";
 import AuthCallback from "@/pages/AuthCallback";
+import LegalPage from "@/pages/LegalPage";
 
 function AppShell() {
   const location = useLocation();
@@ -43,6 +44,8 @@ function AppShell() {
           <Route path="/roadmap" element={<Roadmap />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/legal/:doc" element={<LegalPage />} />
+          <Route path="/legal" element={<LegalPage />} />
         </Routes>
       </main>
       {location.pathname === "/" && <Footer />}

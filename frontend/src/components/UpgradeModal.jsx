@@ -144,6 +144,9 @@ export default function UpgradeModal({ open, onOpenChange }) {
               className="w-full rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 text-[#0D1117] hover:from-yellow-300 hover:to-amber-400 font-semibold mt-2">
               <Sparkles className="w-4 h-4 mr-2" /> {busy ? "Loading…" : `Get Premium — ${planLabel?.price}${plan === "monthly" ? "/mo" : plan === "yearly" ? "/yr" : ""}`}
             </Button>
+            <p className="text-[11px] text-slate-500 text-center mt-2">
+              By upgrading you agree to our <a href="/legal/terms" className="text-slate-400 hover:text-[#00D4FF] underline">Terms</a> and <a href="/legal/refund" className="text-slate-400 hover:text-[#00D4FF] underline">Refund Policy</a>.
+            </p>
           </>
         ) : sent ? (
           <div className="py-8 text-center">
