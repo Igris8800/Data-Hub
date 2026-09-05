@@ -30,3 +30,6 @@ It powers the standalone **Statistics Lab** page (/stats), a separate module fro
 | sensors | IoT Sensors (pandas) | readings, devices, thresholds, maintenance | 100 — hourly time-series: resampling, rolling stats, EWMA, gap/outage detection, interpolation, z-score & IQR anomalies, threshold breaches, uptime SLA |
 
 Python Practice (pandas) is now 500 questions across 5 datasets: retail, hr, streaming, finance, sensors.
+| stats2 | Experiments Lab (scipy) | trials, survey, patients, ab_daily | 100 — 3-arm ANOVA & pairwise, Tukey/Bonferroni/BH multiple testing, chi-square independence & residuals, multiple regression (numpy OLS, adj R², F-test, interactions), bootstrap/permutation, A/B sequential & Wilson intervals, power & sample-size simulation |
+
+Statistics Lab (/stats) now spans two scipy datasets: stats + stats2 = 200 questions.

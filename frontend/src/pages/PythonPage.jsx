@@ -90,7 +90,7 @@ export default function PythonPage() {
   const nav = useNavigate();
   const [searchParams] = useSearchParams();
   const jumpQ = searchParams.get("q");
-  const DATASETS = PYTHON_DATASETS.filter((w) => w.key !== "stats");
+  const DATASETS = PYTHON_DATASETS.filter((w) => !["stats", "stats2"].includes(w.key));
   const jumpWb = DATASETS.find((w) => w.key === searchParams.get("company")) || DATASETS[0];
   const jumpTarget = jumpQ ? jumpWb.questions.find((q) => q.id === jumpQ) : null;
   const [pending, setPending] = useState(!!jumpTarget);

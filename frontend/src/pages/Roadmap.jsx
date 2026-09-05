@@ -21,8 +21,8 @@ function buildQuestionIndex(moduleKey) {
   const idx = {};
   const push = (topic, q) => { (idx[topic] = idx[topic] || []).push(q); };
   if (moduleKey === "sql") for (const c of COMPANIES) for (const q of c.questions) if (q.topic) push(q.topic, { key: `${c.key}-${q.id}`, id: q.id, title: q.title, difficulty: q.difficulty, company: c.key, companyName: c.name });
-  if (moduleKey === "python") for (const w of PYTHON_DATASETS) { if (w.key === "stats") continue; for (const q of w.questions) if (q.topic) push(q.topic, { key: `${w.key}-${q.id}`, id: q.id, title: q.title, difficulty: q.difficulty, company: w.key, companyName: w.name }); }
-  if (moduleKey === "stats") { const sw = PYTHON_DATASETS.find((w) => w.key === "stats"); if (sw) for (const q of sw.questions) if (q.topic) push(q.topic, { key: `stats-${q.id}`, id: q.id, title: q.title, difficulty: q.difficulty, company: "stats", companyName: sw.name }); }
+  if (moduleKey === "python") for (const w of PYTHON_DATASETS) { if (w.key === "stats" || w.key === "stats2") continue; for (const q of w.questions) if (q.topic) push(q.topic, { key: `${w.key}-${q.id}`, id: q.id, title: q.title, difficulty: q.difficulty, company: w.key, companyName: w.name }); }
+  if (moduleKey === "stats") for (const w of PYTHON_DATASETS) { if (w.key !== "stats" && w.key !== "stats2") continue; for (const q of w.questions) if (q.topic) push(q.topic, { key: `${w.key}-${q.id}`, id: q.id, title: q.title, difficulty: q.difficulty, company: w.key, companyName: w.name }); }
   if (moduleKey === "powerbi") {
     for (const q of POWERBI_CONCEPTS) if (q.topic) push(q.topic, { key: `pbic-${q.id}`, id: q.id, title: q.title, difficulty: q.difficulty, company: "powerbi", companyName: "Concepts" });
     for (const q of DAX_MODEL.questions) if (q.topic) push(q.topic, { key: `dax-${q.id}`, id: q.id, title: q.title, difficulty: q.difficulty, company: "dax", companyName: "DAX Practice" });
