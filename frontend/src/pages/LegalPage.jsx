@@ -1,13 +1,13 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
 
-// ⚠️ FILL THESE IN before going live — payment processors and app stores check for real details.
+// ⚠️ legalName still needs your real legal name (e.g. "Your Name (sole proprietor)") before Lemon Squeezy approval.
 const BIZ = {
   name: "Data Hub",
-  legalName: "Data Hub", // e.g. "Akash Laguri (sole proprietor)" or your registered entity
-  email: "support@datahub.example", // TODO: your real support email
+  legalName: "Data Hub", // TODO: replace with your legal name, e.g. "Akash Laguri (sole proprietor)"
+  email: "support@crazycoder.tech",
   country: "India",
-  effective: "January 2026",
+  effective: "February 2026",
 };
 
 const Section = ({ title, children }) => (
