@@ -98,6 +98,19 @@ def compute_level(xp: int) -> str:
     if xp >= 200: return "Analyst"
     return "Rookie"
 
+
+def _is_premium_active(user: dict) -> bool:
+    """Premium is active if flagged and not past its expiry. Lifetime/None expiry never lapses."""
+    if not user.get("is_premium"):
+        return False
+    exp = user.get("premium_expires")
+    if not exp:
+        return True  # perpetual (lifetime) or legacy record
+    try:
+        return datetime.fromisoformat(exp) > datetime.now(timezone.utc)
+    except Exception:
+        return True
+
 async def get_user_from_token(token: str) -> Optional[dict]:
     """Accepts either JWT (email/password) or Emergent session_token."""
     if not token:
@@ -149,7 +162,7 @@ def user_to_public(user: dict) -> UserPublic:
         level=compute_level(xp),
         streak=user.get("streak", 0),
         total_solved=user.get("total_solved", 0),
-        is_premium=user.get("is_premium", False),
+        is_premium=_is_premium_active(user),
         badges=user.get("badges", []),
     )
 
@@ -679,15 +692,64 @@ async def verify_payment(payload: RazorpayVerifyRequest, request: Request):
         })
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid payment signature")
+    order = await db.orders.find_one({"order_id": payload.razorpay_order_id})
+    plan = (order or {}).get("plan", "yearly")
+    await _grant_premium(user["user_id"], plan, payload.razorpay_order_id, payload.razorpay_payment_id)
+    return {"ok": True}
+
+
+def _premium_expiry(plan: str):
+    """Return an ISO expiry for time-limited plans, or None for perpetual (lifetime)."""
+    now = datetime.now(timezone.utc)
+    if plan == "monthly":
+        return (now + timedelta(days=30)).isoformat()
+    if plan == "yearly":
+        return (now + timedelta(days=365)).isoformat()
+    return None  # lifetime / unknown → no expiry
+
+
+async def _grant_premium(user_id: str, plan: str, order_id: str, payment_id: str):
+    """Idempotently mark an order paid and grant/extend the user's premium."""
+    existing = await db.orders.find_one({"order_id": order_id})
+    if existing and existing.get("status") == "paid":
+        return  # already processed (e.g. verify ran, then webhook fires too)
     await db.orders.update_one(
-        {"order_id": payload.razorpay_order_id},
-        {"$set": {"status": "paid", "payment_id": payload.razorpay_payment_id,
+        {"order_id": order_id},
+        {"$set": {"status": "paid", "payment_id": payment_id, "plan": plan,
                    "paid_at": datetime.now(timezone.utc).isoformat()}},
+        upsert=True,
     )
-    await db.users.update_one(
-        {"user_id": user["user_id"]},
-        {"$set": {"is_premium": True, "premium_since": datetime.now(timezone.utc).isoformat()}},
-    )
+    update = {"is_premium": True, "premium_plan": plan,
+              "premium_since": datetime.now(timezone.utc).isoformat(),
+              "premium_expires": _premium_expiry(plan)}
+    await db.users.update_one({"user_id": user_id}, {"$set": update})
+
+
+@api_router.post("/payments/webhook")
+async def razorpay_webhook(request: Request):
+    """Server-side source of truth: grants premium even if the browser callback never fires.
+    Configure this URL in Razorpay → Settings → Webhooks with the webhook secret."""
+    secret = os.environ.get("RAZORPAY_WEBHOOK_SECRET", "")
+    body = await request.body()
+    sig = request.headers.get("X-Razorpay-Signature", "")
+    if not secret:
+        raise HTTPException(status_code=503, detail="Webhook secret not configured")
+    import hmac, hashlib
+    expected = hmac.new(secret.encode(), body, hashlib.sha256).hexdigest()
+    if not hmac.compare_digest(expected, sig):
+        raise HTTPException(status_code=400, detail="Invalid webhook signature")
+    event = json.loads(body.decode())
+    etype = event.get("event", "")
+    try:
+        if etype in ("payment.captured", "order.paid"):
+            pay = event["payload"]["payment"]["entity"]
+            order_id = pay.get("order_id")
+            payment_id = pay.get("id")
+            order = await db.orders.find_one({"order_id": order_id})
+            if order:
+                await _grant_premium(order["user_id"], order.get("plan", "yearly"), order_id, payment_id)
+    except Exception as e:
+        logging.getLogger(__name__).warning("webhook processing error: %s", e)
     return {"ok": True}
 
 # --- Newsletter ---
