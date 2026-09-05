@@ -207,7 +207,7 @@ export default function DaxPracticePage() {
         <div className="max-w-[1600px] mx-auto px-4 py-2 border-t border-white/5 flex items-center gap-4 flex-wrap text-sm">
           <div className="flex items-center gap-2">
             <span className="text-slate-500 text-xs uppercase tracking-widest">Model</span>
-            <span className="px-2 py-1 rounded-md bg-[#0D1117] border font-mono-editor text-xs" style={{ borderColor: `${workbook.color}55`, color: workbook.color }}>{workbook.name}</span>
+            <span data-workbook-chip className="px-2 py-1 rounded-md bg-[#0D1117] border font-mono-editor text-xs" style={{ borderColor: `${workbook.color}55`, color: workbook.color }}>{workbook.name}</span>
             <span className="text-[10px] text-slate-500 font-mono-editor">{Object.keys(workbook.tables).join(" · ")}</span>
           </div>
           <div className="flex items-center gap-2">
