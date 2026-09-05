@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { X, ArrowRight } from "lucide-react";
+import UpgradeModal from "@/components/UpgradeModal";
 
 export default function PromoBar() {
   const [open, setOpen] = useState(() => {
     try { return localStorage.getItem("dh_promo_dismissed") !== "1"; } catch { return true; }
   });
+  const [upgradeOpen, setUpgradeOpen] = useState(false);
 
   useEffect(() => {
     if (!open) localStorage.setItem("dh_promo_dismissed", "1");
@@ -37,15 +39,12 @@ export default function PromoBar() {
             </div>
           </div>
           <p className="text-white text-sm truncate">
-            <span className="font-semibold">4,900+ questions</span>, launch price — grab lifetime access before payments go live.
+            <span className="font-semibold">1,700+ hands-on questions</span> — launch price, grab lifetime access before payments go live.
           </p>
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <button
-            onClick={() => {
-              const el = document.getElementById("pricing-anchor");
-              el?.scrollIntoView({ behavior: "smooth" });
-            }}
+            onClick={() => setUpgradeOpen(true)}
             className="hidden sm:inline-flex items-center gap-1 bg-[#00FF88] hover:bg-[#33FFA1] text-[#0D1117] rounded-md px-3 py-1.5 text-sm font-semibold transition-colors"
             data-testid="promo-buy-btn"
           >
@@ -61,6 +60,7 @@ export default function PromoBar() {
           </button>
         </div>
       </div>
+      <UpgradeModal open={upgradeOpen} onOpenChange={setUpgradeOpen} />
     </div>
   );
 }
