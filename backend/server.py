@@ -763,9 +763,18 @@ app.include_router(api_router)
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=[o.strip() for o in os.environ.get('CORS_ORIGINS', '*').split(',') if o.strip()],
-    # Also accept Vercel preview/deployment URLs (e.g. data-hub-abc123-user.vercel.app) and localhost dev servers.
-    allow_origin_regex=os.environ.get('CORS_ORIGIN_REGEX', r"https://.*\.vercel\.app|http://localhost:\d+"),
+    # Explicit allow-list from env (comma-separated). Defaults to the production domains.
+    # NOTE: with allow_credentials=True the wildcard "*" is invalid per the CORS spec, so we
+    # rely on an explicit list + a regex for preview/localhost origins instead.
+    allow_origins=[o.strip() for o in os.environ.get(
+        'CORS_ORIGINS',
+        'https://crazycoder.tech,https://www.crazycoder.tech'
+    ).split(',') if o.strip() and o.strip() != '*'],
+    # Also accept the new domain, Vercel preview/deployment URLs, and localhost dev servers.
+    allow_origin_regex=os.environ.get(
+        'CORS_ORIGIN_REGEX',
+        r"https://(www\.)?crazycoder\.tech|https://.*\.vercel\.app|http://localhost:\d+"
+    ),
     allow_methods=["*"],
     allow_headers=["*"],
 )
