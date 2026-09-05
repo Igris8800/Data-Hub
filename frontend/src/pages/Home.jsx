@@ -56,30 +56,6 @@ const FEATURED = [
   { title: "DAX Time Intelligence", module: "Power BI", level: "Advanced", hours: "2 hr", rating: "4.7", by: "Data Hub" },
 ];
 
-const CATEGORIES = [
-  "Artificial Intelligence", "Machine Learning", "Python", "SQL", "ChatGPT",
-  "Data Analysis", "Probability & Statistics", "Data Engineering", "Excel",
-];
-
-// Route each category to the matching module; everything else opens the roadmap overview.
-const CATEGORY_ROUTE = {
-  "Python": "/python", "SQL": "/sql", "Excel": "/excel",
-  "Probability & Statistics": "/stats", "Data Analysis": "/roadmap",
-};
-const categoryTo = (c) => CATEGORY_ROUTE[c] || "/roadmap";
-
-const TECH_LOGOS = [
-  { name: "Python", color: "#3776AB", glyph: "py" },
-  { name: "SQL", color: "#00D4FF", glyph: "sql" },
-  { name: "OpenAI", color: "#10A37F", glyph: "◉" },
-  { name: "Claude", color: "#E8A87C", glyph: "✦" },
-  { name: "Power BI", color: "#F2C811", glyph: "▢" },
-  { name: "R", color: "#276DC3", glyph: "R" },
-  { name: "Copilot", color: "#8B5CF6", glyph: "◈" },
-  { name: "Databricks", color: "#FF3621", glyph: "▲" },
-  { name: "Snowflake", color: "#29B5E8", glyph: "❄" },
-  { name: "Excel", color: "#217346", glyph: "X" },
-];
 
 
 
@@ -380,45 +356,6 @@ export default function Home() {
               </Link>
             );
           })}
-        </div>
-      </section>
-
-      {/* CATEGORIES pills */}
-      <section className="max-w-7xl mx-auto px-6 pb-14">
-        <h3 className="font-heading text-2xl tracking-tight mb-5">Explore by category</h3>
-        <div className="flex items-center gap-3 flex-wrap">
-          {CATEGORIES.map((c) => (
-            <button
-              key={c}
-              onClick={() => nav(categoryTo(c))}
-              data-testid={`category-${c.toLowerCase().replace(/[^a-z]+/g, '-')}`}
-              className="px-5 py-2 rounded-full border border-white/10 bg-[#151B23] hover:border-[#00D4FF] hover:text-[#00D4FF] text-slate-200 text-sm transition-colors"
-            >
-              {c}
-            </button>
-          ))}
-        </div>
-      </section>
-
-      {/* TECH LOGOS */}
-      <section className="max-w-7xl mx-auto px-6 pb-16">
-        <h3 className="font-heading text-2xl tracking-tight mb-5">Learn the world's most in-demand technologies</h3>
-        <div className="flex items-center gap-3 flex-wrap">
-          {TECH_LOGOS.map((t) => (
-            <div
-              key={t.name}
-              className="flex items-center gap-2.5 px-4 py-2.5 rounded-full border border-white/10 bg-[#151B23] hover:border-white/25 transition-colors"
-              data-testid={`tech-logo-${t.name.toLowerCase()}`}
-            >
-              <span
-                className="w-6 h-6 rounded-md flex items-center justify-center font-heading font-bold text-[11px]"
-                style={{ background: `${t.color}20`, color: t.color, border: `1px solid ${t.color}66` }}
-              >
-                {t.glyph}
-              </span>
-              <span className="text-sm font-medium text-slate-200">{t.name}</span>
-            </div>
-          ))}
         </div>
       </section>
 
