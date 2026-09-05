@@ -623,12 +623,12 @@ async def certificate(module: str, request: Request):
         headers={"Content-Disposition": f'attachment; filename="{filename}"'},
     )
 
-# --- Payments (USD) ---
-# Server-side price map in cents — the client never sets the amount.
+# --- Payments (Razorpay, INR — India launch) ---
+# Server-side price map in paise (₹1 = 100 paise). Client never sets the amount.
 PLAN_PRICES = {
-    "monthly": {"amount": 1000, "label": "$10 / month"},
-    "yearly": {"amount": 3000, "label": "$30 / year"},
-    "lifetime": {"amount": 10000, "label": "$100 lifetime"},
+    "monthly": {"amount": 79900, "label": "₹799 / month"},
+    "yearly": {"amount": 249900, "label": "₹2,499 / year"},
+    "lifetime": {"amount": 799900, "label": "₹7,999 lifetime"},
 }
 
 @api_router.get("/payments/config")
@@ -636,8 +636,8 @@ async def payments_config():
     return {
         "razorpay_key_id": RAZORPAY_KEY_ID,
         "configured": bool(RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET),
-        "currency": "USD",
-        "plans": {k: {"amount": v["amount"], "currency": "USD", "label": v["label"]} for k, v in PLAN_PRICES.items()},
+        "currency": "INR",
+        "plans": {k: {"amount": v["amount"], "currency": "INR", "label": v["label"]} for k, v in PLAN_PRICES.items()},
     }
 
 @api_router.post("/payments/order")
@@ -652,7 +652,7 @@ async def create_order(payload: RazorpayOrderRequest, request: Request):
     amount = PLAN_PRICES[payload.plan]["amount"]
     order = rzp.order.create({
         "amount": amount,
-        "currency": "USD",
+        "currency": "INR",
         "notes": {"user_id": user["user_id"], "plan": payload.plan},
     })
     await db.orders.insert_one({
@@ -663,7 +663,7 @@ async def create_order(payload: RazorpayOrderRequest, request: Request):
         "status": "created",
         "created_at": datetime.now(timezone.utc).isoformat(),
     })
-    return {"order_id": order["id"], "amount": amount, "currency": "USD", "key_id": RAZORPAY_KEY_ID}
+    return {"order_id": order["id"], "amount": amount, "currency": "INR", "key_id": RAZORPAY_KEY_ID}
 
 @api_router.post("/payments/verify")
 async def verify_payment(payload: RazorpayVerifyRequest, request: Request):
@@ -716,17 +716,17 @@ class BusinessEnquiry(BaseModel):
 @api_router.post("/business/enquiry")
 async def business_enquiry(payload: BusinessEnquiry):
     seats = max(1, int(payload.seats))
-    # Per-seat annual price (USD) with volume discounts.
+    # Per-seat annual price (INR) with volume discounts.
     if seats >= 100:
         per_seat = None  # custom pricing
     elif seats >= 50:
-        per_seat = 18
+        per_seat = 1499
     elif seats >= 20:
-        per_seat = 21
+        per_seat = 1749
     elif seats >= 5:
-        per_seat = 24
+        per_seat = 1999
     else:
-        per_seat = 30
+        per_seat = 2499
     doc = {
         "name": payload.name, "email": payload.email.lower(), "company": payload.company,
         "seats": seats, "message": payload.message,

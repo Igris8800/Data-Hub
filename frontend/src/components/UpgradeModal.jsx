@@ -17,20 +17,20 @@ const FEATURES = [
 ];
 
 const PLANS = [
-  { key: "monthly", label: "Monthly", price: "$10", sub: "billed monthly" },
-  { key: "yearly", label: "Yearly", price: "$30", sub: "billed yearly", best: true },
-  { key: "lifetime", label: "Lifetime", price: "$100", sub: "pay once, forever" },
+  { key: "monthly", label: "Monthly", price: "₹799", sub: "billed monthly" },
+  { key: "yearly", label: "Yearly", price: "₹2,499", sub: "billed yearly", best: true },
+  { key: "lifetime", label: "Lifetime", price: "₹7,999", sub: "pay once, forever" },
 ];
 
-// Per-seat annual price (USD) by seat count — mirrors the backend.
+// Per-seat annual price (INR) by seat count — mirrors the backend.
 function perSeat(seats) {
   if (seats >= 100) return null; // custom
-  if (seats >= 50) return 18;
-  if (seats >= 20) return 21;
-  if (seats >= 5) return 24;
-  return 30;
+  if (seats >= 50) return 1499;
+  if (seats >= 20) return 1749;
+  if (seats >= 5) return 1999;
+  return 2499;
 }
-const listPrice = 30;
+const listPrice = 2499;
 
 export default function UpgradeModal({ open, onOpenChange }) {
   const { user, refresh } = useAuth();
@@ -175,8 +175,8 @@ export default function UpgradeModal({ open, onOpenChange }) {
                 <>
                   <div>
                     <div className="text-[11px] uppercase tracking-widest text-slate-400">Estimated total / year</div>
-                    <div className="text-2xl font-heading font-bold mt-0.5">${total.toLocaleString()}</div>
-                    <div className="text-[11px] text-slate-500 mt-0.5">${ps}/seat/yr{savePct > 0 && <span className="text-[#00FF88]"> · {savePct}% off</span>}</div>
+                    <div className="text-2xl font-heading font-bold mt-0.5">₹{total.toLocaleString()}</div>
+                    <div className="text-[11px] text-slate-500 mt-0.5">₹{ps}/seat/yr{savePct > 0 && <span className="text-[#00FF88]"> · {savePct}% off</span>}</div>
                   </div>
                   <div className="text-right text-[11px] text-slate-500 leading-relaxed">
                     5+ seats · 20% off<br />20+ seats · 30% off<br />50+ seats · 40% off
