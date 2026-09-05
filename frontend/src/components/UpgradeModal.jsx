@@ -18,7 +18,7 @@ const FEATURES = [
 
 const PLANS = [
   { key: "monthly", label: "Monthly", price: "$10", sub: "billed monthly" },
-  { key: "yearly", label: "Yearly", price: "$30", sub: "4 months free", best: true },
+  { key: "yearly", label: "Yearly", price: "$30", sub: "billed yearly", best: true },
   { key: "lifetime", label: "Lifetime", price: "$100", sub: "pay once, forever" },
 ];
 
