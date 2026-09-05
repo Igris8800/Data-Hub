@@ -19,7 +19,7 @@ const FEATURES = [
 const PLANS = [
   { key: "monthly", label: "Monthly", price: "$10", sub: "billed monthly" },
   { key: "yearly", label: "Yearly", price: "$30", sub: "4 months free", best: true },
-  { key: "lifetime", label: "Lifetime", price: "$99", sub: "pay once, forever" },
+  { key: "lifetime", label: "Lifetime", price: "$100", sub: "pay once, forever" },
 ];
 
 // Per-seat annual price (USD) by seat count — mirrors the backend.
@@ -102,6 +102,10 @@ export default function UpgradeModal({ open, onOpenChange }) {
           </DialogTitle>
           <DialogDescription className="text-slate-400">One plan. Every module. Every difficulty.</DialogDescription>
         </DialogHeader>
+
+        <div className="self-start inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold" style={{ background: "#00FF8815", color: "#00FF88", border: "1px solid #00FF8855" }}>
+          <Sparkles className="w-3 h-3" /> Launch price — locked in before payments go live
+        </div>
 
         <div className="inline-flex items-center rounded-lg border border-white/10 p-0.5 bg-[#0D1117] self-start">
           <button onClick={() => setTab("individual")} data-testid="tab-individual"
