@@ -623,16 +623,21 @@ async def certificate(module: str, request: Request):
         headers={"Content-Disposition": f'attachment; filename="{filename}"'},
     )
 
-# --- Razorpay (payments) ---
+# --- Payments (USD) ---
+# Server-side price map in cents — the client never sets the amount.
+PLAN_PRICES = {
+    "monthly": {"amount": 1000, "label": "$10 / month"},
+    "yearly": {"amount": 3000, "label": "$30 / year"},
+    "lifetime": {"amount": 9900, "label": "$99 lifetime"},
+}
+
 @api_router.get("/payments/config")
 async def payments_config():
     return {
         "razorpay_key_id": RAZORPAY_KEY_ID,
         "configured": bool(RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET),
-        "plans": {
-            "monthly": {"amount": 49900, "currency": "INR", "label": "₹499 / month"},
-            "yearly": {"amount": 299900, "currency": "INR", "label": "₹2999 / year"},
-        },
+        "currency": "USD",
+        "plans": {k: {"amount": v["amount"], "currency": "USD", "label": v["label"]} for k, v in PLAN_PRICES.items()},
     }
 
 @api_router.post("/payments/order")
@@ -640,12 +645,14 @@ async def create_order(payload: RazorpayOrderRequest, request: Request):
     user = await require_user(request)
     if not (RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET):
         raise HTTPException(status_code=503, detail="Razorpay not configured yet. Please contact support.")
+    if payload.plan not in PLAN_PRICES:
+        raise HTTPException(status_code=400, detail="Unknown plan")
     import razorpay
     rzp = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
-    amount = 49900 if payload.plan == "monthly" else 299900
+    amount = PLAN_PRICES[payload.plan]["amount"]
     order = rzp.order.create({
         "amount": amount,
-        "currency": "INR",
+        "currency": "USD",
         "notes": {"user_id": user["user_id"], "plan": payload.plan},
     })
     await db.orders.insert_one({
@@ -656,7 +663,7 @@ async def create_order(payload: RazorpayOrderRequest, request: Request):
         "status": "created",
         "created_at": datetime.now(timezone.utc).isoformat(),
     })
-    return {"order_id": order["id"], "amount": amount, "currency": "INR", "key_id": RAZORPAY_KEY_ID}
+    return {"order_id": order["id"], "amount": amount, "currency": "USD", "key_id": RAZORPAY_KEY_ID}
 
 @api_router.post("/payments/verify")
 async def verify_payment(payload: RazorpayVerifyRequest, request: Request):
@@ -696,6 +703,38 @@ async def newsletter_signup(payload: NewsletterRequest):
                             "created_at": datetime.now(timezone.utc).isoformat()}},
         upsert=True,
     )
+    return {"ok": True}
+
+# --- Business / team enquiries ---
+class BusinessEnquiry(BaseModel):
+    name: str
+    email: EmailStr
+    company: str = ""
+    seats: int = 5
+    message: str = ""
+
+@api_router.post("/business/enquiry")
+async def business_enquiry(payload: BusinessEnquiry):
+    seats = max(1, int(payload.seats))
+    # Per-seat annual price (USD) with volume discounts.
+    if seats >= 100:
+        per_seat = None  # custom pricing
+    elif seats >= 50:
+        per_seat = 18
+    elif seats >= 20:
+        per_seat = 21
+    elif seats >= 5:
+        per_seat = 24
+    else:
+        per_seat = 30
+    doc = {
+        "name": payload.name, "email": payload.email.lower(), "company": payload.company,
+        "seats": seats, "message": payload.message,
+        "quoted_per_seat": per_seat,
+        "quoted_total": (per_seat * seats) if per_seat else None,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.business_enquiries.insert_one(doc)
     return {"ok": True}
 
 # --- Leaderboard ---
