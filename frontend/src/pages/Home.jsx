@@ -61,6 +61,13 @@ const CATEGORIES = [
   "Data Analysis", "Probability & Statistics", "Data Engineering", "Excel",
 ];
 
+// Route each category to the matching module; everything else opens the roadmap overview.
+const CATEGORY_ROUTE = {
+  "Python": "/python", "SQL": "/sql", "Excel": "/excel",
+  "Probability & Statistics": "/stats", "Data Analysis": "/roadmap",
+};
+const categoryTo = (c) => CATEGORY_ROUTE[c] || "/roadmap";
+
 const TECH_LOGOS = [
   { name: "Python", color: "#3776AB", glyph: "py" },
   { name: "SQL", color: "#00D4FF", glyph: "sql" },
@@ -145,11 +152,11 @@ export default function Home() {
               Trusted by <span className="text-white font-semibold">37,000+ learners</span> across India and beyond. Practice hands-on in your browser — no setup, no credit card.
             </p>
             <Button
-              onClick={() => nav("/sql")}
+              onClick={() => nav(user ? "/profile" : "/roadmap")}
               className="rounded-full bg-[#00FF88] text-[#0D1117] hover:bg-[#33FFA1] px-6 h-12 font-semibold text-base"
               data-testid="hero-start-btn"
             >
-              Start Learning for Free
+              {user ? "Continue learning" : "Start Learning for Free"}
             </Button>
             <div className="mt-8 flex items-center gap-3">
               <div className="w-10 h-10 rounded-md bg-[#FF6B35] flex items-center justify-center text-white font-heading font-bold text-sm">G2</div>
@@ -221,10 +228,13 @@ export default function Home() {
               }}
             >
               <h3 className="font-heading text-2xl lg:text-3xl tracking-tight text-white mb-1">
-                OpenAI trains your models.
+                Learn the skills.
               </h3>
-              <p className="font-heading text-2xl lg:text-3xl tracking-tight italic mb-6" style={{ color: "#B892FF" }}>
-                We train your people.
+              <p className="font-heading text-2xl lg:text-3xl tracking-tight italic mb-4" style={{ color: "#B892FF" }}>
+                Land the job.
+              </p>
+              <p className="text-white/70 text-sm mb-6 max-w-xs">
+                Master the tools data analysts use every day — SQL, Excel, Python, Power BI and Statistics — with hands-on practice, not videos.
               </p>
               <button
                 onClick={() => setUpgradeOpen(true)}
@@ -234,7 +244,8 @@ export default function Home() {
                 Data Hub for Business
               </button>
 
-              <div className="mt-8 grid grid-cols-3 gap-y-4 gap-x-6 items-center">
+              <div className="mt-6 text-white/50 text-xs font-medium tracking-widest uppercase mb-3">Where our learners work</div>
+              <div className="grid grid-cols-3 gap-y-4 gap-x-6 items-center">
                 {COMPANY_LOGOS.map((c) => (
                   <div key={c} className="text-white/80 text-sm font-heading font-medium tracking-tight">{c}</div>
                 ))}
@@ -361,7 +372,7 @@ export default function Home() {
           {CATEGORIES.map((c) => (
             <button
               key={c}
-              onClick={() => nav("/sql")}
+              onClick={() => nav(categoryTo(c))}
               data-testid={`category-${c.toLowerCase().replace(/[^a-z]+/g, '-')}`}
               className="px-5 py-2 rounded-full border border-white/10 bg-[#151B23] hover:border-[#00D4FF] hover:text-[#00D4FF] text-slate-200 text-sm transition-colors"
             >
