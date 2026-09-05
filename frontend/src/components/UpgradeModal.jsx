@@ -18,8 +18,7 @@ const FEATURES = [
 
 const PLANS = [
   { key: "monthly", label: "Monthly", price: "₹799", sub: "billed monthly" },
-  { key: "yearly", label: "Yearly", price: "₹2,499", sub: "billed yearly", best: true },
-  { key: "lifetime", label: "Lifetime", price: "₹7,999", sub: "pay once, forever" },
+  { key: "yearly", label: "Yearly", price: "₹2,499", was: "₹4,000", sub: "billed yearly", best: true },
 ];
 
 // Per-seat annual price (INR) by seat count — mirrors the backend.
@@ -103,8 +102,17 @@ export default function UpgradeModal({ open, onOpenChange }) {
           <DialogDescription className="text-slate-400">One plan. Every module. Every difficulty.</DialogDescription>
         </DialogHeader>
 
-        <div className="self-start inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold" style={{ background: "#00FF8815", color: "#00FF88", border: "1px solid #00FF8855" }}>
-          <Sparkles className="w-3 h-3" /> Launch price — locked in before payments go live
+        <style>{`
+          @keyframes ls-glow {
+            0%,100% { box-shadow: 0 0 0 0 rgba(0,255,136,0.35); border-color: rgba(0,255,136,0.55); }
+            50%     { box-shadow: 0 0 14px 2px rgba(0,255,136,0.35); border-color: rgba(0,255,136,0.9); }
+          }
+          @keyframes ls-spark { 0%,100%{ transform:scale(1); opacity:1;} 50%{ transform:scale(1.25); opacity:.7;} }
+          @media (prefers-reduced-motion: reduce){ .ls-badge, .ls-badge * { animation: none !important; } }
+        `}</style>
+        <div className="ls-badge self-start inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold"
+          style={{ background: "#00FF8815", color: "#00FF88", border: "1px solid #00FF8855", animation: "ls-glow 2s ease-in-out infinite" }}>
+          <Sparkles className="w-3 h-3" style={{ animation: "ls-spark 2s ease-in-out infinite" }} /> Launch price — locked in before payments go live
         </div>
 
         <div className="inline-flex items-center rounded-lg border border-white/10 p-0.5 bg-[#0D1117] self-start">
@@ -120,13 +128,16 @@ export default function UpgradeModal({ open, onOpenChange }) {
 
         {tab === "individual" ? (
           <>
-            <div className="grid grid-cols-3 gap-2 mt-1">
+            <div className="grid grid-cols-2 gap-2 mt-1">
               {PLANS.map((p) => (
                 <button key={p.key} onClick={() => setPlan(p.key)} data-testid={`plan-${p.key}-btn`}
                   className={`relative text-left p-3 rounded-md border transition-colors ${plan === p.key ? "border-[#00D4FF] bg-[#0D1117]" : "border-white/10 bg-[#0D1117]/50 hover:border-white/25"}`}>
                   {p.best && <span className="absolute -top-2 right-2 text-[9px] bg-[#00FF88] text-[#0D1117] px-1.5 py-0.5 rounded-full font-bold">BEST</span>}
                   <div className="text-[10px] uppercase tracking-widest text-slate-400">{p.label}</div>
-                  <div className="text-xl font-heading font-bold mt-0.5">{p.price}</div>
+                  <div className="flex items-baseline gap-2 mt-0.5">
+                    <span className="text-xl font-heading font-bold">{p.price}</span>
+                    {p.was && <span className="text-sm text-slate-500 line-through">{p.was}</span>}
+                  </div>
                   <div className="text-[10px] text-slate-500 mt-0.5">{p.sub}</div>
                 </button>
               ))}

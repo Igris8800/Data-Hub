@@ -628,7 +628,6 @@ async def certificate(module: str, request: Request):
 PLAN_PRICES = {
     "monthly": {"amount": 79900, "label": "₹799 / month"},
     "yearly": {"amount": 249900, "label": "₹2,499 / year"},
-    "lifetime": {"amount": 799900, "label": "₹7,999 lifetime"},
 }
 
 @api_router.get("/payments/config")

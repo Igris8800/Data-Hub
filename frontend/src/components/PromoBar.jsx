@@ -39,7 +39,7 @@ export default function PromoBar() {
             </div>
           </div>
           <p className="text-white text-sm truncate">
-            <span className="font-semibold">Lifetime access ₹7,999</span> — launch price. Every module, every difficulty, one payment.
+            <span className="font-semibold">Launch price — ₹2,499/year</span> <span className="line-through opacity-70">₹4,000</span>. Every module, every difficulty.
           </p>
         </div>
         <div className="flex items-center gap-2 shrink-0">
