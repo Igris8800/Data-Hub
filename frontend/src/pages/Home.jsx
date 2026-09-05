@@ -346,39 +346,36 @@ export default function Home() {
 
       {/* MODULE bento grid */}
       <section className="max-w-7xl mx-auto px-6 pb-16">
-        <div className="mb-8">
+        <div className="mb-6">
           <div className="uppercase text-[11px] tracking-[0.25em] text-[#00D4FF] mb-2">Practice modules</div>
           <h2 className="font-heading text-3xl sm:text-4xl tracking-tight">Pick a track. Start solving.</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {MODULES.map((m, idx) => {
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          {MODULES.map((m) => {
             const Icon = ICONS[m.icon] || Sheet;
             const solved = progress[m.key]?.solved || 0;
-            const span = idx === 0 || idx === 3 ? "md:col-span-2" : "";
             return (
               <Link
                 key={m.key}
                 to={`/${m.key}`}
                 data-testid={`module-card-${m.key}`}
-                className={`group relative overflow-hidden p-7 rounded-xl border border-white/10 bg-[#151B23] hover:border-white/25 transition-[transform,border-color] duration-200 hover:-translate-y-1 ${span}`}
+                className="group relative flex flex-col p-4 rounded-xl border border-white/10 bg-[#151B23] hover:border-white/25 hover:-translate-y-0.5 transition-[transform,border-color] duration-200"
               >
-                <div className="flex items-start justify-between mb-6">
-                  <div className="w-11 h-11 rounded-md flex items-center justify-center"
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-9 h-9 rounded-md flex items-center justify-center"
                        style={{ background: `${m.accent}15`, border: `1px solid ${m.accent}55` }}>
-                    <Icon className="w-5 h-5" style={{ color: m.accent }} />
+                    <Icon className="w-4 h-4" style={{ color: m.accent }} />
                   </div>
-                  <div className="text-right text-xs font-mono-editor text-slate-500">
-                    {m.total.toLocaleString()} Qs
-                  </div>
+                  <span className="text-[10px] font-mono-editor text-slate-500">{m.total.toLocaleString()} Qs</span>
                 </div>
-                <h3 className="font-heading text-2xl tracking-tight mb-1">{m.name}</h3>
-                <p className="text-sm text-slate-400 mb-5">{m.tagline}</p>
-                <div className="flex items-center justify-between">
-                  <div className="text-xs text-slate-500">Free sample · <span className="text-slate-300">{solved}/25 solved</span></div>
-                  <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-white group-hover:translate-x-1 transition-transform" />
+                <h3 className="font-heading text-lg tracking-tight">{m.name}</h3>
+                <p className="text-[12px] text-slate-400 leading-snug mt-0.5 mb-3 flex-1">{m.tagline}</p>
+                <div className="h-1 rounded-full bg-white/5 overflow-hidden">
+                  <div className="h-full" style={{ width: `${Math.min(100,(solved/25)*100)}%`, background: m.accent }} />
                 </div>
-                <div className="mt-4 h-1 rounded-full bg-white/5 overflow-hidden">
-                  <div className="h-full" style={{ width: `${(solved/25)*100}%`, background: m.accent }} />
+                <div className="flex items-center justify-between mt-2">
+                  <span className="text-[11px] text-slate-500">{solved}/25 free</span>
+                  <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition-transform" />
                 </div>
               </Link>
             );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "@/App.css";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
@@ -21,6 +21,8 @@ import AuthCallback from "@/pages/AuthCallback";
 
 function AppShell() {
   const location = useLocation();
+  // Reset scroll to top on every route change (otherwise the browser keeps the previous page's scroll position).
+  useEffect(() => { window.scrollTo(0, 0); }, [location.pathname]);
   // OAuth callback: session_id in URL fragment → process before routes render
   if (location.hash?.includes("session_id=")) {
     return <AuthCallback />;

@@ -3,11 +3,11 @@ import { POWERBI_CONCEPTS } from "@/lib/powerbiConcepts";
 // Each additional locked question is represented as a placeholder for the lock UI.
 
 export const MODULES = [
-  { key: "excel", name: "Excel", tagline: "Formulas, PivotTables & Power Query", icon: "Sheet", accent: "#00FF88", total: 1000 },
-  { key: "sql", name: "SQL", tagline: "Query real data with SQLite in-browser", icon: "Database", accent: "#00D4FF", total: 1000 },
-  { key: "python", name: "Python", tagline: "Pandas, NumPy & Data Cleaning", icon: "Code2", accent: "#FFD166", total: 1000 },
-  { key: "powerbi", name: "Power BI", tagline: "DAX, Data Modeling & Dashboards", icon: "BarChart3", accent: "#F58549", total: 1000 },
-  { key: "stats", name: "Statistics", tagline: "Distributions, Tests & Regression", icon: "Sigma", accent: "#B892FF", total: 1000 },
+  { key: "excel", name: "Excel", tagline: "Formulas, PivotTables & Power Query", icon: "Sheet", accent: "#00FF88", total: 500 },
+  { key: "sql", name: "SQL", tagline: "Query real data with SQLite in-browser", icon: "Database", accent: "#00D4FF", total: 500 },
+  { key: "python", name: "Python", tagline: "Pandas, NumPy & Data Cleaning", icon: "Code2", accent: "#FFD166", total: 500 },
+  { key: "powerbi", name: "Power BI", tagline: "DAX, Data Modeling & Dashboards", icon: "BarChart3", accent: "#F58549", total: 500 },
+  { key: "stats", name: "Statistics", tagline: "Distributions, Tests & Regression", icon: "Sigma", accent: "#B892FF", total: 200 },
 ];
 
 // helper to build ids
