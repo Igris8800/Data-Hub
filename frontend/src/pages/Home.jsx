@@ -103,7 +103,7 @@ export default function Home() {
           {/* LEFT — value prop */}
           <div className="pt-4">
             <div className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-[#00FF88] mb-6" data-testid="hero-eyebrow">
-              <Sparkles className="w-3.5 h-3.5" /> 5,000+ questions · Free to start
+              <Sparkles className="w-3.5 h-3.5" /> 1,700+ hands-on questions · Free to start
             </div>
             <h1 className="font-heading text-5xl sm:text-6xl lg:text-[64px] tracking-tighter leading-[0.98] mb-6">
               Become a
@@ -124,7 +124,7 @@ export default function Home() {
               </span>
             </h1>
             <p className="text-lg text-slate-300 max-w-md mb-8 leading-relaxed">
-              Trusted by <span className="text-white font-semibold">37,000+ learners</span> across India and beyond. Practice hands-on in your browser — no setup, no credit card.
+              Practice <span className="text-white font-semibold">real SQL, Python, Excel, Power BI and Statistics</span> right in your browser — actual datasets, instant grading, no setup and no credit card.
             </p>
             <Button
               onClick={() => nav(user ? "/profile" : "/roadmap")}
@@ -133,12 +133,10 @@ export default function Home() {
             >
               {user ? "Continue learning" : "Start Learning for Free"}
             </Button>
-            <div className="mt-8 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-md bg-[#FF6B35] flex items-center justify-center text-white font-heading font-bold text-sm">G2</div>
-              <div className="flex items-center gap-0.5 text-[#FFC93C]">
-                {[1,2,3,4,5].map(i => <Star key={i} className="w-4 h-4 fill-current" />)}
-              </div>
-              <span className="text-sm text-slate-300 font-medium">4.7/5</span>
+            <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-400">
+              <span className="inline-flex items-center gap-1.5"><Check className="w-4 h-4 text-[#00FF88]" /> Runs in your browser</span>
+              <span className="inline-flex items-center gap-1.5"><Check className="w-4 h-4 text-[#00FF88]" /> Graded on real results</span>
+              <span className="inline-flex items-center gap-1.5"><Check className="w-4 h-4 text-[#00FF88]" /> Free to start</span>
             </div>
           </div>
 
