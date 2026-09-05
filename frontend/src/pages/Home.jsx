@@ -83,7 +83,6 @@ const TECH_LOGOS = [
 
 
 
-const COMPANY_LOGOS = ["Google", "Microsoft", "Amazon", "Flipkart", "Swiggy", "Adobe"];
 
 export default function Home() {
   const { user } = useAuth();
@@ -219,45 +218,79 @@ export default function Home() {
             </div>
           </div>
 
-          {/* RIGHT — Business panel with purple accent */}
+          {/* RIGHT — Animated achievement panel */}
           <div className="relative">
+            <style>{`
+              @keyframes dh-grid { to { background-position: 42px 42px; } }
+              @keyframes dh-pulse { 50% { opacity:.3; transform:scale(.7); } }
+              @keyframes dh-float { 0%,100%{ transform: rotateY(-7deg) translateY(0);} 50%{ transform: rotateY(-3deg) translateY(-10px);} }
+              @keyframes dh-ring { to { transform: translate(-50%,-50%) rotate(360deg); } }
+              @keyframes dh-trophy { 0%,100%{ transform: translate(-50%,-50%) scale(1);} 50%{ transform: translate(-50%,-56%) scale(1.06);} }
+              @keyframes dh-stars { to { background-position: 67px 67px; } }
+              @keyframes dh-fc { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-9px);} }
+              @keyframes dh-bar { from{ width:52%;} to{ width:92%;} }
+              @media (prefers-reduced-motion: reduce){ .dh-anim, .dh-anim * { animation: none !important; } }
+            `}</style>
             <div
-              className="rounded-2xl overflow-hidden relative p-8 pb-40 h-full"
-              style={{
-                background: "linear-gradient(160deg, #1E0B4B 0%, #4B1FB3 55%, #7C3AED 100%)",
-              }}
+              className="dh-anim rounded-2xl overflow-hidden relative p-7 h-full min-h-[520px]"
+              style={{ background: "radial-gradient(circle at 75% 40%, #0b3b3f 0%, transparent 34%), linear-gradient(150deg, #071019 0%, #0b1a2b 55%, #05101a 100%)", border: "1px solid rgba(255,255,255,0.08)" }}
             >
-              <h3 className="font-heading text-2xl lg:text-3xl tracking-tight text-white mb-1">
-                Learn the skills.
-              </h3>
-              <p className="font-heading text-2xl lg:text-3xl tracking-tight italic mb-4" style={{ color: "#B892FF" }}>
-                Land the job.
-              </p>
-              <p className="text-white/70 text-sm mb-6 max-w-xs">
-                Master the tools data analysts use every day — SQL, Excel, Python, Power BI and Statistics — with hands-on practice, not videos.
-              </p>
-              <button
-                onClick={() => setUpgradeOpen(true)}
-                className="bg-[#0D1117] text-white text-sm px-4 py-2 rounded-md font-medium hover:bg-black transition-colors"
-                data-testid="hero-business-btn"
-              >
-                Data Hub for Business
-              </button>
+              {/* animated grid */}
+              <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px)", backgroundSize: "42px 42px", animation: "dh-grid 18s linear infinite" }} />
 
-              <div className="mt-6 text-white/50 text-xs font-medium tracking-widest uppercase mb-3">Where our learners work</div>
-              <div className="grid grid-cols-3 gap-y-4 gap-x-6 items-center">
-                {COMPANY_LOGOS.map((c) => (
-                  <div key={c} className="text-white/80 text-sm font-heading font-medium tracking-tight">{c}</div>
-                ))}
+              {/* eyebrow */}
+              <div className="relative z-10 inline-flex items-center gap-2 border border-white/15 bg-white/5 rounded-full px-3 py-1.5 text-[11px] font-bold tracking-wide">
+                <span className="w-2 h-2 rounded-full" style={{ background: "#00FF88", boxShadow: "0 0 14px #00FF88", animation: "dh-pulse 1.4s infinite" }} />
+                LEVEL UP YOUR DATA CAREER
               </div>
 
-              {/* Decorative circle image */}
-              <div className="absolute -bottom-8 right-4 w-48 h-48 rounded-full overflow-hidden border-4 border-white/10 hidden md:block">
-                <img
-                  src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=400&h=400&q=70"
-                  alt="Team working"
-                  className="w-full h-full object-cover"
-                />
+              <h3 className="relative z-10 font-heading text-3xl lg:text-4xl tracking-tight mt-4 leading-[0.95]">
+                Learn. Practice.<br />
+                <span style={{ background: "linear-gradient(90deg,#fff,#00FF88,#00D4FF)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>Earn your belt.</span>
+              </h3>
+              <p className="relative z-10 text-slate-400 text-sm mt-3 max-w-xs leading-relaxed">
+                Every SQL query, Python challenge and interview problem is measurable progress — build streaks, unlock belts and prove your skills.
+              </p>
+
+              {/* trophy stage */}
+              <div className="relative z-10 mt-5 h-[220px]">
+                <div className="absolute inset-0 rounded-2xl overflow-hidden" style={{ background: "radial-gradient(circle at 50% 38%, rgba(0,255,136,.14), transparent 34%), radial-gradient(circle at 50% 80%, rgba(0,212,255,.16), transparent 42%), linear-gradient(#0c2233,#07131f 72%)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                  {/* stars */}
+                  <div className="absolute inset-0 opacity-25" style={{ backgroundImage: "radial-gradient(#fff 1px,transparent 1px)", backgroundSize: "40px 40px", animation: "dh-stars 12s linear infinite" }} />
+                  {/* ring */}
+                  <div className="absolute left-1/2 top-1/2 w-44 h-44 rounded-full" style={{ transform: "translate(-50%,-50%)", border: "1px solid rgba(0,255,136,.35)", boxShadow: "0 0 60px rgba(0,255,136,.15)", animation: "dh-ring 18s linear infinite" }} />
+                  {/* trophy */}
+                  <div className="absolute left-1/2 top-1/2 text-6xl" style={{ transform: "translate(-50%,-50%)", filter: "drop-shadow(0 0 22px rgba(255,211,106,.4))", animation: "dh-trophy 3.2s infinite" }}>🏆</div>
+                  <div className="absolute left-1/2 text-[10px] tracking-[0.14em] text-slate-300 whitespace-nowrap" style={{ top: "calc(50% + 66px)", transform: "translateX(-50%)" }}>CURRENT BELT · <b className="text-white">GREEN</b></div>
+                  {/* corner badges */}
+                  <div className="absolute left-3 top-3 rounded-lg px-2.5 py-1.5 text-[9px] text-slate-300" style={{ background: "rgba(7,24,39,.85)", border: "1px solid rgba(255,255,255,.08)", backdropFilter: "blur(10px)" }}>🔥 STREAK<b className="block text-white text-[11px] mt-0.5">14 DAYS</b></div>
+                  <div className="absolute right-3 top-8 rounded-lg px-2.5 py-1.5 text-[9px] text-slate-300" style={{ background: "rgba(7,24,39,.85)", border: "1px solid rgba(255,255,255,.08)", backdropFilter: "blur(10px)" }}>⚡ SOLVED<b className="block text-[11px] mt-0.5" style={{ color: "#FFD36A" }}>1,000+</b></div>
+                  <div className="absolute left-4 bottom-3 rounded-lg px-2.5 py-1.5 text-[9px] text-slate-300" style={{ background: "rgba(7,24,39,.85)", border: "1px solid rgba(255,255,255,.08)", backdropFilter: "blur(10px)" }}>◆ BELTS<b className="block text-white text-[11px] mt-0.5">8 RANKS</b></div>
+                  <div className="absolute right-3 bottom-4 rounded-lg px-2.5 py-1.5 text-[9px] text-slate-300" style={{ background: "rgba(7,24,39,.85)", border: "1px solid rgba(255,255,255,.08)", backdropFilter: "blur(10px)" }}>🎯 INTERVIEW<b className="block text-white text-[11px] mt-0.5">MODE</b></div>
+                </div>
+                {/* floating cards */}
+                <div className="absolute -right-1 -top-1 rounded-xl px-3 py-2 text-[10px] text-slate-200 hidden sm:block" style={{ background: "rgba(7,24,39,.9)", border: "1px solid rgba(255,255,255,.1)", boxShadow: "0 18px 40px rgba(0,0,0,.5)", animation: "dh-fc 5s infinite" }}>
+                  🚀 <b>Next belt</b>
+                  <div className="h-1.5 w-24 rounded-full mt-1 overflow-hidden bg-white/10"><span className="block h-full rounded-full" style={{ background: "linear-gradient(90deg,#00FF88,#00D4FF)", animation: "dh-bar 2.5s infinite alternate" }} /></div>
+                </div>
+                <div className="absolute -left-2 -bottom-2 rounded-xl px-3 py-2 text-[10px] text-slate-200 hidden sm:block" style={{ background: "rgba(7,24,39,.9)", border: "1px solid rgba(255,255,255,.1)", boxShadow: "0 18px 40px rgba(0,0,0,.5)", animation: "dh-fc 6s infinite reverse" }}>
+                  🏅 <b>Achievement unlocked</b><br />SQL Speed Runner
+                </div>
+              </div>
+
+              {/* actions + module chips */}
+              <div className="relative z-10 mt-6 flex flex-wrap gap-2">
+                <button onClick={() => nav(user ? "/profile" : "/roadmap")} className="px-4 py-2.5 rounded-lg text-sm font-bold" style={{ background: "#00FF88", color: "#03130f" }} data-testid="hero-panel-start">
+                  {user ? "Continue your journey →" : "Start your journey →"}
+                </button>
+                <button onClick={() => nav(user ? "/profile" : "/roadmap")} className="px-4 py-2.5 rounded-lg text-sm font-semibold bg-white/5 border border-white/15 hover:bg-white/10 transition-colors" data-testid="hero-panel-belts">
+                  View belts
+                </button>
+              </div>
+              <div className="relative z-10 flex flex-wrap gap-1.5 mt-4">
+                {["SQL", "Python", "Power BI", "Excel", "Statistics"].map((c) => (
+                  <span key={c} className="text-[11px] px-2.5 py-1 rounded-md border border-white/10 bg-white/5 text-slate-300">{c}</span>
+                ))}
               </div>
             </div>
           </div>
