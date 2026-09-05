@@ -1,10 +1,9 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
 
-// ⚠️ legalName still needs your real legal name (e.g. "Your Name (sole proprietor)") before Lemon Squeezy approval.
 const BIZ = {
   name: "Data Hub",
-  legalName: "Data Hub", // TODO: replace with your legal name, e.g. "Akash Laguri (sole proprietor)"
+  legalName: "Akash Laguri (sole proprietor)",
   email: "support@crazycoder.tech",
   country: "India",
   effective: "February 2026",
