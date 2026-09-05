@@ -1,0 +1,343 @@
+[
+{
+"id": "pysn-m-01",
+"tier": "medium",
+"topic": "pandas: resample",
+"title": "Daily average per device 1",
+"context": "Downsample hourly to daily.",
+"task": "Set result to a Series of daily mean value for device 1 (set ts as index, resample 'D'), rounded to 3 decimals, sorted by day.",
+"hint": "filter device 1, set_index('ts'), resample('D').mean().",
+"answer": "d = readings[readings['device_id'] == 1].set_index('ts').sort_index()\nresult = d['value'].resample('D').mean().round(3)",
+"order": true
+},
+{
+"id": "pysn-m-02",
+"tier": "medium",
+"topic": "pandas: resample",
+"title": "Hourly-of-day profile",
+"context": "Average by hour across all days for device 1.",
+"task": "Set result to a Series of mean value per hour-of-day (0-23) for device 1, rounded to 3 decimals, sorted by hour.",
+"hint": "groupby ts.dt.hour mean.",
+"answer": "d = readings[readings['device_id'] == 1]\nresult = d.groupby(d['ts'].dt.hour)['value'].mean().round(3).sort_index()",
+"order": true
+},
+{
+"id": "pysn-m-03",
+"tier": "medium",
+"topic": "pandas: groupby",
+"title": "Average value per kind",
+"context": "By sensor type.",
+"task": "Set result to a Series of mean value per device kind, rounded to 3 decimals.",
+"hint": "merge, groupby kind.",
+"answer": "result = readings.merge(devices, on='device_id').groupby('kind')['value'].mean().round(3)"
+},
+{
+"id": "pysn-m-04",
+"tier": "medium",
+"topic": "pandas: thresholds",
+"title": "Out-of-range readings",
+"context": "Flag readings outside the per-kind thresholds.",
+"task": "Set result to the number of readings whose value is below the low or above the high threshold for the device's kind (an int; ignore missing values).",
+"hint": "merge readings→devices→thresholds, compare.",
+"answer": "m = readings.dropna(subset=['value']).merge(devices, on='device_id').merge(thresholds, on='kind')\nresult = int(((m['value'] < m['low']) | (m['value'] > m['high'])).sum())"
+},
+{
+"id": "pysn-m-05",
+"tier": "medium",
+"topic": "pandas: thresholds",
+"title": "Breaches per device",
+"context": "Which sensors misbehave?",
+"task": "Set result to a Series of the number of out-of-range readings per device_id (only devices with at least one breach), sorted descending.",
+"hint": "merge, compute breach mask, groupby device_id sum.",
+"answer": "m = readings.dropna(subset=['value']).merge(devices, on='device_id').merge(thresholds, on='kind')\nm['breach'] = (m['value'] < m['low']) | (m['value'] > m['high'])\nb = m.groupby('device_id')['breach'].sum()\nresult = b[b > 0].sort_values(ascending=False)",
+"order": true
+},
+{
+"id": "pysn-m-06",
+"tier": "medium",
+"topic": "pandas: fillna",
+"title": "Forward-fill missing values",
+"context": "Carry the last good reading per device.",
+"task": "Set result to readings for device 1 (sorted by ts) with value forward-filled; keep reading_id, ts, value.",
+"hint": "sort, ffill on value.",
+"answer": "d = readings[readings['device_id'] == 1].sort_values('ts').copy()\nd['value'] = d['value'].ffill()\nresult = d[['reading_id', 'ts', 'value']].reset_index(drop=True)"
+},
+{
+"id": "pysn-m-07",
+"tier": "medium",
+"topic": "pandas: interpolate",
+"title": "Interpolate gaps",
+"context": "Linear interpolation of missing values.",
+"task": "Set result to the number of previously-missing values in device 1's series that become non-null after linear interpolation (an int).",
+"hint": "before/after isna counts on the interpolated series.",
+"answer": "d = readings[readings['device_id'] == 1].sort_values('ts')\nbefore = d['value'].isna().sum()\nafter = d['value'].interpolate().isna().sum()\nresult = int(before - after)"
+},
+{
+"id": "pysn-m-08",
+"tier": "medium",
+"topic": "pandas: dates",
+"title": "Readings per hour bucket",
+"context": "Volume by hour of day, all devices.",
+"task": "Set result to a Series of reading counts per hour-of-day (0-23), sorted by hour.",
+"hint": "ts.dt.hour.value_counts().sort_index().",
+"answer": "result = readings['ts'].dt.hour.value_counts().sort_index()",
+"order": true
+},
+{
+"id": "pysn-m-09",
+"tier": "medium",
+"topic": "pandas: groupby",
+"title": "Battery drain per device",
+"context": "First minus last battery.",
+"task": "Set result to a Series of battery drop (first battery − last battery, by ts order) per device_id, rounded to 1 decimal.",
+"hint": "sort by ts, groupby first()/last().",
+"answer": "d = readings.sort_values('ts')\nfirst = d.groupby('device_id')['battery'].first()\nlast = d.groupby('device_id')['battery'].last()\nresult = (first - last).round(1)"
+},
+{
+"id": "pysn-m-10",
+"tier": "medium",
+"topic": "pandas: pivot",
+"title": "Value by device and day",
+"context": "pivot_table.",
+"task": "Set result to a pivot_table: index device_id, columns day (ts normalized), values mean value, rounded to 2 decimals (leave NaN for gaps).",
+"hint": "add day column, pivot_table aggfunc mean.",
+"answer": "r = readings.copy()\nr['day'] = r['ts'].dt.normalize()\nresult = r.pivot_table(index='device_id', columns='day', values='value', aggfunc='mean').round(2)"
+},
+{
+"id": "pysn-m-11",
+"tier": "medium",
+"topic": "pandas: filter",
+"title": "Devices with no readings",
+"context": "Anti-join.",
+"task": "Set result to a Series of device name for devices with no rows in readings.",
+"hint": "~device_id.isin(readings.device_id).",
+"answer": "result = devices.loc[~devices['device_id'].isin(readings['device_id']), 'name']"
+},
+{
+"id": "pysn-m-12",
+"tier": "medium",
+"topic": "pandas: apply",
+"title": "Value band",
+"context": "cut into bands.",
+"task": "Set result to a Series of reading counts per value band using pd.cut on value with bins [-100,0,20,40,200] and labels ['neg','low','mid','high'].",
+"hint": "pd.cut then value_counts sorted.",
+"answer": "b = pd.cut(readings['value'], bins=[-100, 0, 20, 40, 200], labels=['neg', 'low', 'mid', 'high'])\nresult = b.value_counts().sort_index()",
+"order": true
+},
+{
+"id": "pysn-m-13",
+"tier": "medium",
+"topic": "pandas: dates",
+"title": "Weekend readings",
+"context": "dayofweek.",
+"task": "Set result to the number of readings taken on Saturday or Sunday (an int).",
+"hint": "ts.dt.dayofweek >= 5.",
+"answer": "result = int((readings['ts'].dt.dayofweek >= 5).sum())"
+},
+{
+"id": "pysn-m-14",
+"tier": "medium",
+"topic": "pandas: groupby",
+"title": "Value range per device",
+"context": "max − min per sensor.",
+"task": "Set result to a Series of value range (max − min) per device_id, rounded to 3 decimals, sorted descending.",
+"hint": "groupby agg max and min, subtract.",
+"answer": "g = readings.groupby('device_id')['value'].agg(['max', 'min'])\nresult = (g['max'] - g['min']).round(3).sort_values(ascending=False)",
+"order": true
+},
+{
+"id": "pysn-m-15",
+"tier": "medium",
+"topic": "pandas: merge",
+"title": "Readings per site",
+"context": "Volume by location.",
+"task": "Set result to a Series of reading counts per site, sorted descending.",
+"hint": "merge readings→devices, groupby site size.",
+"answer": "result = readings.merge(devices, on='device_id').groupby('site').size().sort_values(ascending=False)",
+"order": true
+},
+{
+"id": "pysn-m-16",
+"tier": "medium",
+"topic": "pandas: dates",
+"title": "Coverage gaps",
+"context": "Expected hourly readings vs actual for device 1.",
+"task": "Set result to the number of missing hourly slots for device 1 = (total hours in its range) − (rows present), an int. Use (max ts − min ts)/1h + 1 as expected.",
+"hint": "compute expected hours from the range.",
+"answer": "d = readings[readings['device_id'] == 1]\nexpected = int((d['ts'].max() - d['ts'].min()).total_seconds() // 3600) + 1\nresult = int(expected - len(d))"
+},
+{
+"id": "pysn-m-17",
+"tier": "medium",
+"topic": "pandas: rank",
+"title": "Noisiest device",
+"context": "Highest std of value.",
+"task": "Set result to the device_id with the highest standard deviation of value (an int).",
+"hint": "groupby std idxmax.",
+"answer": "result = int(readings.groupby('device_id')['value'].std().idxmax())"
+},
+{
+"id": "pysn-m-18",
+"tier": "medium",
+"topic": "pandas: apply",
+"title": "Battery percent bucket",
+"context": "Health tiers.",
+"task": "Set result to a Series of counts per battery tier using pd.cut on battery with bins [0,20,50,80,100] and labels ['critical','low','ok','full'].",
+"hint": "pd.cut then value_counts.",
+"answer": "b = pd.cut(readings['battery'], bins=[0, 20, 50, 80, 100], labels=['critical', 'low', 'ok', 'full'])\nresult = b.value_counts().sort_index()",
+"order": true
+},
+{
+"id": "pysn-m-19",
+"tier": "medium",
+"topic": "pandas: maintenance",
+"title": "Devices with maintenance",
+"context": "Distinct serviced devices.",
+"task": "Set result to the number of distinct device_id values that appear in maintenance (an int).",
+"hint": "nunique.",
+"answer": "result = int(maintenance['device_id'].nunique())"
+},
+{
+"id": "pysn-m-20",
+"tier": "medium",
+"topic": "pandas: audit",
+"title": "Battery increases",
+"context": "Battery should only fall between consecutive readings (except after a swap).",
+"task": "Set result to the number of consecutive reading pairs (same device, ordered by ts) where battery increased by more than 5 (an int).",
+"hint": "sort, groupby device shift, diff > 5.",
+"answer": "d = readings.sort_values(['device_id', 'ts']).copy()\nd['prev'] = d.groupby('device_id')['battery'].shift()\nresult = int(((d['battery'] - d['prev']) > 5).sum())"
+},
+{
+"id": "pysn-m-21",
+"tier": "medium",
+"topic": "pandas: resample",
+"title": "Daily max per device 1",
+"context": "Peak per day.",
+"task": "Set result to a Series of daily max value for device 1 (resample 'D'), rounded to 3 decimals, sorted by day.",
+"hint": "set_index ts, resample('D').max().",
+"answer": "d = readings[readings['device_id'] == 1].set_index('ts').sort_index()\nresult = d['value'].resample('D').max().round(3)",
+"order": true
+},
+{
+"id": "pysn-m-22",
+"tier": "medium",
+"topic": "pandas: groupby",
+"title": "Median value per kind",
+"context": "Robust central reading.",
+"task": "Set result to a Series of median value per device kind, rounded to 3 decimals.",
+"hint": "merge, groupby kind median.",
+"answer": "result = readings.merge(devices, on='device_id').groupby('kind')['value'].median().round(3)"
+},
+{
+"id": "pysn-m-23",
+"tier": "medium",
+"topic": "pandas: dates",
+"title": "Readings in first week",
+"context": "Date-range filter.",
+"task": "Set result to the number of readings with ts in the first 7 days (2025-06-01 to 2025-06-07 inclusive) (an int).",
+"hint": "ts between the two dates (use < 2025-06-08).",
+"answer": "result = int(((readings['ts'] >= '2025-06-01') & (readings['ts'] < '2025-06-08')).sum())"
+},
+{
+"id": "pysn-m-24",
+"tier": "medium",
+"topic": "pandas: thresholds",
+"title": "Percent of readings in range",
+"context": "Reliability metric.",
+"task": "Set result to the percentage of non-missing readings that are within [low, high] for their kind, rounded to 1 decimal.",
+"hint": "merge, in-range mask, mean*100.",
+"answer": "m = readings.dropna(subset=['value']).merge(devices, on='device_id').merge(thresholds, on='kind')\nin_range = (m['value'] >= m['low']) & (m['value'] <= m['high'])\nresult = round(float(in_range.mean() * 100), 1)"
+},
+{
+"id": "pysn-m-25",
+"tier": "medium",
+"topic": "pandas: apply",
+"title": "Status label",
+"context": "Classify each reading.",
+"task": "Set result to readings merged with device kind and thresholds, plus a column status: 'high' if value>high, 'low' if value<low, else 'ok' (missing → 'missing'); keep reading_id, status.",
+"hint": "np.select or nested np.where; handle NaN.",
+"answer": "m = readings.merge(devices, on='device_id').merge(thresholds, on='kind')\nconds = [m['value'].isna(), m['value'] > m['high'], m['value'] < m['low']]\nm['status'] = np.select(conds, ['missing', 'high', 'low'], default='ok')\nresult = m[['reading_id', 'status']]"
+},
+{
+"id": "pysn-m-26",
+"tier": "medium",
+"topic": "pandas: groupby",
+"title": "Uptime per device",
+"context": "Share of expected hours reported.",
+"task": "Set result to a Series of reported reading count per device_id as a percentage of 504 expected hours (21 days × 24), rounded to 1 decimal.",
+"hint": "count / 504 * 100.",
+"answer": "result = (readings.groupby('device_id').size() / 504 * 100).round(1)"
+},
+{
+"id": "pysn-m-27",
+"tier": "medium",
+"topic": "pandas: value_counts",
+"title": "Busiest reading hour",
+"context": "Peak hour overall.",
+"task": "Set result to the hour-of-day (0-23) with the most readings (an int).",
+"hint": "ts.dt.hour.value_counts().idxmax().",
+"answer": "result = int(readings['ts'].dt.hour.value_counts().idxmax())"
+},
+{
+"id": "pysn-m-28",
+"tier": "medium",
+"topic": "pandas: merge",
+"title": "Readings after maintenance",
+"context": "For maintenance row 1, count that device's readings after the maintenance ts.",
+"task": "Set result to the number of readings for the device in maintenance row 1 (iloc[0]) with ts after that maintenance ts (an int).",
+"hint": "get device_id and ts from maintenance.iloc[0].",
+"answer": "m0 = maintenance.iloc[0]\nresult = int(((readings['device_id'] == m0['device_id']) & (readings['ts'] > m0['ts'])).sum())"
+},
+{
+"id": "pysn-m-29",
+"tier": "medium",
+"topic": "pandas: fillna",
+"title": "Fill missing with device mean",
+"context": "Impute per device.",
+"task": "Set result to readings with value missing values filled by that device's mean value; keep reading_id, device_id, value.",
+"hint": "transform('mean') then fillna.",
+"answer": "r = readings.copy()\nr['value'] = r['value'].fillna(r.groupby('device_id')['value'].transform('mean'))\nresult = r[['reading_id', 'device_id', 'value']]"
+},
+{
+"id": "pysn-m-30",
+"tier": "medium",
+"topic": "pandas: dates",
+"title": "Average value by day-of-week",
+"context": "Weekly pattern.",
+"task": "Set result to a Series of mean value per weekday name, ordered Mon..Sun, rounded to 3 decimals.",
+"hint": "groupby ts.dt.day_name(), reindex to order.",
+"answer": "order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']\nresult = readings.groupby(readings['ts'].dt.day_name())['value'].mean().round(3).reindex(order)",
+"order": true
+},
+{
+"id": "pysn-m-31",
+"tier": "medium",
+"topic": "pandas: groupby",
+"title": "Std value per site",
+"context": "Which site is most variable?",
+"task": "Set result to a Series of std (ddof=1) of value per site, rounded to 3 decimals, sorted descending.",
+"hint": "merge, groupby site std.",
+"answer": "result = readings.merge(devices, on='device_id').groupby('site')['value'].std().round(3).sort_values(ascending=False)",
+"order": true
+},
+{
+"id": "pysn-m-32",
+"tier": "medium",
+"topic": "pandas: audit",
+"title": "Duplicate timestamps per device",
+"context": "A device shouldn't report twice in the same hour.",
+"task": "Set result to the number of (device_id, ts) pairs that occur more than once (an int).",
+"hint": "duplicated(subset=[...], keep=False) then count unique pairs, or groupby size>1.",
+"answer": "g = readings.groupby(['device_id', 'ts']).size()\nresult = int((g > 1).sum())"
+},
+{
+"id": "pysn-m-33",
+"tier": "medium",
+"topic": "pandas: transform",
+"title": "Deviation from device mean",
+"context": "Center each reading on its device.",
+"task": "Set result to the number of readings whose value is more than 10 above its device's mean value (an int; ignore missing).",
+"hint": "transform('mean') then compare.",
+"answer": "r = readings.dropna(subset=['value']).copy()\nmean = r.groupby('device_id')['value'].transform('mean')\nresult = int((r['value'] - mean > 10).sum())"
+}
+]

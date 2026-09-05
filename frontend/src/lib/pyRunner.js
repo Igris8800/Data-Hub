@@ -33,7 +33,7 @@ def _load_dataset(key, frames_json):
     for name, csv_text in json.loads(frames_json).items():
         df = pd.read_csv(io.StringIO(csv_text))
         for c in df.columns:
-            if c.endswith('_date') or c in ('order_date','signup_date','review_date','month','watch_date','start_date','hire_date','exit_date','date'):
+            if c.endswith('_date') or c in ('order_date','signup_date','review_date','month','watch_date','start_date','hire_date','exit_date','date','ts'):
                 df[c] = pd.to_datetime(df[c], errors='coerce')
         frames[name] = df
     _DATASETS[key] = frames

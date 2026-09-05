@@ -27,3 +27,6 @@ Series by (index, value) pairs (index ignored when it is positional), scalars/li
 
 The `stats` dataset sets `needs_scipy: true`; the browser runner lazily `loadPackage(["scipy"])` and exposes `scipy.stats as stats`.
 It powers the standalone **Statistics Lab** page (/stats), a separate module from Python Practice (which excludes the stats dataset).
+| sensors | IoT Sensors (pandas) | readings, devices, thresholds, maintenance | 100 — hourly time-series: resampling, rolling stats, EWMA, gap/outage detection, interpolation, z-score & IQR anomalies, threshold breaches, uptime SLA |
+
+Python Practice (pandas) is now 500 questions across 5 datasets: retail, hr, streaming, finance, sensors.
