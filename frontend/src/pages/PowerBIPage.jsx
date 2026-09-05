@@ -174,8 +174,8 @@ export default function PowerBIPage() {
       <div className="border-b border-white/10 bg-[#0F1520]">
         <div className="max-w-[1600px] mx-auto px-4 py-3 flex items-center gap-4 flex-wrap">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-md bg-gradient-to-br from-[#FFD166] to-[#F58549] flex items-center justify-center text-[#0D1117]"><Code2 className="w-4 h-4" /></div>
-            <div><div className="font-heading text-sm tracking-tight">Python Practice</div><div className="text-[10px] text-slate-500">by Data Hub</div></div>
+            <div className="w-8 h-8 rounded-md bg-gradient-to-br from-[#F2C811] to-[#F58549] flex items-center justify-center text-[#0D1117]"><BarChart3 className="w-4 h-4" /></div>
+            <div><div className="font-heading text-sm tracking-tight">Power BI Concepts</div><div className="text-[10px] text-slate-500">quiz · DAX, modelling, Power Query, visuals</div></div>
           </div>
           <div className="flex items-center gap-1 p-1 rounded-lg bg-[#0D1117] border border-white/10" role="tablist" data-testid="powerbi-mode-selector">
             {Object.entries(MODE_META).map(([k, m]) => {
@@ -191,20 +191,20 @@ export default function PowerBIPage() {
           </div>
           <div className="ml-auto flex items-center gap-2" data-testid="workbook-selector">
             <ModeGuideButton onClick={() => setModeGuideOpen(true)} />
-            {CONCEPT_BANK.map((w) => (
-              <button key={w.key} onClick={() => setWbKey(w.key)} data-testid={`powerbi-${w.key}`}
-                className={`inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium border ${w.key === wbKey ? "text-white" : "text-slate-400 border-white/5 hover:bg-white/5"}`}
-                style={w.key === wbKey ? { borderColor: w.color, background: `${w.color}15` } : undefined}>
-                <Code2 className="w-3.5 h-3.5" style={{ color: w.color }} /> {w.name}
-                <span className="text-[9px] font-mono-editor px-1.5 py-0.5 rounded bg-white/5">{w.questions.length}Q</span>
-              </button>
-            ))}
+            <div className="inline-flex items-center rounded-lg border border-white/10 p-0.5 bg-white/5" data-testid="powerbi-subnav">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold text-[#0D1117]" style={{ background: "#F2C811" }}>
+                <BarChart3 className="w-3.5 h-3.5" /> Concepts <span className="text-[9px] font-mono-editor px-1 py-0.5 rounded bg-black/15">{ALL_CONCEPTS.length}Q</span>
+              </span>
+              <Link to="/powerbi/dax" data-testid="goto-dax-top" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-slate-300 hover:text-white hover:bg-white/5">
+                <Code2 className="w-3.5 h-3.5" /> DAX Practice
+              </Link>
+            </div>
           </div>
         </div>
         {/* Sub-bar */}
         <div className="max-w-[1600px] mx-auto px-4 py-2 border-t border-white/5 flex items-center gap-4 flex-wrap text-sm">
           <div className="flex items-center gap-2">
-            <span className="text-slate-500 text-xs uppercase tracking-widest">Dataset</span>
+            <span className="text-slate-500 text-xs uppercase tracking-widest">Section</span>
             <span className="px-2 py-1 rounded-md bg-[#0D1117] border font-mono-editor text-xs" style={{ borderColor: `${workbook.color}55`, color: workbook.color }}>{workbook.name}</span>
             <span className="text-[10px] text-slate-500 font-mono-editor">{workbook.tagline}</span>
           </div>
@@ -271,8 +271,8 @@ export default function PowerBIPage() {
                 <Button onClick={() => { setResult(null); setPicked(null); setShowSolution(false); setStatus({ text: "Not Started", tone: "muted" }); }} className="h-10 rounded-md bg-white/10 hover:bg-white/15 font-semibold" data-testid="powerbi-retry">Try again</Button>
               )}
               <Button onClick={goNext} variant="outline" size="sm" className="h-10 border-white/15 bg-transparent hover:bg-white/5">Next <ChevronRight className="w-4 h-4 ml-1" /></Button>
-              <Link to="/powerbi/dax" className="ml-auto inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-[#F2C811] px-3 py-2 rounded-md border border-white/10 hover:border-[#F2C811]/40" data-testid="goto-dax">
-                <Code2 className="w-3.5 h-3.5" /> Hands-on DAX Practice <ArrowRight className="w-3.5 h-3.5" />
+              <Link to="/powerbi/dax" className="ml-auto inline-flex items-center gap-1.5 text-xs font-semibold text-[#0D1117] bg-[#F2C811] hover:bg-[#FADA3C] px-3 py-2 rounded-md" data-testid="goto-dax">
+                <Code2 className="w-3.5 h-3.5" /> Write real DAX <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
           </div>

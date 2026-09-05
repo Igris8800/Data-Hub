@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import {
   ChevronRight, ChevronLeft, Play, Lightbulb, Eye, BookOpen, Circle, CircleCheck,
-  Lock, Crown, HelpCircle, RotateCcw, FunctionSquare, Briefcase, Timer,
-} from "lucide-react";
+  Lock, Crown, HelpCircle, RotateCcw, FunctionSquare, Briefcase, Timer, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import api from "@/lib/api";
@@ -178,7 +177,7 @@ export default function DaxPracticePage() {
         <div className="max-w-[1600px] mx-auto px-4 py-3 flex items-center gap-4 flex-wrap">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-md bg-gradient-to-br from-[#F2C811] to-[#F58549] flex items-center justify-center text-[#0D1117]"><Code2 className="w-4 h-4" /></div>
-            <div><div className="font-heading text-sm tracking-tight">DAX Practice</div><div className="text-[10px] text-slate-500">by Data Hub</div></div>
+            <div><div className="font-heading text-sm tracking-tight">DAX Practice</div><div className="text-[10px] text-slate-500">write measures against a star schema</div></div>
           </div>
           <div className="flex items-center gap-1 p-1 rounded-lg bg-[#0D1117] border border-white/10" role="tablist" data-testid="dax-mode-selector">
             {Object.entries(MODE_META).map(([k, m]) => {
@@ -194,20 +193,20 @@ export default function DaxPracticePage() {
           </div>
           <div className="ml-auto flex items-center gap-2" data-testid="workbook-selector">
             <ModeGuideButton onClick={() => setModeGuideOpen(true)} />
-            {DATASETS.map((w) => (
-              <button key={w.key} onClick={() => setWbKey(w.key)} data-testid={`dax-model-${w.key}`}
-                className={`inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium border ${w.key === wbKey ? "text-white" : "text-slate-400 border-white/5 hover:bg-white/5"}`}
-                style={w.key === wbKey ? { borderColor: w.color, background: `${w.color}15` } : undefined}>
-                <Code2 className="w-3.5 h-3.5" style={{ color: w.color }} /> {w.name}
-                <span className="text-[9px] font-mono-editor px-1.5 py-0.5 rounded bg-white/5">{w.questions.length}Q</span>
-              </button>
-            ))}
+            <div className="inline-flex items-center rounded-lg border border-white/10 p-0.5 bg-white/5">
+              <Link to="/powerbi" data-testid="goto-concepts" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-slate-300 hover:text-white hover:bg-white/5">
+                <BarChart3 className="w-3.5 h-3.5" /> Concepts
+              </Link>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold text-[#0D1117]" style={{ background: "#F2C811" }}>
+                <Code2 className="w-3.5 h-3.5" /> DAX Practice <span className="text-[9px] font-mono-editor px-1 py-0.5 rounded bg-black/15">{workbook.questions.length}Q</span>
+              </span>
+            </div>
           </div>
         </div>
         {/* Sub-bar */}
         <div className="max-w-[1600px] mx-auto px-4 py-2 border-t border-white/5 flex items-center gap-4 flex-wrap text-sm">
           <div className="flex items-center gap-2">
-            <span className="text-slate-500 text-xs uppercase tracking-widest">Dataset</span>
+            <span className="text-slate-500 text-xs uppercase tracking-widest">Model</span>
             <span className="px-2 py-1 rounded-md bg-[#0D1117] border font-mono-editor text-xs" style={{ borderColor: `${workbook.color}55`, color: workbook.color }}>{workbook.name}</span>
             <span className="text-[10px] text-slate-500 font-mono-editor">{Object.keys(workbook.tables).join(" · ")}</span>
           </div>
