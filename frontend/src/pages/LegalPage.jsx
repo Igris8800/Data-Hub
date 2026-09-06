@@ -26,7 +26,7 @@ function Terms() {
         <p>You must provide accurate information when creating an account and are responsible for activity under your account. You must be at least 16 years old, or have consent from a parent or guardian, to use the service.</p>
       </Section>
       <Section title="3. Subscriptions & access">
-        <p>Free accounts can access a sample set of questions per module. Premium plans (Monthly, Yearly, and Lifetime) unlock all questions and features described at checkout. Monthly and Yearly plans grant access for the stated period; the Lifetime plan grants access for the lifetime of the product.</p>
+        <p>Free accounts can access a sample set of questions per module. Premium is sold as one-time access passes — currently 3-month, 6-month, and 1-year — which unlock all questions and features described at checkout for the stated duration. Passes are one-time payments and do not auto-renew; access ends when the pass period expires unless you purchase again.</p>
         <p>Prices are shown at checkout and may change for future purchases; changes do not affect an active paid term.</p>
       </Section>
       <Section title="4. Payments">
@@ -85,14 +85,11 @@ function Refund() {
       <Section title="Overview">
         <p>Because Premium is a digital product that unlocks access immediately, we offer refunds as described below. This policy is in addition to any rights the payment processor or your local law grants you.</p>
       </Section>
-      <Section title="7-day money-back (Monthly & Yearly)">
-        <p>If you are not satisfied, email <a className="text-[#00D4FF]" href={`mailto:${BIZ.email}`}>{BIZ.email}</a> within 7 days of your first payment for a full refund, provided the account has not been used abusively (e.g. bulk downloading of content).</p>
+      <Section title="7-day money-back">
+        <p>If you are not satisfied, email <a className="text-[#00D4FF]" href={`mailto:${BIZ.email}`}>{BIZ.email}</a> within 7 days of your purchase for a full refund, provided the account has not been used abusively (e.g. bulk downloading of content). This applies to all access passes (3-month, 6-month and 1-year).</p>
       </Section>
-      <Section title="Lifetime plan">
-        <p>The Lifetime plan is refundable within 7 days of purchase under the same conditions. After 7 days it is non-refundable given the permanent access granted.</p>
-      </Section>
-      <Section title="Renewals">
-        <p>Where a plan renews, contact us before the renewal date to cancel. Renewal charges are generally non-refundable once processed, but reach out and we will review fairly.</p>
+      <Section title="No auto-renewal">
+        <p>All passes are one-time payments and do not auto-renew, so there are no recurring charges to cancel. When a pass expires, access simply ends until you choose to purchase another.</p>
       </Section>
       <Section title="How to request">
         <p>Email <a className="text-[#00D4FF]" href={`mailto:${BIZ.email}`}>{BIZ.email}</a> from your account email with your order details. Approved refunds are returned to the original payment method, typically within 5–10 business days depending on the provider and bank.</p>
