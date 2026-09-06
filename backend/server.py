@@ -30,7 +30,7 @@ db = client[DB_NAME]
 
 app = FastAPI(title="Data Hub API")
 
-BUILD_VERSION = "cors-fix-4"
+BUILD_VERSION = "cors-fix-5"
 
 # CORS must be registered BEFORE routes/errors so even error responses carry the header.
 _CORS_REGEX = os.environ.get(
@@ -58,7 +58,13 @@ async def _force_cors(request: Request, call_next):
         from starlette.responses import Response as _Resp
         resp = _Resp(status_code=200)
     else:
-        resp = await call_next(request)
+        try:
+            resp = await call_next(request)
+        except Exception as e:
+            import traceback
+            logging.getLogger(__name__).error("unhandled: %s\n%s", e, traceback.format_exc())
+            from starlette.responses import JSONResponse as _JSON
+            resp = _JSON(status_code=500, content={"detail": f"Server error: {type(e).__name__}"})
     if allowed:
         resp.headers["Access-Control-Allow-Origin"] = origin
         resp.headers["Access-Control-Allow-Credentials"] = "true"
@@ -717,27 +723,31 @@ async def create_order(payload: RazorpayOrderRequest, request: Request):
         raise HTTPException(status_code=503, detail="Razorpay not configured yet. Please contact support.")
     if payload.plan not in PLAN_PRICES:
         raise HTTPException(status_code=400, detail="Unknown plan")
-    import razorpay
-    rzp = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
-    amount = PLAN_PRICES[payload.plan]["amount"]
     try:
+        import razorpay
+        rzp = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
+        amount = PLAN_PRICES[payload.plan]["amount"]
         order = rzp.order.create({
             "amount": amount,
             "currency": "INR",
+            "receipt": f"dh_{user['user_id'][:20]}",
             "notes": {"user_id": user["user_id"], "plan": payload.plan},
         })
+        await db.orders.insert_one({
+            "order_id": order["id"],
+            "user_id": user["user_id"],
+            "plan": payload.plan,
+            "amount": amount,
+            "status": "created",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        })
+        return {"order_id": order["id"], "amount": amount, "currency": "INR", "key_id": RAZORPAY_KEY_ID}
+    except HTTPException:
+        raise
     except Exception as e:
-        logging.getLogger(__name__).error("Razorpay order.create failed: %s", e)
-        raise HTTPException(status_code=502, detail=f"Razorpay error: {str(e)[:300]}")
-    await db.orders.insert_one({
-        "order_id": order["id"],
-        "user_id": user["user_id"],
-        "plan": payload.plan,
-        "amount": amount,
-        "status": "created",
-        "created_at": datetime.now(timezone.utc).isoformat(),
-    })
-    return {"order_id": order["id"], "amount": amount, "currency": "INR", "key_id": RAZORPAY_KEY_ID}
+        import traceback
+        logging.getLogger(__name__).error("order create failed: %s\n%s", e, traceback.format_exc())
+        raise HTTPException(status_code=502, detail=f"Payment setup failed: {type(e).__name__}: {str(e)[:300]}")
 
 @api_router.post("/payments/verify")
 async def verify_payment(payload: RazorpayVerifyRequest, request: Request):
