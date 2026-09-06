@@ -29,6 +29,23 @@ client = AsyncIOMotorClient(MONGO_URL)
 db = client[DB_NAME]
 
 app = FastAPI(title="Data Hub API")
+
+# CORS must be registered BEFORE routes/errors so that even error responses (4xx/5xx) carry
+# the Access-Control-Allow-Origin header — otherwise the browser masks a 500 as a CORS block.
+app.add_middleware(
+    CORSMiddleware,
+    allow_credentials=True,
+    allow_origins=[o.strip() for o in os.environ.get(
+        'CORS_ORIGINS',
+        'https://crazycoder.tech,https://www.crazycoder.tech'
+    ).split(',') if o.strip() and o.strip() != '*'],
+    allow_origin_regex=os.environ.get(
+        'CORS_ORIGIN_REGEX',
+        r"https://(www\.)?crazycoder\.tech|https://.*\.vercel\.app|http://localhost:\d+"
+    ),
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 api_router = APIRouter(prefix="/api")
 
 # --- Models ---
@@ -824,25 +841,6 @@ async def health():
     return {"ok": True}
 
 app.include_router(api_router)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_credentials=True,
-    # Explicit allow-list from env (comma-separated). Defaults to the production domains.
-    # NOTE: with allow_credentials=True the wildcard "*" is invalid per the CORS spec, so we
-    # rely on an explicit list + a regex for preview/localhost origins instead.
-    allow_origins=[o.strip() for o in os.environ.get(
-        'CORS_ORIGINS',
-        'https://crazycoder.tech,https://www.crazycoder.tech'
-    ).split(',') if o.strip() and o.strip() != '*'],
-    # Also accept the new domain, Vercel preview/deployment URLs, and localhost dev servers.
-    allow_origin_regex=os.environ.get(
-        'CORS_ORIGIN_REGEX',
-        r"https://(www\.)?crazycoder\.tech|https://.*\.vercel\.app|http://localhost:\d+"
-    ),
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
