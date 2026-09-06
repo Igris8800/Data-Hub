@@ -377,7 +377,7 @@ export default function Home() {
 
       {/* SKILL LEVELS dark panel */}
       <section className="max-w-7xl mx-auto px-6 pb-16" id="pricing-anchor">
-        <div className="rounded-2xl p-8 md:p-12 relative overflow-hidden" style={{ background: "radial-gradient(ellipse at top left, rgba(0, 212, 255, 0.15), transparent 50%), radial-gradient(ellipse at bottom right, rgba(255, 209, 102, 0.12), transparent 50%), #0F1520", border: "1px solid rgba(255,255,255,0.08)" }}>
+        <div data-dark-panel className="rounded-2xl p-8 md:p-12 relative overflow-hidden" style={{ background: "radial-gradient(ellipse at top left, rgba(0, 212, 255, 0.15), transparent 50%), radial-gradient(ellipse at bottom right, rgba(255, 209, 102, 0.12), transparent 50%), #0F1520", border: "1px solid rgba(255,255,255,0.08)" }}>
           <div className="flex items-end justify-between mb-8 flex-wrap gap-3">
             <div>
               <div className="uppercase text-[11px] tracking-[0.25em] text-yellow-300 mb-2 flex items-center gap-2"><Award className="w-4 h-4" /> Skill assessment</div>
@@ -390,7 +390,7 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-4 md:grid-cols-8 gap-2" data-testid="belt-ladder">
             {BELTS.map((b, i) => (
-              <div key={b.name} className="p-3 rounded-xl bg-[#0D1117] border border-white/10 text-center">
+              <div key={b.name} data-belt-card className="p-3 rounded-xl bg-[#0D1117] border border-white/10 text-center">
                 <div className="mx-auto w-10 h-3 rounded-sm border border-white/20 mb-2" style={{ background: b.color }} />
                 <div className="font-heading text-sm">{b.name}</div>
                 <div className="text-[10px] text-slate-500 mt-1 leading-snug">{i === 0 ? "Start here" : `${b.total} solved${b.hard ? ` · ${b.hard} hard` : b.medium ? ` · ${b.medium} medium` : ""}`}</div>
@@ -419,6 +419,7 @@ export default function Home() {
       {/* NEWSLETTER CTA band */}
       <section className="max-w-7xl mx-auto px-6 pb-24">
         <div
+          data-dark-panel
           className="rounded-2xl p-10 md:p-14 flex flex-col md:flex-row md:items-center gap-6"
           style={{
             background: "linear-gradient(120deg, #0D1117 0%, #0D1117 40%, rgba(0, 212, 255, 0.12) 100%)",

@@ -134,6 +134,20 @@
     html[data-theme="light"] [data-testid="promo-bar"] p,
     html[data-theme="light"] [data-testid="promo-bar"] p * { color: #FFFFFF !important; }
     html[data-theme="light"] [data-testid="promo-close-btn"] { color: rgba(255,255,255,0.8) !important; }
+
+    /* Dark panels on the home page (skill-levels, newsletter) keep a dark background in both
+       themes, so their headings/prose must stay light in light mode. Inputs/buttons keep their own. */
+    html[data-theme="light"] [data-dark-panel] h1,
+    html[data-theme="light"] [data-dark-panel] h2,
+    html[data-theme="light"] [data-dark-panel] h3,
+    html[data-theme="light"] [data-dark-panel] p,
+    html[data-theme="light"] [data-dark-panel] p * { color: #E8EDF4 !important; }
+    html[data-theme="light"] [data-dark-panel] .text-slate-400,
+    html[data-theme="light"] [data-dark-panel] .text-slate-300 { color: #9FB0C3 !important; }
+    /* the belt cards inside the skill panel keep a dark bg — force dark bg + light text in light mode */
+    html[data-theme="light"] [data-dark-panel] [data-belt-card] { background: #0D1117 !important; }
+    html[data-theme="light"] [data-dark-panel] [data-belt-card] *:not([style*="background"]) { color: #E8EDF4 !important; }
+    html[data-theme="light"] [data-dark-panel] [data-belt-card] .text-slate-500 { color: #9FB0C3 !important; }
 }
 
 .font-heading { font-family: 'Outfit', sans-serif; }
