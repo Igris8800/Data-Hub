@@ -31,7 +31,7 @@ const TRACKS = [
     title: "Become a Data Analyst",
     icon: BarChart3,
     tint: "#00FF88",
-    to: "/sql",
+    to: "/roadmap",
     desc: "Structured 90-day path from Excel to SQL to Python to portfolio.",
   },
   {
