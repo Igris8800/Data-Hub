@@ -662,11 +662,15 @@ async def create_order(payload: RazorpayOrderRequest, request: Request):
     import razorpay
     rzp = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
     amount = PLAN_PRICES[payload.plan]["amount"]
-    order = rzp.order.create({
-        "amount": amount,
-        "currency": "INR",
-        "notes": {"user_id": user["user_id"], "plan": payload.plan},
-    })
+    try:
+        order = rzp.order.create({
+            "amount": amount,
+            "currency": "INR",
+            "notes": {"user_id": user["user_id"], "plan": payload.plan},
+        })
+    except Exception as e:
+        logging.getLogger(__name__).error("Razorpay order.create failed: %s", e)
+        raise HTTPException(status_code=502, detail=f"Razorpay error: {str(e)[:300]}")
     await db.orders.insert_one({
         "order_id": order["id"],
         "user_id": user["user_id"],
