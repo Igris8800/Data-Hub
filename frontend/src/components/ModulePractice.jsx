@@ -194,9 +194,6 @@ export default function ModulePractice({ moduleKey, render, renderEmbed }) {
             </Button>
           </div>
 
-          <div className="mt-8 h-24 rounded-md border border-dashed border-white/15 bg-[#151B23]/40 flex items-center justify-center text-xs text-slate-500" data-testid="adsense-module-placeholder">
-            AdSense placeholder — inline banner
-          </div>
         </div>
       </div>
 

@@ -76,10 +76,6 @@ export default function Footer() {
               <Mail className="w-4 h-4 mr-2" /> Subscribe (free)
             </Button>
           </form>
-          {/* AdSense placeholder */}
-          <div className="mt-4 h-16 rounded-md border border-dashed border-white/15 bg-[#151B23]/50 flex items-center justify-center text-xs text-slate-500">
-            <span data-testid="adsense-footer-placeholder">AdSense placeholder — footer banner</span>
-          </div>
         </div>
       </div>
       <div className="border-t border-white/5 py-4 px-6 flex flex-col sm:flex-row items-center justify-center gap-x-4 gap-y-2 text-xs text-slate-500">
