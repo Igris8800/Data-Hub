@@ -128,6 +128,12 @@
     html[data-theme="light"] [data-testid="workbook-dropdown"] span,
     html[data-theme="light"] [data-testid="dataset-dropdown"] span,
     html[data-theme="light"] [data-workbook-chip] { color: #0F172A !important; }
+
+    /* Promo bar sits on a dark purple gradient in BOTH themes — keep its MESSAGE text white
+       in light mode (badges and the green button keep their own inline colors). */
+    html[data-theme="light"] [data-testid="promo-bar"] p,
+    html[data-theme="light"] [data-testid="promo-bar"] p * { color: #FFFFFF !important; }
+    html[data-theme="light"] [data-testid="promo-close-btn"] { color: rgba(255,255,255,0.8) !important; }
 }
 
 .font-heading { font-family: 'Outfit', sans-serif; }
