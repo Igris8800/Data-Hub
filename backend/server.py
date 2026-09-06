@@ -30,7 +30,7 @@ db = client[DB_NAME]
 
 app = FastAPI(title="Data Hub API")
 
-BUILD_VERSION = "cors-fix-5"
+BUILD_VERSION = "pay-fix-6"
 
 # CORS must be registered BEFORE routes/errors so even error responses carry the header.
 _CORS_REGEX = os.environ.get(
