@@ -4,5 +4,5 @@
   "installCommand": "npm install --legacy-peer-deps",
   "buildCommand": "CI=false npm run build",
   "outputDirectory": "build",
-  "rewrites": [{ "source": "/((?!static/|api/).*)", "destination": "/index.html" }]
+  "rewrites": [{ "source": "/((?!static/|api/|blog).*)", "destination": "/index.html" }]
 }

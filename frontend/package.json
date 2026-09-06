@@ -68,6 +68,7 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
+    "postbuild": "node scripts/prerender-blog.js",
     "test": "craco test"
   },
   "browserslist": {
