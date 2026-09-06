@@ -190,3 +190,26 @@
     50% { box-shadow: 0 0 0 8px rgba(0, 212, 255, 0); }
 }
 .pulse-ring { animation: pulse-ring 2.2s infinite; }
+
+/* --- Blog article typography --- */
+.blog-prose { color: #C7D2DE; font-size: 16px; line-height: 1.75; }
+.blog-prose h2 { font-family: var(--font-heading, inherit); font-size: 1.5rem; letter-spacing: -0.02em; margin: 2rem 0 0.75rem; color: #F1F5F9; }
+.blog-prose h3 { font-size: 1.15rem; font-weight: 600; margin: 1.5rem 0 0.5rem; color: #E2E8F0; }
+.blog-prose p { margin: 0 0 1rem; }
+.blog-prose ul, .blog-prose ol { margin: 0 0 1rem 1.25rem; padding-left: 0.5rem; }
+.blog-prose li { margin: 0.35rem 0; }
+.blog-prose strong { color: #F1F5F9; font-weight: 600; }
+.blog-prose a { color: #00D4FF; text-decoration: underline; }
+.blog-prose blockquote { border-left: 3px solid #00D4FF; margin: 1.25rem 0; padding: 0.5rem 0 0.5rem 1rem; color: #E2E8F0; background: rgba(0,212,255,0.05); border-radius: 0 6px 6px 0; }
+.blog-prose code { background: rgba(255,255,255,0.08); padding: 0.1rem 0.35rem; border-radius: 4px; font-size: 0.9em; font-family: 'JetBrains Mono', ui-monospace, monospace; color: #7DE3FF; }
+.blog-prose pre { background: #0B1220; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 1rem; overflow-x: auto; margin: 0 0 1.25rem; }
+.blog-prose pre code { background: none; padding: 0; color: #C7D2DE; font-size: 0.88rem; line-height: 1.6; }
+.blog-prose hr { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 2rem 0; }
+
+/* Light theme: darken article text for contrast */
+html[data-theme="light"] .blog-prose { color: #334155; }
+html[data-theme="light"] .blog-prose h2, html[data-theme="light"] .blog-prose h3, html[data-theme="light"] .blog-prose strong { color: #0F172A; }
+html[data-theme="light"] .blog-prose blockquote { color: #1E293B; }
+html[data-theme="light"] .blog-prose code { background: rgba(0,0,0,0.06); color: #0369A1; }
+html[data-theme="light"] .blog-prose pre { background: #0B1220; }
+html[data-theme="light"] .blog-prose pre code { color: #C7D2DE; }

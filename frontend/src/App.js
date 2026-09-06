@@ -15,6 +15,8 @@ import StatsPage from "@/pages/StatsPage";
 import PowerBIPage from "@/pages/PowerBIPage";
 import DaxPracticePage from "@/pages/DaxPracticePage";
 import Roadmap from "@/pages/Roadmap";
+import BlogIndex from "@/pages/BlogIndex";
+import BlogPost from "@/pages/BlogPost";
 import Profile from "@/pages/Profile";
 import Leaderboard from "@/pages/Leaderboard";
 import AuthCallback from "@/pages/AuthCallback";
@@ -42,6 +44,8 @@ function AppShell() {
           <Route path="/powerbi/dax" element={<DaxPracticePage />} />
           <Route path="/stats" element={<StatsPage />} />
           <Route path="/roadmap" element={<Roadmap />} />
+          <Route path="/blog" element={<BlogIndex />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/legal/:doc" element={<LegalPage />} />

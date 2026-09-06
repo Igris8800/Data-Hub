@@ -15,6 +15,7 @@ const NAV = [
   { to: "/powerbi", label: "Power BI" },
   { to: "/stats", label: "Statistics" },
   { to: "/roadmap", label: "Roadmap" },
+  { to: "/blog", label: "Blog" },
 ];
 
 export default function Header() {
