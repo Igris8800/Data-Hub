@@ -30,7 +30,7 @@ db = client[DB_NAME]
 
 app = FastAPI(title="Data Hub API")
 
-BUILD_VERSION = "cors-fix-3"
+BUILD_VERSION = "cors-fix-4"
 
 # CORS must be registered BEFORE routes/errors so even error responses carry the header.
 _CORS_REGEX = os.environ.get(
@@ -69,6 +69,25 @@ async def _force_cors(request: Request, call_next):
         resp.headers["Vary"] = "Origin"
     return resp
 api_router = APIRouter(prefix="/api")
+
+# Explicit preflight handler — guarantees OPTIONS on any /api/* path returns 200 with CORS
+# headers, so the browser never gets a 405 on preflight (which masks the real response).
+@api_router.options("/{rest_of_path:path}")
+async def _preflight(rest_of_path: str, request: Request):
+    from starlette.responses import Response as _Resp
+    origin = request.headers.get("origin", "")
+    headers = {}
+    if origin and _ALLOW_RE.fullmatch(origin):
+        headers = {
+            "Access-Control-Allow-Origin": origin,
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": request.headers.get(
+                "access-control-request-headers", "Content-Type, Authorization"
+            ),
+            "Vary": "Origin",
+        }
+    return _Resp(status_code=200, headers=headers)
 
 # --- Models ---
 class SignupRequest(BaseModel):
