@@ -1,3 +1,4 @@
+import Seo from "@/components/Seo";
 import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
@@ -209,6 +210,7 @@ export default function StatsPage() {
 
   return (
     <div className="min-h-[calc(100vh-140px)] flex flex-col bg-[#0D1117]">
+      <Seo title="Statistics Practice" description="Practice statistics hands-on in your browser with real scipy — t-tests, confidence intervals, regression, ANOVA and A/B testing. 200 graded questions. Free to start." path="/stats" />
       {/* Top bar */}
       <div className="border-b border-white/10 bg-[#0F1520]">
         <div className="max-w-[1600px] mx-auto px-4 py-3 flex items-center gap-4 flex-wrap">

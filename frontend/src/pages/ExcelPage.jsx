@@ -1,3 +1,4 @@
+import Seo from "@/components/Seo";
 import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
@@ -224,6 +225,7 @@ export default function ExcelPage() {
 
   return (
     <div className="min-h-[calc(100vh-140px)] flex flex-col bg-[#0D1117]">
+      <Seo title="Excel Practice" description="Practice Excel formulas, PivotTables and functions in a live in-browser spreadsheet — 500 real business questions with instant grading. Free to start." path="/excel" />
       {/* Top bar */}
       <div className="border-b border-white/10 bg-[#0F1520]">
         <div className="max-w-[1600px] mx-auto px-4 py-3 flex items-center gap-4 flex-wrap">

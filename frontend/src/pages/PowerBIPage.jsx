@@ -1,3 +1,4 @@
+import Seo from "@/components/Seo";
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
@@ -170,6 +171,7 @@ export default function PowerBIPage() {
 
   return (
     <div className="min-h-[calc(100vh-140px)] flex flex-col bg-[#0D1117]">
+      <Seo title="Power BI Practice" description="Practice Power BI concepts and DAX with 400+ questions — data modelling, Power Query, visuals and hands-on measures. Free to start." path="/powerbi" />
       {/* Top bar */}
       <div className="border-b border-white/10 bg-[#0F1520]">
         <div className="max-w-[1600px] mx-auto px-4 py-3 flex items-center gap-4 flex-wrap">

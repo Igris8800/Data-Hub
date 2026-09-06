@@ -1,3 +1,4 @@
+import Seo from "@/components/Seo";
 import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
@@ -498,6 +499,7 @@ export default function SQLPage() {
 
   return (
     <div className="min-h-[calc(100vh-140px)] flex flex-col bg-[#0D1117]">
+      <Seo title="SQL Practice" description="Practice real SQL queries in your browser against live datasets from Amazon, Netflix, Uber, Google and Meta. 500 questions with instant grading and interview mode. Free to start." path="/sql" />
       {/* Top brand bar */}
       <div className="border-b border-white/10 bg-[#0F1520]">
         <div className="max-w-[1600px] mx-auto px-4 py-3 flex items-center gap-4 flex-wrap">

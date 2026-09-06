@@ -1,3 +1,4 @@
+import Seo from "@/components/Seo";
 import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
@@ -208,6 +209,7 @@ export default function PythonPage() {
 
   return (
     <div className="min-h-[calc(100vh-140px)] flex flex-col bg-[#0D1117]">
+      <Seo title="Python & Pandas Practice" description="Practice Python, pandas and NumPy on real datasets in your browser — 500 hands-on questions with instant grading, from data cleaning to cohorts and time-series. Free to start." path="/python" />
       {/* Top bar */}
       <div className="border-b border-white/10 bg-[#0F1520]">
         <div className="max-w-[1600px] mx-auto px-4 py-3 flex items-center gap-4 flex-wrap">

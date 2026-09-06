@@ -1,3 +1,4 @@
+import Seo from "@/components/Seo";
 import React, { useMemo, useState, useEffect, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Sheet as SheetRoot, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
@@ -64,6 +65,7 @@ export default function Roadmap() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8" data-testid="roadmap-page">
+      <Seo title="Data Analyst Roadmap" description="A structured roadmap to become a data analyst — SQL, Excel, Python, Power BI and Statistics, from White belt to Black, with hands-on practice at every step." path="/roadmap" />
       {/* header */}
       <div className="flex items-end justify-between flex-wrap gap-4 mb-6">
         <div>

@@ -1,3 +1,4 @@
+import Seo from "@/components/Seo";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -93,6 +94,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
+      <Seo description="Practice SQL, Python, Excel, Power BI and Statistics with 2,000+ hands-on questions that run in your browser. Real datasets, instant grading, interview mode. Free to start." path="/" />
       {/* HERO — 3-column split */}
       <section className="relative overflow-hidden border-b border-white/5">
         {/* Faint tech grid backdrop */}
