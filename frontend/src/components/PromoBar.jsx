@@ -34,12 +34,12 @@ export default function PromoBar() {
                 className="rotate-[-6deg] mt-0.5 px-2 py-[1px] text-[8px] font-heading rounded-sm"
                 style={{ background: "#B892FF", color: "#1E0B4B" }}
               >
-                DATA & AI SKILLS
+                DATA & ANALYTICS SKILLS
               </div>
             </div>
           </div>
           <p className="text-white text-sm truncate">
-            <span className="font-semibold">Launch price — ₹2,499/year</span> <span className="line-through opacity-70">₹4,000</span>. Every module, every difficulty.
+            <span className="font-semibold">Launch price — ₹1,999/year</span> <span className="line-through opacity-70">₹3,200</span>. Every module, every difficulty.
           </p>
         </div>
         <div className="flex items-center gap-2 shrink-0">
