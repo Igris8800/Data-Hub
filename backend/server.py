@@ -30,9 +30,9 @@ db = client[DB_NAME]
 
 app = FastAPI(title="Data Hub API")
 
-# CORS must be registered BEFORE routes/errors so even error responses (4xx/5xx) carry the header.
-# A single authoritative regex covers apex + www of the production domain, all Vercel URLs, and localhost.
-# We intentionally do NOT read CORS_ORIGINS here to avoid a mis-set env var silently blocking the site.
+BUILD_VERSION = "cors-fix-3"
+
+# CORS must be registered BEFORE routes/errors so even error responses carry the header.
 _CORS_REGEX = os.environ.get(
     "CORS_ORIGIN_REGEX",
     r"https://(www\.)?crazycoder\.tech|https://[a-z0-9-]+\.vercel\.app|http://localhost:\d+",
@@ -44,6 +44,30 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Belt-and-braces: guarantee an Access-Control-Allow-Origin header on EVERY response
+# (including 401/405/500 and preflight) for our known origins, regardless of middleware nuances.
+import re as _re
+_ALLOW_RE = _re.compile(_CORS_REGEX)
+
+@app.middleware("http")
+async def _force_cors(request: Request, call_next):
+    origin = request.headers.get("origin", "")
+    allowed = bool(origin and _ALLOW_RE.fullmatch(origin))
+    if request.method == "OPTIONS":
+        from starlette.responses import Response as _Resp
+        resp = _Resp(status_code=200)
+    else:
+        resp = await call_next(request)
+    if allowed:
+        resp.headers["Access-Control-Allow-Origin"] = origin
+        resp.headers["Access-Control-Allow-Credentials"] = "true"
+        resp.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+        resp.headers["Access-Control-Allow-Headers"] = request.headers.get(
+            "access-control-request-headers", "Content-Type, Authorization"
+        )
+        resp.headers["Vary"] = "Origin"
+    return resp
 api_router = APIRouter(prefix="/api")
 
 # --- Models ---
@@ -836,7 +860,7 @@ async def leaderboard():
 
 @api_router.get("/health")
 async def health():
-    return {"ok": True}
+    return {"ok": True, "version": BUILD_VERSION}
 
 app.include_router(api_router)
 
