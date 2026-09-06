@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Logo from "@/components/Logo";
 import api from "@/lib/api";
 import { toast } from "sonner";
 import { Mail, Github } from "lucide-react";
@@ -28,8 +29,8 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-14 grid md:grid-cols-4 gap-10">
         <div>
           <div className="flex items-center gap-2 font-heading mb-3">
-            <span className="w-8 h-8 rounded-md bg-gradient-to-br from-[#00D4FF] to-[#00FF88] flex items-center justify-center text-[#0D1117] font-bold text-lg">D</span>
-            <span className="text-lg font-semibold">Data Hub</span>
+            <Logo className="w-8 h-8" />
+            <span className="text-lg font-semibold">Crazycoder</span>
           </div>
           <p className="text-sm text-slate-400 max-w-xs leading-relaxed">
             Learn. Practice. Get hired as a data analyst. Excel · SQL · Python · Power BI · Statistics.
@@ -82,7 +83,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-white/5 py-4 px-6 flex flex-col sm:flex-row items-center justify-center gap-x-4 gap-y-2 text-xs text-slate-500">
-        <span>© {new Date().getFullYear()} Data Hub. Built for aspiring data analysts.</span>
+        <span>© {new Date().getFullYear()} Crazycoder. Built for aspiring data analysts.</span>
         <span className="hidden sm:inline">·</span>
         <span className="flex items-center gap-3">
           <a href="/legal/terms" className="hover:text-[#00D4FF]">Terms</a>

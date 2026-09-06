@@ -47,7 +47,7 @@ export default function AuthModal({ open, onOpenChange }) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="bg-[#151B23] border-white/10 max-w-md" data-testid="auth-modal">
         <DialogHeader>
-          <DialogTitle className="font-heading text-2xl tracking-tight">Welcome to Data Hub</DialogTitle>
+          <DialogTitle className="font-heading text-2xl tracking-tight">Welcome to Crazycoder</DialogTitle>
           <DialogDescription className="text-slate-400">Save your progress, XP and streaks across devices.</DialogDescription>
         </DialogHeader>
 

@@ -17,8 +17,9 @@ const FEATURES = [
 ];
 
 const PLANS = [
-  { key: "monthly", label: "Monthly", price: "₹799", sub: "billed monthly" },
-  { key: "yearly", label: "Yearly", price: "₹2,499", was: "₹4,000", sub: "billed yearly", best: true },
+  { key: "q1", label: "3 Months", price: "₹799", sub: "one-time · 90 days" },
+  { key: "q2", label: "6 Months", price: "₹1,299", sub: "one-time · 180 days" },
+  { key: "year", label: "1 Year", price: "₹1,999", was: "₹3,200", sub: "one-time · 365 days", best: true },
 ];
 
 // Per-seat annual price (INR) by seat count — mirrors the backend.
@@ -35,7 +36,7 @@ export default function UpgradeModal({ open, onOpenChange }) {
   const { user, refresh } = useAuth();
   const [busy, setBusy] = useState(false);
   const [tab, setTab] = useState("individual");
-  const [plan, setPlan] = useState("yearly");
+  const [plan, setPlan] = useState("year");
 
   const [seats, setSeats] = useState(10);
   const [biz, setBiz] = useState({ name: "", email: "", company: "", message: "" });
@@ -66,7 +67,7 @@ export default function UpgradeModal({ open, onOpenChange }) {
       }
       const rzp = new window.Razorpay({
         key: order.key_id, amount: order.amount, currency: order.currency, order_id: order.order_id,
-        name: "Data Hub Premium", description: (planLabel?.price || "") + " · " + (planLabel?.label || ""),
+        name: "Crazycoder Premium", description: (planLabel?.price || "") + " · " + (planLabel?.label || ""),
         theme: { color: "#00D4FF" }, prefill: { email: user.email, name: user.name },
         handler: async (res) => {
           try { await api.post("/payments/verify", res); await refresh();
@@ -97,7 +98,7 @@ export default function UpgradeModal({ open, onOpenChange }) {
       <DialogContent className="bg-[#151B23] border-white/10 max-w-lg" data-testid="upgrade-modal">
         <DialogHeader>
           <DialogTitle className="font-heading text-2xl tracking-tight flex items-center gap-2">
-            <Crown className="w-6 h-6 text-yellow-400" /> Unlock Data Hub Premium
+            <Crown className="w-6 h-6 text-yellow-400" /> Unlock Crazycoder Premium
           </DialogTitle>
           <DialogDescription className="text-slate-400">One plan. Every module. Every difficulty.</DialogDescription>
         </DialogHeader>
@@ -153,10 +154,10 @@ export default function UpgradeModal({ open, onOpenChange }) {
 
             <Button onClick={startCheckout} disabled={busy} data-testid="upgrade-checkout-btn"
               className="w-full rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 text-[#0D1117] hover:from-yellow-300 hover:to-amber-400 font-semibold mt-2">
-              <Sparkles className="w-4 h-4 mr-2" /> {busy ? "Loading…" : `Get Premium — ${planLabel?.price}${plan === "monthly" ? "/mo" : plan === "yearly" ? "/yr" : ""}`}
+              <Sparkles className="w-4 h-4 mr-2" /> {busy ? "Loading…" : `Get Premium — ${planLabel?.price}`}
             </Button>
             <p className="text-[11px] text-slate-500 text-center mt-2">
-              By upgrading you agree to our <a href="/legal/terms" className="text-slate-400 hover:text-[#00D4FF] underline">Terms</a> and <a href="/legal/refund" className="text-slate-400 hover:text-[#00D4FF] underline">Refund Policy</a>.
+              One-time payment · no auto-renewal. By upgrading you agree to our <a href="/legal/terms" className="text-slate-400 hover:text-[#00D4FF] underline">Terms</a> and <a href="/legal/refund" className="text-slate-400 hover:text-[#00D4FF] underline">Refund Policy</a>.
             </p>
           </>
         ) : sent ? (
@@ -169,7 +170,7 @@ export default function UpgradeModal({ open, onOpenChange }) {
           </div>
         ) : (
           <>
-            <p className="text-sm text-slate-400 -mt-1">Roll out Data Hub to your team. Volume discounts, one invoice, and a team progress dashboard.</p>
+            <p className="text-sm text-slate-400 -mt-1">Roll out Crazycoder to your team. Volume discounts, one invoice, and a team progress dashboard.</p>
 
             <div className="mt-1">
               <div className="flex items-center justify-between mb-2">

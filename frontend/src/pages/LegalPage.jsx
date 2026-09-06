@@ -2,7 +2,7 @@ import React from "react";
 import { useParams, Link } from "react-router-dom";
 
 const BIZ = {
-  name: "Data Hub",
+  name: "Crazycoder",
   legalName: "Akash Laguri (sole proprietor)",
   email: "support@crazycoder.tech",
   country: "India",
@@ -110,7 +110,7 @@ function Contact() {
         <p className="text-slate-400 text-sm">Operator: {BIZ.legalName}, {BIZ.country}.</p>
       </Section>
       <Section title="Business & teams">
-        <p>Rolling out Data Hub to a team? Use the Business tab in the upgrade dialog to request a quote, or email us directly.</p>
+        <p>Rolling out Crazycoder to a team? Use the Business tab in the upgrade dialog to request a quote, or email us directly.</p>
       </Section>
     </>
   );

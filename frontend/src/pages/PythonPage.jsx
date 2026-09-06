@@ -213,7 +213,7 @@ export default function PythonPage() {
         <div className="max-w-[1600px] mx-auto px-4 py-3 flex items-center gap-4 flex-wrap">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-md bg-gradient-to-br from-[#FFD166] to-[#F58549] flex items-center justify-center text-[#0D1117]"><Code2 className="w-4 h-4" /></div>
-            <div><div className="font-heading text-sm tracking-tight">Python Practice</div><div className="text-[10px] text-slate-500">by Data Hub</div></div>
+            <div><div className="font-heading text-sm tracking-tight">Python Practice</div><div className="text-[10px] text-slate-500">by Crazycoder</div></div>
           </div>
           <div className="flex items-center gap-1 p-1 rounded-lg bg-[#0D1117] border border-white/10" role="tablist" data-testid="python-mode-selector">
             {Object.entries(MODE_META).map(([k, m]) => {

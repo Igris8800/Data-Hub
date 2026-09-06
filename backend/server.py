@@ -30,7 +30,7 @@ db = client[DB_NAME]
 
 app = FastAPI(title="Data Hub API")
 
-BUILD_VERSION = "pay-fix-6"
+BUILD_VERSION = "plans-v7"
 
 # CORS must be registered BEFORE routes/errors so even error responses carry the header.
 _CORS_REGEX = os.environ.get(
@@ -703,8 +703,9 @@ async def certificate(module: str, request: Request):
 # --- Payments (Razorpay, INR — India launch) ---
 # Server-side price map in paise (₹1 = 100 paise). Client never sets the amount.
 PLAN_PRICES = {
-    "monthly": {"amount": 79900, "label": "₹799 / month"},
-    "yearly": {"amount": 249900, "label": "₹2,499 / year"},
+    "q1": {"amount": 79900, "label": "₹799 / 3 months", "days": 90},
+    "q2": {"amount": 129900, "label": "₹1,299 / 6 months", "days": 180},
+    "year": {"amount": 199900, "label": "₹1,999 / year", "days": 365},
 }
 
 @api_router.get("/payments/config")
@@ -765,19 +766,17 @@ async def verify_payment(payload: RazorpayVerifyRequest, request: Request):
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid payment signature")
     order = await db.orders.find_one({"order_id": payload.razorpay_order_id})
-    plan = (order or {}).get("plan", "yearly")
+    plan = (order or {}).get("plan", "year")
     await _grant_premium(user["user_id"], plan, payload.razorpay_order_id, payload.razorpay_payment_id)
     return {"ok": True}
 
 
 def _premium_expiry(plan: str):
-    """Return an ISO expiry for time-limited plans, or None for perpetual (lifetime)."""
-    now = datetime.now(timezone.utc)
-    if plan == "monthly":
-        return (now + timedelta(days=30)).isoformat()
-    if plan == "yearly":
-        return (now + timedelta(days=365)).isoformat()
-    return None  # lifetime / unknown → no expiry
+    """Return an ISO expiry based on the plan's duration in days."""
+    days = PLAN_PRICES.get(plan, {}).get("days")
+    if not days:
+        return None
+    return (datetime.now(timezone.utc) + timedelta(days=days)).isoformat()
 
 
 async def _grant_premium(user_id: str, plan: str, order_id: str, payment_id: str):
@@ -819,7 +818,7 @@ async def razorpay_webhook(request: Request):
             payment_id = pay.get("id")
             order = await db.orders.find_one({"order_id": order_id})
             if order:
-                await _grant_premium(order["user_id"], order.get("plan", "yearly"), order_id, payment_id)
+                await _grant_premium(order["user_id"], order.get("plan", "year"), order_id, payment_id)
     except Exception as e:
         logging.getLogger(__name__).warning("webhook processing error: %s", e)
     return {"ok": True}

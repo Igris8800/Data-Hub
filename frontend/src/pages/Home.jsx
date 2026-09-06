@@ -51,9 +51,9 @@ const TRACKS = [
 ];
 
 const FEATURED = [
-  { title: "Window functions deep dive", module: "SQL", level: "Advanced", hours: "3 hr", rating: "4.8", by: "Data Hub" },
-  { title: "Pandas groupby & pivot", module: "Python", level: "Intermediate", hours: "2 hr", rating: "4.9", by: "Data Hub" },
-  { title: "DAX Time Intelligence", module: "Power BI", level: "Advanced", hours: "2 hr", rating: "4.7", by: "Data Hub" },
+  { title: "Window functions deep dive", module: "SQL", level: "Advanced", hours: "3 hr", rating: "4.8", by: "Crazycoder" },
+  { title: "Pandas groupby & pivot", module: "Python", level: "Intermediate", hours: "2 hr", rating: "4.9", by: "Crazycoder" },
+  { title: "DAX Time Intelligence", module: "Power BI", level: "Advanced", hours: "2 hr", rating: "4.7", by: "Crazycoder" },
 ];
 
 

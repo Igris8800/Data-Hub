@@ -505,7 +505,7 @@ export default function SQLPage() {
             <div className="w-8 h-8 rounded-md bg-gradient-to-br from-[#00D4FF] to-[#00FF88] flex items-center justify-center text-[#0D1117] font-heading font-bold">S</div>
             <div>
               <div className="font-heading text-sm tracking-tight">SQL Practice</div>
-              <div className="text-[10px] text-slate-500">by Data Hub</div>
+              <div className="text-[10px] text-slate-500">by Crazycoder</div>
             </div>
           </div>
 

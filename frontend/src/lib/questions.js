@@ -143,7 +143,7 @@ export const sqlQuestions = [
 // ---------- PYTHON ----------
 export const pythonQuestions = [
   // BEGINNER (9)
-  q("python", 1, "beginner", { type: "code", title: "Print hello", prompt: "Print exactly: Hello, Data Hub!", starter: 'print(', expectedOutput: "Hello, Data Hub!", hint: "Use print()", solution: 'print("Hello, Data Hub!")' }),
+  q("python", 1, "beginner", { type: "code", title: "Print hello", prompt: "Print exactly: Hello, Crazycoder!", starter: 'print(', expectedOutput: "Hello, Crazycoder!", hint: "Use print()", solution: 'print("Hello, Crazycoder!")' }),
   q("python", 2, "beginner", { type: "code", title: "Sum list", prompt: "Print the sum of [4, 8, 15, 16, 23, 42].", expectedOutput: "108", hint: "Use sum().", solution: "print(sum([4,8,15,16,23,42]))" }),
   q("python", 3, "beginner", { type: "code", title: "Uppercase", prompt: 'Print "data hub" in uppercase.', expectedOutput: "DATA HUB", hint: ".upper()", solution: 'print("data hub".upper())' }),
   q("python", 4, "beginner", { type: "code", title: "Length of list", prompt: "Print the length of the list [1,2,3,4,5,6,7].", expectedOutput: "7", hint: "len()", solution: "print(len([1,2,3,4,5,6,7]))" }),

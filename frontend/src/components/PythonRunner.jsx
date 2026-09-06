@@ -111,7 +111,7 @@ sys.stderr = _buf
         value={code}
         onChange={e => setCode(e.target.value)}
         className="bg-[#0D1117] border-white/10 font-mono-editor text-sm mb-3"
-        placeholder="print('Hello, Data Hub!')"
+        placeholder="print('Hello, Crazycoder!')"
         data-testid="py-editor"
       />
 
