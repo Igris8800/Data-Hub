@@ -91,7 +91,7 @@ export default function StatsPage() {
   const nav = useNavigate();
   const [searchParams] = useSearchParams();
   const jumpQ = searchParams.get("q");
-  const STATS_KEYS = ["stats", "stats2"];
+  const STATS_KEYS = ["stats", "stats2", "stats3"];
   const DATASETS = PYTHON_DATASETS.filter((w) => STATS_KEYS.includes(w.key));
   const jumpWb = DATASETS.find((w) => w.key === searchParams.get("company")) || DATASETS[0];
   const jumpTarget = jumpQ ? jumpWb.questions.find((q) => q.id === jumpQ) : null;
@@ -210,7 +210,7 @@ export default function StatsPage() {
 
   return (
     <div className="min-h-[calc(100vh-140px)] flex flex-col bg-[#0D1117]">
-      <Seo title="Statistics Practice" description="Practice statistics hands-on in your browser with real scipy — t-tests, confidence intervals, regression, ANOVA and A/B testing. 200 graded questions. Free to start." path="/stats" />
+      <Seo title="Statistics Practice" description="Practice statistics hands-on in your browser with real scipy — t-tests, confidence intervals, regression, ANOVA, nonparametric tests, effect sizes, bootstrap and A/B testing. 300 graded questions. Free to start." path="/stats" />
       {/* Top bar */}
       <div className="border-b border-white/10 bg-[#0F1520]">
         <div className="max-w-[1600px] mx-auto px-4 py-3 flex items-center gap-4 flex-wrap">

@@ -32,4 +32,6 @@ It powers the standalone **Statistics Lab** page (/stats), a separate module fro
 Python Practice (pandas) is now 500 questions across 5 datasets: retail, hr, streaming, finance, sensors.
 | stats2 | Experiments Lab (scipy) | trials, survey, patients, ab_daily | 100 — 3-arm ANOVA & pairwise, Tukey/Bonferroni/BH multiple testing, chi-square independence & residuals, multiple regression (numpy OLS, adj R², F-test, interactions), bootstrap/permutation, A/B sequential & Wilson intervals, power & sample-size simulation |
 
-Statistics Lab (/stats) now spans two scipy datasets: stats + stats2 = 200 questions.
+| stats3 | Field Research Lab (scipy) | plots, training, poll, bivar, ab | 100 — nonparametric tests (Mann-Whitney, Wilcoxon, Kruskal-Wallis, KS), effect sizes (Cohen's d, Hedges' g, rank-biserial, Cramer's V, eta-squared), CIs, correlation variants (Spearman/Kendall/point-biserial), bootstrap & permutation, multiple testing (Bonferroni/BH), multiple regression (numpy OLS), Bayesian Beta-Binomial A/B, power & sample size |
+
+Statistics Lab (/stats) now spans three scipy datasets: stats + stats2 + stats3 = 300 questions.
