@@ -16,6 +16,8 @@ import { isQuestionLocked, lockedCount } from "@/lib/premium";
 import ModeGuide, { useFirstVisitGuide, ModeGuideButton } from "@/components/ModeGuide";
 import { Code2 } from "lucide-react";
 import BeltBadge from "@/components/BeltBadge";
+import QuestionNav from "@/components/QuestionNav";
+import { loadMode, saveMode, learningLocked } from "@/lib/learning";
 import { loadWorkspace, saveWorkspace, hydrateFromAttempts, localSolvedSet } from "@/lib/practiceState";
 import { tallyAttempts } from "@/lib/belts";
 
@@ -76,7 +78,7 @@ export default function DaxPracticePage() {
   const [wbKey, setWbKey] = useState(jumpWb.key);
   const workbook = DATASETS[0];
   const [running, setRunning] = useState(false);
-  const [mode, setMode] = useState("practice");
+  const [mode, setMode] = useState(() => loadMode("dax"));
   const [difficulty, setDifficulty] = useState(jumpTarget?.difficulty || "beginner");
   const [idx, setIdx] = useState(0);
   const [formula, setFormula] = useState("");
@@ -99,11 +101,13 @@ export default function DaxPracticePage() {
   }, [workbook, difficulty, mode]);
   const cur = questions[idx] || questions[0];
   const isLocked = useCallback((i) => isQuestionLocked(i, difficulty, user), [difficulty, user]);
+  const isLearnLocked = useCallback((i) => learningLocked(mode, questions, i, solvedIds), [mode, questions, solvedIds]);
   const curLocked = isLocked(idx);
   const premiumLeft = lockedCount(questions.length, difficulty, user);
   
 
   useEffect(() => { setIdx(0); }, [wbKey, difficulty, mode]);
+  useEffect(() => { saveMode("dax", mode); }, [mode]);
   useEffect(() => {
     if (!pending || !jumpTarget) return;
     const i = questions.findIndex((q) => q.id === jumpTarget.id);
@@ -141,7 +145,12 @@ export default function DaxPracticePage() {
     return () => clearTimeout(t);
   }, [formula, wsKey]);
 
-  const jumpTo = (i) => { if (i < 0 || i >= questions.length) return; if (isLocked(i)) { setUpgradeOpen(true); return; } setIdx(i); };
+  const jumpTo = (i) => {
+    if (i < 0 || i >= questions.length) return;
+    if (isLocked(i)) { setUpgradeOpen(true); return; }
+    if (i > idx && isLearnLocked(i)) { toast.info("📚 Learning Mode — solve the earlier questions first."); return; }
+    setIdx(i);
+  };
   const goPrev = () => jumpTo(idx - 1);
   const goNext = () => { if (mode === "learning" && cur && !solvedIds.has(cur.id)) { toast.info("📚 Learning Mode — solve this one before moving on."); return; } jumpTo(idx + 1); };
 
@@ -246,11 +255,11 @@ export default function DaxPracticePage() {
       <div className="border-b border-white/5 bg-[#0D1117]">
         <div className="max-w-[1600px] mx-auto px-4 py-1.5 flex items-center gap-1 overflow-x-auto" data-testid="dax-question-strip">
           {questions.map((q, i) => {
-            const locked = isLocked(i), solved = solvedIds.has(q.id);
+            const locked = isLocked(i), learnLock = !locked && isLearnLocked(i), solved = solvedIds.has(q.id);
             return (
-              <button key={q.id} onClick={() => jumpTo(i)} title={locked ? `${q.title} · Premium` : q.title} data-testid={`dax-qdot-${i}`}
-                className={`shrink-0 h-6 min-w-[24px] px-1 rounded text-[10px] font-mono-editor border ${i === idx ? "border-[#00FF88] text-[#00FF88] bg-[#00FF88]/10" : locked ? "border-yellow-400/30 text-yellow-300/70 bg-yellow-400/5" : solved ? "border-[#00FF88]/40 text-[#00FF88]/80" : "border-white/10 text-slate-400 hover:bg-white/5"}`}>
-                {locked ? <Lock className="w-3 h-3 inline" /> : i + 1}
+              <button key={q.id} onClick={() => jumpTo(i)} title={locked ? `${q.title} · Premium` : learnLock ? `${q.title} · Solve earlier questions first` : q.title} data-testid={`dax-qdot-${i}`}
+                className={`shrink-0 h-6 min-w-[24px] px-1 rounded text-[10px] font-mono-editor border ${i === idx ? "border-[#00FF88] text-[#00FF88] bg-[#00FF88]/10" : locked ? "border-yellow-400/30 text-yellow-300/70 bg-yellow-400/5" : learnLock ? "border-white/10 text-slate-600 bg-white/[0.02]" : solved ? "border-[#00FF88]/40 text-[#00FF88]/80" : "border-white/10 text-slate-400 hover:bg-white/5"}`}>
+                {locked || learnLock ? <Lock className="w-3 h-3 inline" /> : i + 1}
               </button>
             );
           })}
@@ -314,6 +323,8 @@ export default function DaxPracticePage() {
             {showHint && <div className="p-3 rounded-md border border-[#00D4FF]/30 bg-[#00D4FF]/5 text-sm text-slate-200" data-testid="dax-hint-panel"><div className="text-[10px] uppercase tracking-widest text-[#00D4FF] mb-1">Hint</div>{cur.hint}</div>}
             {showSolution && <div className="p-3 rounded-md border border-yellow-400/30 bg-yellow-400/5" data-testid="dax-solution-panel"><div className="text-[10px] uppercase tracking-widest text-yellow-300 mb-1">Solution</div><pre className="text-[11px] font-mono-editor text-slate-200 whitespace-pre-wrap">{cur.solution}</pre></div>}
           </div>
+          <QuestionNav idx={idx} total={questions.length} onPrev={goPrev} onNext={goNext}
+            nextLocked={idx + 1 < questions.length && (isLocked(idx + 1) || isLearnLocked(idx + 1))} accent={dColor} />
           {curLocked && (
             <div className="absolute inset-0 z-20 flex items-center justify-center p-6">
               <div className="absolute inset-0 backdrop-blur-md bg-[#0D1117]/70" />

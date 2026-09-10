@@ -12,6 +12,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import ModeGuide, { useFirstVisitGuide, ModeGuideButton } from "@/components/ModeGuide";
 import BeltBadge from "@/components/BeltBadge";
 import { loadWorkspace, saveWorkspace, hydrateFromAttempts, localSolvedSet } from "@/lib/practiceState";
+import QuestionNav from "@/components/QuestionNav";
+import { loadMode, saveMode, learningLocked } from "@/lib/learning";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import api from "@/lib/api";
@@ -285,7 +287,7 @@ export default function SQLPage() {
   const pendingJump = useRef(searchParams.get("q") ? { company: searchParams.get("company"), q: searchParams.get("q") } : null);
   const [companyKey, setCompanyKey] = useState(() => (COMPANIES.some(c => c.key === searchParams.get("company")) ? searchParams.get("company") : COMPANIES[0].key));
   const company = COMPANIES.find(c => c.key === companyKey);
-  const [mode, setMode] = useState("practice");
+  const [mode, setMode] = useState(() => loadMode("sql"));
   const [collapsed, setCollapsed] = useState(false);
   const [difficulty, setDifficulty] = useState(() => {
     const j = pendingJump.current; if (!j) return "beginner";
@@ -473,12 +475,15 @@ export default function SQLPage() {
   }, [code, cur?.id, companyKey]);
 
   const isLocked = useCallback((i) => isQuestionLocked(i, difficulty, user), [difficulty, user]);
+  const isLearnLocked = useCallback((i) => learningLocked(mode, questions, i, solvedIds), [mode, questions, solvedIds]);
   const curLocked = isLocked(idx);
   const premiumLeft = lockedCount(questions.length, difficulty, user);
+  useEffect(() => { saveMode("sql", mode); }, [mode]);
   // Any attempt to land on a locked question opens the upgrade modal instead of moving.
   const jumpTo = (i) => {
     if (i < 0 || i >= questions.length) return;
     if (isLocked(i)) { setUpgradeOpen(true); return; }
+    if (i > idx && isLearnLocked(i)) { toast.info("📚 Learning Mode — solve the earlier questions first."); return; }
     setIdx(i);
   };
   const goPrev = () => jumpTo(idx - 1);
@@ -625,16 +630,18 @@ export default function SQLPage() {
         <div className="max-w-[1600px] mx-auto px-4 py-1.5 flex items-center gap-1 overflow-x-auto" data-testid="question-strip">
           {questions.map((q, i) => {
             const locked = isLocked(i);
+            const learnLock = !locked && isLearnLocked(i);
             const solved = solvedIds.has(q.id);
             return (
-              <button key={q.id} onClick={() => jumpTo(i)} title={locked ? `${q.title} · Premium` : q.title}
+              <button key={q.id} onClick={() => jumpTo(i)} title={locked ? `${q.title} · Premium` : learnLock ? `${q.title} · Solve earlier questions first` : q.title}
                 data-testid={`qdot-${i}`}
                 className={`shrink-0 h-6 min-w-[24px] px-1 rounded text-[10px] font-mono-editor border transition-colors ${
                   i === idx ? "border-[#00D4FF] text-[#00D4FF] bg-[#00D4FF]/10" :
                   locked ? "border-yellow-400/30 text-yellow-300/70 bg-yellow-400/5 hover:bg-yellow-400/10" :
+                  learnLock ? "border-white/10 text-slate-600 bg-white/[0.02]" :
                   solved ? "border-[#00FF88]/40 text-[#00FF88] bg-[#00FF88]/5" :
                   "border-white/10 text-slate-400 hover:bg-white/5"}`}>
-                {locked ? <Lock className="w-3 h-3 inline" /> : i + 1}
+                {locked || learnLock ? <Lock className="w-3 h-3 inline" /> : i + 1}
               </button>
             );
           })}
@@ -835,6 +842,8 @@ export default function SQLPage() {
               )}
             </div>
           </div>
+          <QuestionNav idx={idx} total={questions.length} onPrev={goPrev} onNext={goNext}
+            nextLocked={idx + 1 < questions.length && (isLocked(idx + 1) || isLearnLocked(idx + 1))} accent={difficultyColor} />
         </div>
       </div>
 
