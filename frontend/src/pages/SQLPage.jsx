@@ -13,7 +13,7 @@ import ModeGuide, { useFirstVisitGuide, ModeGuideButton } from "@/components/Mod
 import BeltBadge from "@/components/BeltBadge";
 import { loadWorkspace, saveWorkspace, hydrateFromAttempts, localSolvedSet } from "@/lib/practiceState";
 import QuestionNav from "@/components/QuestionNav";
-import { loadMode, saveMode, learningLocked } from "@/lib/learning";
+import { loadMode, saveMode, learningLocked, useActiveChipInView } from "@/lib/learning";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import api from "@/lib/api";
@@ -476,6 +476,7 @@ export default function SQLPage() {
 
   const isLocked = useCallback((i) => isQuestionLocked(i, difficulty, user), [difficulty, user]);
   const isLearnLocked = useCallback((i) => learningLocked(mode, questions, i, solvedIds), [mode, questions, solvedIds]);
+  useActiveChipInView(idx, "qdot-");
   const curLocked = isLocked(idx);
   const premiumLeft = lockedCount(questions.length, difficulty, user);
   useEffect(() => { saveMode("sql", mode); }, [mode]);

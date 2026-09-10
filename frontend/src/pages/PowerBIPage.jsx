@@ -18,7 +18,7 @@ import ModeGuide, { useFirstVisitGuide, ModeGuideButton } from "@/components/Mod
 import { Code2, BarChart3, Check, X, ArrowRight } from "lucide-react";
 import BeltBadge from "@/components/BeltBadge";
 import QuestionNav from "@/components/QuestionNav";
-import { loadMode, saveMode, learningLocked } from "@/lib/learning";
+import { loadMode, saveMode, learningLocked, useActiveChipInView } from "@/lib/learning";
 import { loadWorkspace, saveWorkspace, hydrateFromAttempts, localSolvedSet } from "@/lib/practiceState";
 import { tallyAttempts } from "@/lib/belts";
 
@@ -111,6 +111,7 @@ export default function PowerBIPage() {
   const cur = questions[idx] || questions[0];
   const isLocked = useCallback((i) => isQuestionLocked(i, difficulty, user), [difficulty, user]);
   const isLearnLocked = useCallback((i) => learningLocked(mode, questions, i, solvedIds), [mode, questions, solvedIds]);
+  useActiveChipInView(idx, "powerbi-qdot-");
   const curLocked = isLocked(idx);
   const premiumLeft = lockedCount(questions.length, difficulty, user);
   

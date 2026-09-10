@@ -9,6 +9,8 @@
  *     survives navigating away and back (previously only the "Next" button checked it, so the strip
  *     and jump-to let you skip ahead, and a reset to Practice removed the gate entirely).
  */
+import { useEffect } from "react";
+
 const MODES = ["learning", "practice", "interview"];
 const MODE_KEY = (module) => `dh_mode:${module}`;
 
@@ -36,4 +38,16 @@ export function learningLocked(mode, questions, index, solvedIds) {
     if (!solvedIds.has(questions[j].id)) return true;
   }
   return false;
+}
+
+/**
+ * Keep the active question chip visible in the (horizontally scrolling) question strip, so the
+ * learner never has to drag the strip sideways to find where they are or reach the next question.
+ * `testidPrefix` is the per-page chip test-id prefix, e.g. "excel-qdot-" (chips are "<prefix><index>").
+ */
+export function useActiveChipInView(idx, testidPrefix) {
+  useEffect(() => {
+    const el = typeof document !== "undefined" && document.querySelector(`[data-testid="${testidPrefix}${idx}"]`);
+    if (el && el.scrollIntoView) el.scrollIntoView({ inline: "center", block: "nearest" });
+  }, [idx, testidPrefix]);
 }

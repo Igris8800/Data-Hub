@@ -21,7 +21,7 @@ import { Code2 } from "lucide-react";
 import BeltBadge from "@/components/BeltBadge";
 import QuestionNav from "@/components/QuestionNav";
 import { loadWorkspace, saveWorkspace, hydrateFromAttempts, localSolvedSet } from "@/lib/practiceState";
-import { loadMode, saveMode, learningLocked } from "@/lib/learning";
+import { loadMode, saveMode, learningLocked, useActiveChipInView } from "@/lib/learning";
 import { tallyAttempts } from "@/lib/belts";
 
 const MODE_META = {
@@ -129,6 +129,7 @@ export default function StatsPage() {
   const cur = questions[idx] || questions[0];
   const isLocked = useCallback((i) => isQuestionLocked(i, difficulty, user), [difficulty, user]);
   const isLearnLocked = useCallback((i) => learningLocked(mode, questions, i, solvedIds), [mode, questions, solvedIds]);
+  useActiveChipInView(idx, "python-qdot-");
   const curLocked = isLocked(idx);
   const premiumLeft = lockedCount(questions.length, difficulty, user);
 
