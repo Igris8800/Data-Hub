@@ -22,6 +22,9 @@ const PLANS = [
   { key: "year", label: "1 Year", price: "₹1,999", was: "₹3,200", sub: "one-time · 365 days", best: true },
 ];
 
+// Meta Pixel Purchase value (INR) per plan — mirrors the backend PLAN_PRICES amounts.
+const PLAN_VALUE = { q1: 799, q2: 1299, year: 1999 };
+
 // Per-seat annual price (INR) by seat count — mirrors the backend.
 function perSeat(seats) {
   if (seats >= 100) return null; // custom
@@ -71,6 +74,11 @@ export default function UpgradeModal({ open, onOpenChange }) {
         theme: { color: "#00D4FF" }, prefill: { email: user.email, name: user.name },
         handler: async (res) => {
           try { await api.post("/payments/verify", res); await refresh();
+            // Meta Pixel: the payment is confirmed server-side by /payments/verify above, so fire
+            // Purchase here (never on page load) with the value of the plan the user actually bought.
+            if (typeof window !== "undefined" && typeof window.fbq === "function") {
+              window.fbq("track", "Purchase", { value: PLAN_VALUE[plan] ?? 0, currency: "INR" });
+            }
             toast.success("Premium unlocked! Enjoy every question."); onOpenChange(false);
           } catch (e) { toast.error("Payment verification failed"); }
         },

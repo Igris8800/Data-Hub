@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import "@/App.css";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
@@ -26,6 +26,13 @@ function AppShell() {
   const location = useLocation();
   // Reset scroll to top on every route change (otherwise the browser keeps the previous page's scroll position).
   useEffect(() => { window.scrollTo(0, 0); }, [location.pathname]);
+  // Meta Pixel: this is a client-routed SPA, so fire a PageView on each in-app navigation.
+  // The base pixel in public/index.html already fires the PageView for the initial load, so skip the first run here.
+  const fbqFirstNav = useRef(true);
+  useEffect(() => {
+    if (fbqFirstNav.current) { fbqFirstNav.current = false; return; }
+    if (typeof window !== "undefined" && typeof window.fbq === "function") window.fbq("track", "PageView");
+  }, [location.pathname]);
   // OAuth callback: session_id in URL fragment → process before routes render
   if (location.hash?.includes("session_id=")) {
     return <AuthCallback />;
